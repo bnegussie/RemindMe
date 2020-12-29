@@ -1,0 +1,356 @@
+/************************************ START: APP.JS **********************************************/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'PT Sans', sans-serif;
+}
+/************************************ END: APP.JS ************************************************/
+/************************************ START: FOOTER.JS *******************************************/
+.footer-container {
+  flex-shrink: 0;
+  margin-top: auto;
+
+  background-color: #242424;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: relative;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 16px;
+  text-align: center;
+  width: 160px;
+  box-sizing: border-box;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+}
+
+.footer-links a:hover {
+  color: #e9e9e9;
+  transition: 0.3s ease-out;
+}
+/************************************ END: FOOTER.JS *********************************************/
+/************************************ START: ABOUTUS.JS ******************************************/
+.about-us-container {
+  background-color: #ffffff73;
+  background-position: center;
+  background-size: cover;
+}
+
+.about-us-message {
+  margin-left: 100px;
+  margin-right: 100px;
+
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.about-us-container > h1 {
+  text-align: center;
+  color: black;
+}
+
+.about-us-message > p {
+  color: #8B4513;
+  text-indent: 40px;
+  font-size: 20px;
+}
+
+#about-us-subtitle {
+  color: black;
+  font-size: 26px;
+  margin-bottom: 0px;
+  text-indent: 0px;
+}
+/************************************ END: ABOUTUS.JS ********************************************/
+/************************************ START: BUTTON.JS *******************************************/
+:root {
+  --primary: #fff;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: 2px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background-color: var(--primary);
+  color: #242424;
+  border: 1px solid var(--primary);
+}
+
+.btn--outline {
+  background-color: transparent;
+  color: #fff;
+  padding: 8px 20px;
+  border: 1px solid var(--primary);
+  transition: all 0.3s ease-out;
+}
+
+.btn--medium {
+  padding: 8px 20px;
+  font-size: 20px;
+}
+
+.btn--large {
+  padding: 12px 26px;
+  font-size: 20px;
+}
+
+.btn--medium:hover, .btn--large:hover {
+  background: #fff;
+  color: #242424;
+  transition: all 0.3s ease-out;
+}
+/************************************ END: BUTTON.JS *********************************************/
+/************************************ START: LANDINGPAGE.JS **************************************/
+.landing-container {
+  background: url('./images/cafe.jpg') center center/cover no-repeat;
+  height: 100vh;
+  width: 95vw;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: -50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  box-shadow: 0 0 0 100px rgba(0, 0, 0, 0);
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.landing-page-message {
+  background-color: #ffffff73;
+  background-position: center;
+  background-size: cover;
+  text-align: left;
+  
+  margin-left: 100px;
+  margin-right: 100px;
+
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+#call-to-action {
+  text-align: left;
+  color: #8B4513;
+  font-size: 70px;
+}
+
+.call-to-action-msg {
+  color: #8B4513;
+  font-size: 32px;
+}
+
+@media screen and (max-width: 960px) {
+  #call-to-action {
+      font-size: 50px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .landing-container {
+      margin-left: -25px;
+  }
+  
+  #call-to-action {
+      font-size: 25px;
+  }
+
+  .call-to-action-msg {
+      font-size: 15px;
+  }
+}
+/************************************ END: LANDINGPAGE.JS ****************************************/
+/************************************ START: NAVBAR.JS *******************************************/
+.navbar {
+  background: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  max-width: 1500px;
+}
+
+.navbar-logo {
+  color: #fff;
+  justify-self: start;
+  margin-left: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.fa-typo3 {
+  margin-left: 0.5rem;
+  font-size: 1.8rem;
+}
+
+.nav-menu {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-gap: 10px;
+  list-style: none;
+  text-align: center;
+  width: 60vw;
+  justify-content: end;
+  margin-right: 2rem;
+}
+
+.nav-item {
+  height: 80px;
+}
+
+.nav-links {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  height: 100%;
+}
+
+.nav-links:hover {
+  border-bottom: 4px solid #fff;
+  transition: all 0.2s ease-out;
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar-logo:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.fa-bars {
+  color: #fff;
+}
+
+.nav-links-mobile {
+  display: none;
+}
+
+.menu-icon {
+  display: none;
+}
+
+@media screen and (max-width: 960px) {
+  .NavbarItems {
+    position: relative;
+  }
+
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 90vh;
+    position: absolute;
+    top: 80px;
+    left: -100%;
+    opacity: 1;
+    transition: all 0.5s ease;
+  }
+
+  .nav-menu.active {
+    background: #242222;
+    left: 0;
+    opacity: 1;
+    transition: all 0.5s ease;
+    z-index: 1;
+  }
+
+  .nav-links {
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    display: table;
+  }
+
+  .nav-links:hover {
+    background-color: #fff;
+    color: #242424;
+    border-radius: 0;
+    text-decoration: none;
+  }
+
+  .navbar-logo {
+    text-decoration: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(25%, 50%);
+  }
+
+  .navbar-logo:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .menu-icon {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-100%, 60%);
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+
+  .fa-times {
+    color: #fff;
+    font-size: 2rem;
+  }
+
+  .nav-links-mobile {
+    display: block;
+    text-align: center;
+    margin: 2rem auto;
+    border-radius: 4px;
+    width: 80%;
+    text-decoration: none;
+    font-size: 1.5rem;
+    background-color: transparent;
+    color: #fff;
+    padding: 14px 20px;
+    border: 1px solid #fff;
+    transition: all 0.3s ease-out;
+  }
+
+  .nav-links-mobile:hover {
+    background: #fff;
+    color: #242424;
+    transition: 250ms;
+  }
+}
+/************************************ END: NAVBAR.JS *********************************************/
