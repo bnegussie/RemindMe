@@ -2,9 +2,9 @@ import React, { Fragment, useState } from "react";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
 
-import "./../App.css"
+import "./../../../App.css"
 
-function EditReminders({ currReminder }) {
+function EditReminder({ currReminder, setAuth }) {
 	const [completed, setCompleted] = useState( currReminder.reminder_completed );
 	const [title, setTitle] = useState(currReminder.reminder_title);
 	const [desc, setDesc] = useState(currReminder.reminder_desc);
@@ -42,10 +42,17 @@ function EditReminders({ currReminder }) {
 			// The possibility that the Completed check box state being 
 			// altered makes this a bit more complicated function. 
 
-			const respAllGetReminder = await fetch(`http://localhost:5000/reminder/all/${id}`);
+			const respAllGetReminder = await fetch(`http://localhost:5000/dashboard/reminder/all/${id}`, {
+				method: "GET",
+				headers: {token: localStorage.token}
+			});
 			const respCurrReminder = await respAllGetReminder.json();
 			
 			const originalCompletedState = respCurrReminder.reminder_completed;
+
+			const myHeaders = new Headers();
+			myHeaders.append("Content-type", "application/json");
+			myHeaders.append("token", localStorage.token);
 
 			if (originalCompletedState === completed) {
 				// The Completed state has not been changed.
@@ -53,19 +60,20 @@ function EditReminders({ currReminder }) {
 				if (completed) {
 					// eslint-disable-next-line
 					const respUpdatedCompletedReminder = await fetch(
-						`http://localhost:5000/reminder/completed/${id}`, 
+						`http://localhost:5000/dashboard/reminder/completed/${id}`, 
 						{
 							method: "PUT",
-							headers: { "Content-Type": "application/json" },
+							headers: myHeaders,
 							body: JSON.stringify(body)
 					});
 
 				} else {
 					// eslint-disable-next-line
-					const respUpdatedActiveReminder = await fetch(`http://localhost:5000/reminder/active/${id}`, {
-						method: "PUT",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(body)
+					const respUpdatedActiveReminder = await fetch(
+						`http://localhost:5000/dashboard/reminder/active/${id}`, {
+							method: "PUT",
+							headers: myHeaders,
+							body: JSON.stringify(body)
 					});
 
 
@@ -73,7 +81,10 @@ function EditReminders({ currReminder }) {
 					const getCurrentTime = ( new Date() ).getTime();
 					const dueTime = ( new Date(dueDate) ).getTime();
 
-					const respAllOverdue = await fetch("http://localhost:5000/reminder/overdue");
+					const respAllOverdue = await fetch("http://localhost:5000/dashboard/reminder/overdue", {
+						method: "GET",
+						headers: {token: localStorage.token}
+					});
 					const localAllOverdueReminders = await respAllOverdue.json();
 					
 					var alreadyOnOverdueList = false;
@@ -89,10 +100,10 @@ function EditReminders({ currReminder }) {
 								// and is currently overdue, so updating the Overdue list.
 								// eslint-disable-next-line
 								const respUpdateOfOverdueReminder = await fetch(
-									`http://localhost:5000/reminder/overdue/${id}`, 
+									`http://localhost:5000/dashboard/reminder/overdue/${id}`, 
 									{
 										method: "PUT",
-										headers: { "Content-Type": "application/json" },
+										headers: myHeaders,
 										body: JSON.stringify(body)
 								});
 							} else {
@@ -103,9 +114,10 @@ function EditReminders({ currReminder }) {
 
 								// eslint-disable-next-line
 								const respDeleteOfOverdueReminder = await fetch(
-									`http://localhost:5000/reminder/overdue/${id}`, 
+									`http://localhost:5000/dashboard/reminder/overdue/${id}`, 
 									{
-										method: "DELETE"
+										method: "DELETE",
+										headers: {token: localStorage.token}
 								});
 
 							}
@@ -120,41 +132,50 @@ function EditReminders({ currReminder }) {
 
 				if (completed) {
 					// eslint-disable-next-line
-					const respDeletedActiveReminder = await fetch(`http://localhost:5000/reminder/active/${id}`, {
-						method: "DELETE",
+					const respDeletedActiveReminder = await fetch(
+						`http://localhost:5000/dashboard/reminder/active/${id}`, {
+							method: "DELETE",
+							headers: {token: localStorage.token}
 					});
 
 					// eslint-disable-next-line
-					const respDeletedOverdueReminder = await fetch(`http://localhost:5000/reminder/overdue/${id}`, {
-						method: "DELETE",
+					const respDeletedOverdueReminder = await fetch(
+						`http://localhost:5000/dashboard/reminder/overdue/${id}`, {
+							method: "DELETE",
+							headers: {token: localStorage.token}
 					});
 
 					// eslint-disable-next-line
-					const respAddingToCompleted = await fetch("http://localhost:5000/reminder/completed", {
-						method: "POST",
-						headers: {"Content-type": "application/json"},
-						body: JSON.stringify(bodyPlusId)
+					const respAddingToCompleted = await fetch(
+						"http://localhost:5000/dashboard/reminder/completed", {
+							method: "POST",
+							headers: myHeaders,
+							body: JSON.stringify(bodyPlusId)
 					});
 				} else {
 					// eslint-disable-next-line
-					const respDeletedCompletedReminder = await fetch(`http://localhost:5000/reminder/completed/${id}`, {
-						method: "DELETE",
+					const respDeletedCompletedReminder = await fetch(
+						`http://localhost:5000/dashboard/reminder/completed/${id}`, {
+							method: "DELETE",
+							headers: {token: localStorage.token}
 					});
 
 					// eslint-disable-next-line
-					const respAddingToCompleted = await fetch("http://localhost:5000/reminder/active", {
-						method: "POST",
-						headers: {"Content-type": "application/json"},
-						body: JSON.stringify(bodyPlusId)
+					const respAddingToCompleted = await fetch(
+						"http://localhost:5000/dashboard/reminder/active", {
+							method: "POST",
+							headers: myHeaders,
+							body: JSON.stringify(bodyPlusId)
 					});
 				}
 			}
 
 			// eslint-disable-next-line
-			const respUpdatedAllReminder = await fetch(`http://localhost:5000/reminder/all/${id}`, {
-				method: "PUT",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(body)
+			const respUpdatedAllReminder = await fetch(
+				`http://localhost:5000/dashboard/reminder/all/${id}`, {
+					method: "PUT",
+					headers: myHeaders,
+					body: JSON.stringify(body)
 			});
 			
 
@@ -283,4 +304,4 @@ function EditReminders({ currReminder }) {
 	);
 }
 
-export default EditReminders;
+export default EditReminder;

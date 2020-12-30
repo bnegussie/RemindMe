@@ -1,13 +1,15 @@
 import React, { Fragment, useState, useEffect } from "react";
 import InlineConfirmButton from "react-inline-confirm";
-import EditToDo from "./EditToDo";
-import InputToDo from "./InputToDo";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
-import "./../App.css";
+import "./../../../App.css";
 import "react-tabs/style/react-tabs.css";
 
-function Reminders() {
+// Components:
+import EditReminder from "./EditReminder";
+import CreateReminder from "./CreateReminder";
+
+function Reminders({ setAuth }) {
 	const [allActiveReminders, setAllActiveReminders] = useState([]);
 	const [allCompletedReminders, setAllCompletedReminders] = useState([]);
 	const [allOverdueReminders, setAllOverdueReminders] = useState([]);
@@ -18,25 +20,37 @@ function Reminders() {
 	const confirmIconClass = `fa fa-${isExecuting ? "circle-o-notch fa-spin" : "fa fa-trash"}`;
 
 	async function getAllActiveReminders() {
-		const response = await fetch("http://localhost:5000/reminder/active");
+		const response = await fetch("http://localhost:5000/dashboard/reminder/active", {
+			method: "GET",
+			headers: {token: localStorage.token}
+		});
 		const parseResp = await response.json();
 		setAllActiveReminders(parseResp);
 	}
 
 	async function getAllCompletedReminders() {
-		const response = await fetch("http://localhost:5000/reminder/completed");
+		const response = await fetch("http://localhost:5000/dashboard/reminder/completed", {
+			method: "GET",
+			headers: {token: localStorage.token}
+		});
 		const parseResp = await response.json();
 		setAllCompletedReminders(parseResp);
 	}
 
 	async function getAllOverdueReminders() {
-		const response = await fetch("http://localhost:5000/reminder/overdue");
+		const response = await fetch("http://localhost:5000/dashboard/reminder/overdue", {
+			method: "GET",
+			headers: {token: localStorage.token}
+		});
 		const parseResp = await response.json();
 		setAllOverdueReminders(parseResp);
 	}
 
 	async function getAllReminders() {
-		const response = await fetch("http://localhost:5000/reminder/all");
+		const response = await fetch("http://localhost:5000/dashboard/reminder/all", {
+			method: "GET",
+			headers: {token: localStorage.token}
+		});
 		const parseResp = await response.json();
 		setAllReminders(parseResp);
 	}
@@ -44,34 +58,38 @@ function Reminders() {
 	async function deleteReminderTask(reminder_id) {
 		try {
 			// eslint-disable-next-line
-			const respAllReminders = await fetch(
-				`http://localhost:5000/reminder/all/${reminder_id}`,
-				{
-					method: "DELETE",
-				}
-			);
-
-			// eslint-disable-next-line
 			const respActiveReminders = await fetch(
-				`http://localhost:5000/reminder/active/${reminder_id}`,
+				`http://localhost:5000/dashboard/reminder/active/${reminder_id}`,
 				{
 					method: "DELETE",
+					headers: {token: localStorage.token}
 				}
 			);
 
 			// eslint-disable-next-line
 			const respCompletedReminders = await fetch(
-				`http://localhost:5000/reminder/completed/${reminder_id}`,
+				`http://localhost:5000/dashboard/reminder/completed/${reminder_id}`,
 				{
 					method: "DELETE",
+					headers: {token: localStorage.token}
 				}
 			);
 
 			// eslint-disable-next-line
 			const respOverdueReminders = await fetch(
-				`http://localhost:5000/reminder/overdue/${reminder_id}`,
+				`http://localhost:5000/dashboard/reminder/overdue/${reminder_id}`,
 				{
 					method: "DELETE",
+					headers: {token: localStorage.token}
+				}
+			);
+
+			// eslint-disable-next-line
+			const respAllReminders = await fetch(
+				`http://localhost:5000/dashboard/reminder/all/${reminder_id}`,
+				{
+					method: "DELETE",
+					headers: {token: localStorage.token}
 				}
 			);
 
@@ -94,17 +112,23 @@ function Reminders() {
 	async function reminderCompletedState(reminder_id, reminder_completed) {
 		reminder_completed = !reminder_completed;
 
+		const myHeaders = new Headers();
+		myHeaders.append("Content-type", "application/json");
+		myHeaders.append("token", localStorage.token);
+
 		if (reminder_completed) {
 			// The Completed checkbox just got the check marked.
 
-			const respActiveReminders = await fetch( `http://localhost:5000/reminder/active/${reminder_id}`, {
+			const respActiveReminders = await fetch( `http://localhost:5000/dashboard/reminder/active/${reminder_id}`, {
 					method: "DELETE",
+					headers: {token: localStorage.token}
 				}
 			);
 
 			// eslint-disable-next-line
-			const respOverdueReminders = await fetch( `http://localhost:5000/reminder/overdue/${reminder_id}`, {
+			const respOverdueReminders = await fetch( `http://localhost:5000/dashboard/reminder/overdue/${reminder_id}`, {
 					method: "DELETE",
+					headers: {token: localStorage.token}
 				}
 			);
 
@@ -122,18 +146,18 @@ function Reminders() {
 
 			// eslint-disable-next-line
 			const respAllReminders = await fetch(
-				`http://localhost:5000/reminder/all/${reminder_id}`,
+				`http://localhost:5000/dashboard/reminder/all/${reminder_id}`,
 				{
 					method: "PUT",
-					headers: { "Content-Type": "application/json" },
+					headers: myHeaders,
 					body: JSON.stringify(body),
 				}
 			);
 
 			// eslint-disable-next-line
-			const respCompletedReminders = await fetch("http://localhost:5000/reminder/completed", {
+			const respCompletedReminders = await fetch("http://localhost:5000/dashboard/reminder/completed", {
 				method: "POST",
-				headers: { "Content-type": "application/json" },
+				headers: myHeaders,
 				body: JSON.stringify(bodyPlusId),
 			});
 		} else {
@@ -141,9 +165,10 @@ function Reminders() {
 
 			// eslint-disable-next-line
 			const respCompletedReminders = await fetch(
-				`http://localhost:5000/reminder/completed/${reminder_id}`,
+				`http://localhost:5000/dashboard/reminder/completed/${reminder_id}`,
 				{
 					method: "DELETE",
+					headers: {token: localStorage.token}
 				}
 			);
 
@@ -161,18 +186,18 @@ function Reminders() {
 
 			// eslint-disable-next-line
 			const respAllReminders = await fetch(
-				`http://localhost:5000/reminder/all/${reminder_id}`,
+				`http://localhost:5000/dashboard/reminder/all/${reminder_id}`,
 				{
 					method: "PUT",
-					headers: { "Content-Type": "application/json" },
+					headers: myHeaders,
 					body: JSON.stringify(body),
 				}
 			);
 
 			// eslint-disable-next-line
-			const respActiveReminders = await fetch("http://localhost:5000/reminder/active", {
+			const respActiveReminders = await fetch("http://localhost:5000/dashboard/reminder/active", {
 				method: "POST",
-				headers: { "Content-type": "application/json" },
+				headers: myHeaders,
 				body: JSON.stringify(bodyPlusId),
 			});
 		}
@@ -195,10 +220,17 @@ function Reminders() {
 				 * have the proper decision, before deciding to place a reminder as overdue,
 				 * as to prevent any duplications.
 				 */
-				const respGetAllActiveReminders = await fetch("http://localhost:5000/reminder/active");
+				const respGetAllActiveReminders = await fetch("http://localhost:5000/dashboard/reminder/active", {
+					method: "GET",
+					headers: {token: localStorage.token}
+				});
 				const allActive = await respGetAllActiveReminders.json();
 
-				const respGetAllOverdueReminders = await fetch("http://localhost:5000/reminder/overdue");
+				const respGetAllOverdueReminders = await fetch(
+					"http://localhost:5000/dashboard/reminder/overdue", {
+						method: "GET",
+						headers: {token: localStorage.token}
+					});
 				const allOverdue = await respGetAllOverdueReminders.json();
 				
 				var activeLength = allActive.length;
@@ -241,12 +273,16 @@ function Reminders() {
 
 							var bodyPlusId = { id, completed, title, desc, dueDate, reminderDate };
 
+							const myHeaders = new Headers();
+							myHeaders.append("Content-type", "application/json");
+							myHeaders.append("token", localStorage.token);
+
 							// eslint-disable-next-line
 							const addingToOverdueReminders = await fetch(
-								`http://localhost:5000/reminder/overdue`,
+								`http://localhost:5000/dashboard/reminder/overdue`,
 								{
 									method: "POST",
-									headers: { "Content-type": "application/json" },
+									headers: myHeaders,
 									body: JSON.stringify(bodyPlusId),
 								}
 							);
@@ -278,7 +314,7 @@ function Reminders() {
 	return (
 		<Fragment>
 			<div id="new-reminder-btn-on-dashboard">
-				<InputToDo />
+				<CreateReminder setAuth={setAuth} />
 			</div>
 
 			<Tabs>
@@ -301,9 +337,9 @@ function Reminders() {
 							<thead>
 								<tr id="reminders-table-row">
 									<th width="10%">Completed</th>
-									<th width="70%">Title</th>
+									<th width="60%">Title</th>
 									<th width="10%">View</th>
-									<th width="10%">Delete</th>
+									<th width="20%">Delete</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -326,7 +362,7 @@ function Reminders() {
 											{currReminder.reminder_title}
 										</td>
 										<td>
-											<EditToDo currReminder={currReminder} />
+											<EditReminder currReminder={currReminder} setAuth={setAuth} />
 										</td>
 										<td>
 											<InlineConfirmButton
@@ -354,9 +390,9 @@ function Reminders() {
 							<thead>
 								<tr id="reminders-table-row">
 									<th width="10%">Completed</th>
-									<th width="70%">Title</th>
+									<th width="60%">Title</th>
 									<th width="10%">View</th>
-									<th width="10%">Delete</th>
+									<th width="20%">Delete</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -379,7 +415,7 @@ function Reminders() {
 											{currReminder.reminder_title}
 										</td>
 										<td>
-											<EditToDo currReminder={currReminder} />
+											<EditReminder currReminder={currReminder} setAuth={setAuth} />
 										</td>
 										<td>
 											<InlineConfirmButton
@@ -407,9 +443,9 @@ function Reminders() {
 							<thead>
 								<tr id="reminders-table-row">
 									<th width="10%">Completed</th>
-									<th width="70%">Title</th>
+									<th width="60%">Title</th>
 									<th width="10%">View</th>
-									<th width="10%">Delete</th>
+									<th width="20%">Delete</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -433,7 +469,7 @@ function Reminders() {
 											{currReminder.reminder_title}
 										</td>
 										<td>
-											<EditToDo currReminder={currReminder} />
+											<EditReminder currReminder={currReminder} setAuth={setAuth} />
 										</td>
 										<td>
 											<InlineConfirmButton
@@ -461,9 +497,9 @@ function Reminders() {
 							<thead>
 								<tr id="reminders-table-row">
 									<th width="10%">Completed</th>
-									<th width="70%">Title</th>
+									<th width="60%">Title</th>
 									<th width="10%">View</th>
-									<th width="10%">Delete</th>
+									<th width="20%">Delete</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -485,7 +521,7 @@ function Reminders() {
 										</td>
 										<td id="overdue-title">{currReminder.reminder_title}</td>
 										<td>
-											<EditToDo currReminder={currReminder} />
+											<EditReminder currReminder={currReminder} setAuth={setAuth} />
 										</td>
 										<td>
 											<InlineConfirmButton

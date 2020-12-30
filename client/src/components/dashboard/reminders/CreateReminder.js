@@ -5,9 +5,9 @@ import { toast } from "react-toastify";
 import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import "./../App.css";
+import "./../../../App.css";
 
-function CreateReminder() {
+function CreateReminder({ setAuth }) {
 	const [title, setTitle] = useState("");
 	const [desc, setDesc] = useState("");
 
@@ -35,10 +35,14 @@ function CreateReminder() {
 		const body = {completed, title, desc, dueDate, reminderDate};
 
 		try {
+			const myHeaders = new Headers();
+			myHeaders.append("Content-type", "application/json");
+			myHeaders.append("token", localStorage.token);
+
 			// eslint-disable-next-line
-			const respAllReminders = await fetch("http://localhost:5000/reminder/all", {
+			const respAllReminders = await fetch("http://localhost:5000/dashboard/reminder/all", {
 				method: "POST",
-				headers: { "Content-type": "application/json" },
+				headers: myHeaders,
 				body: JSON.stringify(body),
 			});
 
@@ -48,9 +52,9 @@ function CreateReminder() {
 			const bodyPlusId = {id, completed, title, desc, dueDate, reminderDate}
 			
 			// eslint-disable-next-line
-			const respActiveReminders = await fetch("http://localhost:5000/reminder/active", {
+			const respActiveReminders = await fetch("http://localhost:5000/dashboard/reminder/active", {
 				method: "POST",
-				headers: { "Content-type": "application/json" },
+				headers: myHeaders,
 				body: JSON.stringify(bodyPlusId),
             });
             
