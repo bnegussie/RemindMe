@@ -17,9 +17,6 @@ const Dashboard = ({ setAuth }) => {
 
             const parseResp = await response.json();
 
-            console.log("***TESTING: Dashboard.js");
-            console.log("parseResp = ", [parseResp]);
-
             if (response.status === 403) {
                 toast.error(parseResp, {autoClose: 3000});
                 return false;

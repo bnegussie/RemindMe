@@ -263,7 +263,7 @@ function EditReminder({ currReminder, setAuth }) {
 										placeholderText="Due Date:"
 										showTimeSelect
 										timeFormat="h:mm a"
-										timeIntervals={15}
+										timeIntervals={5}
 										dateFormat="MMMM d, yyyy h:mm aa"
 										popperModifiers={{ preventOverflow: { enabled: true, }, }}
 									/>
@@ -277,7 +277,7 @@ function EditReminder({ currReminder, setAuth }) {
 										placeholderText="Reminder Date:"
 										showTimeSelect
 										timeFormat="h:mm a"
-										timeIntervals={15}
+										timeIntervals={5}
 										dateFormat="MMMM d, yyyy h:mm aa"
 										popperModifiers={{ preventOverflow: { enabled: true, }, }}
 									/>
