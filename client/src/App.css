@@ -492,7 +492,7 @@ a.btn-mobile > button {
   font-weight: bold;
 }
 
-#completed-checkboxes {
+.completed-checkboxes {
   width: 18px;
   height: 18px;
 }

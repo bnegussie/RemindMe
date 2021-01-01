@@ -348,7 +348,7 @@ function Reminders() {
 										<td>
 											<input
 												type="checkbox"
-												id="completed-checkboxes"
+												className="completed-checkboxes"
 												onChange={() =>
 													reminderCompletedState(
 														currReminder.reminder_id,
@@ -401,7 +401,7 @@ function Reminders() {
 										<td>
 											<input
 												type="checkbox"
-												id="completed-checkboxes"
+												className="completed-checkboxes"
 												onChange={() =>
 													reminderCompletedState(
 														currReminder.reminder_id,
@@ -454,7 +454,7 @@ function Reminders() {
 										<td>
 											<input
 												type="checkbox"
-												id="completed-checkboxes"
+												className="completed-checkboxes"
 												onChange={() =>
 													reminderCompletedState(
 														currReminder.reminder_id,
@@ -508,7 +508,7 @@ function Reminders() {
 										<td>
 											<input
 												type="checkbox"
-												id="completed-checkboxes"
+												className="completed-checkboxes"
 												onChange={() =>
 													reminderCompletedState(
 														currReminder.reminder_id,

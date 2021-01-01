@@ -51,7 +51,7 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
                                 <Link to="/dashboard" className="nav-links" onClick={closeMenu}>Home</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-links" onClick={(e) => logout(e)}>Logout</Link>
+                                <Link to="/" className="nav-links" onClick={(e) => logout(e)}>Logout</Link>
                             </li>
                         </ul>
                     </div>

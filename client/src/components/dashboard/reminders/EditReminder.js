@@ -227,7 +227,7 @@ function EditReminder({ currReminder }) {
 								<div className="editreminder-completed">
 									<label>Completed:</label>
 									<input type="checkbox" 
-										id="completed-checkboxes"
+										className="completed-checkboxes"
 										defaultValue={completed}
 										onChange={() => setCompleted( !completed )}
 										checked={completed}
