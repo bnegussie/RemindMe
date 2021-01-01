@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 import "./../../../App.css"
 
-function EditReminder({ currReminder, setAuth }) {
+function EditReminder({ currReminder }) {
 	const [completed, setCompleted] = useState( currReminder.reminder_completed );
 	const [title, setTitle] = useState(currReminder.reminder_title);
 	const [desc, setDesc] = useState(currReminder.reminder_desc);

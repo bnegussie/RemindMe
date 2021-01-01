@@ -116,7 +116,7 @@ function App() {
               exact path="/dashboard" 
               render={props => 
                 isAuthenticated ? (
-                  <Dashboard {...props} setAuth={setAuth} />
+                  <Dashboard {...props} />
                 ) : (
                   <Redirect to="/"/>
                 )  

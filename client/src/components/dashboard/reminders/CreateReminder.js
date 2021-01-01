@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./../../../App.css";
 
-function CreateReminder({ setAuth }) {
+function CreateReminder() {
 	const [title, setTitle] = useState("");
 	const [desc, setDesc] = useState("");
 

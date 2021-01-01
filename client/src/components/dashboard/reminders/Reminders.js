@@ -9,7 +9,7 @@ import "react-tabs/style/react-tabs.css";
 import EditReminder from "./EditReminder";
 import CreateReminder from "./CreateReminder";
 
-function Reminders({ setAuth }) {
+function Reminders() {
 	const [allActiveReminders, setAllActiveReminders] = useState([]);
 	const [allCompletedReminders, setAllCompletedReminders] = useState([]);
 	const [allOverdueReminders, setAllOverdueReminders] = useState([]);
@@ -314,7 +314,7 @@ function Reminders({ setAuth }) {
 	return (
 		<Fragment>
 			<div id="new-reminder-btn-on-dashboard">
-				<CreateReminder setAuth={setAuth} />
+				<CreateReminder />
 			</div>
 
 			<Tabs>
@@ -362,7 +362,7 @@ function Reminders({ setAuth }) {
 											{currReminder.reminder_title}
 										</td>
 										<td>
-											<EditReminder currReminder={currReminder} setAuth={setAuth} />
+											<EditReminder currReminder={currReminder} />
 										</td>
 										<td>
 											<InlineConfirmButton
@@ -415,7 +415,7 @@ function Reminders({ setAuth }) {
 											{currReminder.reminder_title}
 										</td>
 										<td>
-											<EditReminder currReminder={currReminder} setAuth={setAuth} />
+											<EditReminder currReminder={currReminder} />
 										</td>
 										<td>
 											<InlineConfirmButton
@@ -469,7 +469,7 @@ function Reminders({ setAuth }) {
 											{currReminder.reminder_title}
 										</td>
 										<td>
-											<EditReminder currReminder={currReminder} setAuth={setAuth} />
+											<EditReminder currReminder={currReminder} />
 										</td>
 										<td>
 											<InlineConfirmButton
@@ -521,7 +521,7 @@ function Reminders({ setAuth }) {
 										</td>
 										<td id="overdue-title">{currReminder.reminder_title}</td>
 										<td>
-											<EditReminder currReminder={currReminder} setAuth={setAuth} />
+											<EditReminder currReminder={currReminder} />
 										</td>
 										<td>
 											<InlineConfirmButton
