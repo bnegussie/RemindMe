@@ -18,6 +18,7 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
             setButton(false);
         } else {
             setButton(true);
+            setClick(false);
         }
     };
 
@@ -36,56 +37,56 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
         closeMenu(false);
         toast.success("Successful logout.", {autoClose: 3000});
     });
+
+    if (isAuthenticated) {
+        return (
+            <Fragment>
+                <nav className="navbar">
+                    <div className="navbar-container">
+                        <Link to="/dashboard" className="navbar-logo" onClick={closeMenu}>
+                            RemindMe <i className="fas fa-angle-double-right" />
+                        </Link>
+                        <div className="menu-icon" onClick={handleClick}>
+                            <i className={click ? "fas fa-times" : "fas fa-bars"} />
+                        </div>
+                        <ul className={click ? "nav-menu active" : "nav-menu-logged-in"}>
+                            <li className="nav-item">
+                                <Link to="/dashboard" className="nav-links" onClick={closeMenu}>Home</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-links" onClick={(e) => logout(e)}>Logout</Link>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </Fragment>
+        );
+    }
     
     return (
         <Fragment>
             <nav className="navbar">
                 <div className="navbar-container">
-                    {isAuthenticated ? 
-                        (<Link to="/dashboard" className="navbar-logo" onClick={closeMenu}>
-                            RemindMe <i className="fas fa-angle-double-right" />
-                        </Link>
-                        ) : (
-                        <Link to="/" className="navbar-logo" onClick={closeMenu}>
-                            RemindMe <i className="fas fa-angle-double-right" />
-                        </Link>)
-                    }
+                    <Link to="/" className="navbar-logo" onClick={closeMenu}>
+                        RemindMe <i className="fas fa-angle-double-right" />
+                    </Link>
                     <div className="menu-icon" onClick={handleClick}>
                         <i className={click ? "fas fa-times" : "fas fa-bars"} />
                     </div>
                     <ul className={click ? "nav-menu active" : "nav-menu"}>
-                        {isAuthenticated ?  (
-                            <li className="nav-item">
-                                <Link to="/dashboard" className="nav-links" onClick={closeMenu}>Home</Link>
-                            </li>
-                            ) : (null)
-                        }
-                        {isAuthenticated ? (null) : (
-                            <li className="nav-item">
-								<Link to="/AboutUs" className="nav-links" onClick={closeMenu}>About Us</Link>
-                            </li>)
-                        }
-                        {isAuthenticated ? (null) : (
-                            <li className="nav-item">
-								<Link to="/register" className="nav-links" onClick={closeMenu}>Sign Up</Link>
-                            </li>)
-                        }
-                        {isAuthenticated ? (
-                            <li className="nav-item">
-                                <Link className="nav-links" onClick={(e) => logout(e)}>Logout</Link>
-                            </li>) : (null)
-                        }
-
-                        {isAuthenticated ? (null) : (
-                            <li>
-								<Link to="/login" className="nav-links-mobile" onClick={closeMenu}>LOG IN</Link>
-                            </li>)
-                        }
+                        <li className="nav-item">
+                            <Link to="/AboutUs" className="nav-links" onClick={closeMenu}>About Us</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to="/register" className="nav-links" onClick={closeMenu}>Sign Up</Link>
+                        </li>
+                        <li>
+                            <Link to="/login" className="nav-links-mobile" onClick={closeMenu}>LOG IN</Link>
+                        </li>
                     </ul>
-                    {isAuthenticated ? (null) :
-                        (button && <Button buttonStyle="btn--outline" onClick={() => history.push("/login")}>
-                            LOG IN
-                        </Button>)
+                    {button && <Button buttonStyle="btn--outline" onClick={() => history.push("/login")}>
+                        LOG IN
+                    </Button>
                     }
                 </div>
             </nav>

@@ -208,7 +208,7 @@ a.btn-mobile > button {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   position: sticky;
   top: 0;
   z-index: 999;
@@ -228,9 +228,10 @@ a.btn-mobile > button {
   margin-left: 20px;
   cursor: pointer;
   text-decoration: none;
-  font-size: 2rem;
+  font-size: 2.4rem;
   display: flex;
   align-items: center;
+  margin-top: -10px;
 }
 
 .fa-typo3 {
@@ -240,17 +241,29 @@ a.btn-mobile > button {
 
 .nav-menu {
   display: grid;
-  grid-template-columns: repeat(4, auto);
+  grid-template-columns: repeat(2, auto);
   grid-gap: 10px;
   list-style: none;
   text-align: center;
-  width: 60vw;
+  width: 55vw;
+  justify-content: end;
+  margin-right: 2rem;
+  margin-top: 25px;
+}
+
+.nav-menu-logged-in {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-gap: 10px;
+  list-style: none;
+  text-align: center;
+  width: 75vw;
   justify-content: end;
   margin-right: 2rem;
 }
 
 .nav-item {
-  height: 80px;
+  height: 60px;
 }
 
 .nav-links {
@@ -303,12 +316,25 @@ a.btn-mobile > button {
     transition: all 0.5s ease;
   }
 
+  .nav-menu-logged-in {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 90vh;
+    position: absolute;
+    top: 80px;
+    left: -100%;
+    opacity: 1;
+    transition: all 0.5s ease;
+  }
+
   .nav-menu.active {
     background: #242222;
     left: 0;
     opacity: 1;
     transition: all 0.5s ease;
     z-index: 1;
+    margin-top: 0px;
   }
 
   .nav-links {
