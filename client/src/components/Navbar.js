@@ -1,6 +1,5 @@
 import React, {Fragment, useState, useEffect} from 'react'
 import {Link} from 'react-router-dom';
-import { useHistory } from "react-router-dom";
 import {toast} from "react-toastify";
 
 import {Button} from "./Button.js";
@@ -27,8 +26,6 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
     }, []);
 
     window.addEventListener("resize", showButton);
-
-    const history = useHistory();
 
     const logout = ((e) => {
         e.preventDefault();
@@ -84,7 +81,7 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
                             <Link to="/login" className="nav-links-mobile" onClick={closeMenu}>LOG IN</Link>
                         </li>
                     </ul>
-                    {button && <Button buttonStyle="btn--outline" onClick={() => history.push("/login")}>
+                    {button && <Button to="/login" buttonStyle="btn--outline">
                         LOG IN
                     </Button>
                     }
