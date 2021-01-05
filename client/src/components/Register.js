@@ -1,5 +1,6 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { toast } from 'react-toastify';
+import Select from "react-select";
 
 const Register = ({ setAuth }) => {
     
@@ -11,6 +12,9 @@ const Register = ({ setAuth }) => {
         pwd: "",
         pwd_confirm: ""
     });
+    const [cellphoneCarrier, setCellphoneCarrier] = useState("");
+    // eslint-disable-next-line
+    const [allCellphoneCarriers, setAllCellphoneCarriers] = useState([]);
 
     const { f_name, l_name, email, p_num, pwd, pwd_confirm } = inputs;
 
@@ -22,7 +26,7 @@ const Register = ({ setAuth }) => {
         e.preventDefault();
 
         try {
-            const body = { f_name, l_name, email, p_num, pwd, pwd_confirm };
+            const body = { f_name, l_name, email, cellphoneCarrier, p_num, pwd, pwd_confirm };
 
             // Quick input validation:
             // eslint-disable-next-line
@@ -62,6 +66,29 @@ const Register = ({ setAuth }) => {
             console.error(error.message);
         }
     };
+
+    // Getting all of the cellphone carriers and their email extension, so the app 
+    // can send text messages to the users.
+	useEffect(() => {
+        getAllCellphoneCarriers();
+
+        async function getAllCellphoneCarriers() {
+            try {
+                const response = await fetch("http://localhost:5000/dashboard/reminder/cellphone-carriers");
+                const allCarriers = await response.json();
+    
+                allCarriers.forEach(function(currCarrier, index) {
+                    allCellphoneCarriers.push({
+                        "label": `${currCarrier.carrier_name}`,
+                        "value": `${currCarrier.carrier_email_extension}`
+                    })
+                });
+    
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+    }, [allCellphoneCarriers]);
     
     
     return (
@@ -96,14 +123,23 @@ const Register = ({ setAuth }) => {
                     onChange={e => onChange(e)}
                     required
                 />
-                <input
-                    type="tel"
-                    name="p_num"
-                    placeholder="Phone number (optional)"
-                    className="form-control my-3"
-                    value={p_num}
-                    onChange={e => onChange(e)}
-                />
+                <div id="cellphone-container">
+                    <Select options={allCellphoneCarriers}
+                            onChange={e => setCellphoneCarrier(e.value)}
+                            value={cellphoneCarrier.label}
+                            placeholder="Cellphone carrier"
+                    />
+                
+                    <input 
+                        type="tel"
+                        name="p_num"
+                        placeholder="Phone number (optional)"
+                        className="form-control my-3"
+                        value={p_num}
+                        onChange={e => onChange(e)}
+                    />                
+                </div>
+                
                 <input
                     type="password"
                     name="pwd"

@@ -1,5 +1,5 @@
 CREATE TABLE cellphone_carriers (
-    carrier_name VARCHAR(255) NOT NULL PRIMARY KEY,
+    carrier_name VARCHAR(255) NOT NULL PRIMARY KEY UNIQUE,
     carrier_email_extension VARCHAR(255) NOT NULL
 );
 

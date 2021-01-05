@@ -6,6 +6,7 @@ CREATE TABLE users (
     user_f_name VARCHAR(255) NOT NULL,
     user_l_name VARCHAR(255) NOT NULL,
     user_email VARCHAR(255) NOT NULL UNIQUE,
+    user_cp_carrier_email_extn VARCHAR(255),
     user_p_num CHAR(10),
     CONSTRAINT check_p_num CHECK (user_p_num NOT LIKE '%[^0-9]%'),
     user_pwd VARCHAR(255) NOT NULL,

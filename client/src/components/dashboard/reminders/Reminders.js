@@ -20,39 +20,55 @@ function Reminders() {
 	const confirmIconClass = `fa fa-${isExecuting ? "circle-o-notch fa-spin" : "fa fa-trash"}`;
 
 	async function getAllActiveReminders() {
-		const response = await fetch("http://localhost:5000/dashboard/reminder/active", {
-			method: "GET",
-			headers: {token: localStorage.token}
-		});
-		const parseResp = await response.json();
-		setAllActiveReminders(parseResp);
+		try {
+			const response = await fetch("http://localhost:5000/dashboard/reminder/active", {
+				method: "GET",
+				headers: {token: localStorage.token}
+			});
+			const parseResp = await response.json();
+			setAllActiveReminders(parseResp);
+		} catch (error) {
+			console.error(error.message);
+		}
 	}
 
 	async function getAllCompletedReminders() {
-		const response = await fetch("http://localhost:5000/dashboard/reminder/completed", {
-			method: "GET",
-			headers: {token: localStorage.token}
-		});
-		const parseResp = await response.json();
-		setAllCompletedReminders(parseResp);
+		try {
+			const response = await fetch("http://localhost:5000/dashboard/reminder/completed", {
+				method: "GET",
+				headers: {token: localStorage.token}
+			});
+			const parseResp = await response.json();
+			setAllCompletedReminders(parseResp);
+		} catch (error) {
+			console.error(error.message);
+		}
 	}
 
 	async function getAllOverdueReminders() {
-		const response = await fetch("http://localhost:5000/dashboard/reminder/overdue", {
-			method: "GET",
-			headers: {token: localStorage.token}
-		});
-		const parseResp = await response.json();
-		setAllOverdueReminders(parseResp);
+		try {
+			const response = await fetch("http://localhost:5000/dashboard/reminder/overdue", {
+				method: "GET",
+				headers: {token: localStorage.token}
+			});
+			const parseResp = await response.json();
+			setAllOverdueReminders(parseResp);
+		} catch (error) {
+			console.error(error.message);
+		}
 	}
 
 	async function getAllReminders() {
-		const response = await fetch("http://localhost:5000/dashboard/reminder/all", {
-			method: "GET",
-			headers: {token: localStorage.token}
-		});
-		const parseResp = await response.json();
-		setAllReminders(parseResp);
+		try {
+			const response = await fetch("http://localhost:5000/dashboard/reminder/all", {
+				method: "GET",
+				headers: {token: localStorage.token}
+			});
+			const parseResp = await response.json();
+			setAllReminders(parseResp);
+		} catch (error) {
+			console.error(error.message);
+		}
 	}
 
 	async function deleteReminderTask(reminder_id) {

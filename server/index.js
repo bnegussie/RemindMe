@@ -102,6 +102,7 @@ async function triggerGeneralEmail() {
             const allActive = currUserAllActiveReminders;
 
             const userEmail = allActive[0].user_email;
+            const userCPCarrierEmailExtn = allActive[0].user_cp_carrier_email_extn;
             const userPNum = allActive[0].user_p_num;
             const userFName = allActive[0].user_f_name;
 
@@ -168,7 +169,7 @@ async function triggerGeneralEmail() {
             }
 
             // eslint-disable-next-line
-            sendGeneralReminderEmail(reminders, userEmail, userPNum, userFName);
+            sendGeneralReminderEmail(reminders, userEmail, userCPCarrierEmailExtn, userPNum, userFName);
         });
 
     } catch (error) {
@@ -176,7 +177,7 @@ async function triggerGeneralEmail() {
     }
 }
 
-async function sendGeneralReminderEmail(req, userEmail, userPNum, userFName) {
+async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, userPNum, userFName) {
     
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
@@ -404,7 +405,7 @@ async function sendGeneralReminderEmail(req, userEmail, userPNum, userFName) {
         // Step 2, part 2: sending text message with defined transport object:
         let smsInfo = {
             from: "RemindMe <brookninfo@gmail.com>",
-            to: `${userPNum}@tmomail.net`,
+            to: `${userPNum}${userCPCarrierEmailExtn}`,
             subject: "RemindMe: General Daily Reminders",
             text: `Hi ${userFName},
             We just wanted to remind you about your upcoming tasks. We hope that you make the most out of this day!
@@ -474,6 +475,7 @@ async function triggerSpecifiedReminderEmailAndSMS() {
 
     allUserReminders.forEach(function(currUserAllActiveReminders, index) {
         const userEmail = currUserAllActiveReminders[0].user_email;
+        const userCPCarrierEmailExtn = currUserAllActiveReminders[0].user_cp_carrier_email_extn;
         const userPNum = currUserAllActiveReminders[0].user_p_num;
         const userFName = currUserAllActiveReminders[0].user_f_name;
 
@@ -508,12 +510,12 @@ async function triggerSpecifiedReminderEmailAndSMS() {
         });
 
         if (reminders.length > 0) {
-            sendSpecifiedReminderEmail(reminders, userEmail, userPNum, userFName);
+            sendSpecifiedReminderEmail(reminders, userEmail, userCPCarrierEmailExtn, userPNum, userFName);
         }
     });
 }
 
-async function sendSpecifiedReminderEmail(req, userEmail, userPNum, userFName) {
+async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn, userPNum, userFName) {
     
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
@@ -607,7 +609,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userPNum, userFName) {
         // Step 2, part 2: sending a text message with defined transport object:
         let smsInfo = {
             from: "RemindMe <brookninfo@gmail.com>",
-            to: `${userPNum}@tmomail.net`,
+            to: `${userPNum}${userCPCarrierEmailExtn}`,
             subject: "RemindMe: Specific Reminders",
             text: `Hi ${userFName},
             Here are the tasks which you wanted us to remind you about. We hope that you make the most out of this day!

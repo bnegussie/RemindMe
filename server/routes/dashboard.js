@@ -378,6 +378,17 @@ router.delete("/reminder/overdue/:id", authorization, async (req, res) => {
     }
 });
 /************************************** END: overdue_reminders DB ********************************/
+/************************************** START: cellphone_carriers DB *****************************/
+// Gets all of the cellphone carriers:
+router.get("/reminder/cellphone-carriers", async (req, res) => {
+    try {
+        const cellphoneCarriers = await pool.query("SELECT * FROM cellphone_carriers ORDER BY carrier_name ASC;");
+        res.status(200).json(cellphoneCarriers.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+/************************************** END: cellphone_carriers DB *******************************/
 
 
 
