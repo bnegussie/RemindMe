@@ -10,9 +10,15 @@ function Footer({ isAuthenticated }) {
 
 	return (
 		<div className="footer-container">
-			<div className="footer-links">
+            <div className="footer-links">
+                <Link to="/HowItWorks">How It Works</Link>
+            </div>
+        
+            <div className="footer-links">
 				<Link to="/AboutUs">About Us</Link>
-			</div>
+            </div>
+            
+
 			<Link to="#" className="footer-links" data-toggle="modal" data-target="#myModal" >
 				Contact Us
 			</Link>

@@ -28,6 +28,7 @@
   text-align: center;
   width: 160px;
   box-sizing: border-box;
+  align-items: center;
 }
 
 .footer-links a {
@@ -41,6 +42,7 @@ div.footer-container > a {
   text-decoration: none;
   margin-bottom: 0.5rem;
   margin-top: 0px;
+  align-items: center;
 }
 
 .footer-links a:hover {
@@ -63,13 +65,13 @@ div.footer-container > a:hover {
 }
 /************************************ END: FOOTER.JS *********************************************/
 /************************************ START: ABOUTUS.JS ******************************************/
-.about-us-container {
+.info-container {
   background-color: #ffffff73;
   background-position: center;
   background-size: cover;
 }
 
-.about-us-message {
+.info-message {
   margin-left: 100px;
   margin-right: 100px;
 
@@ -78,18 +80,18 @@ div.footer-container > a:hover {
   border-radius: 20px;
 }
 
-.about-us-container > h1 {
+.info-container > h1 {
   text-align: center;
   color: black;
 }
 
-.about-us-message > p {
+.info-message > p {
   color: #8B4513;
   text-indent: 40px;
   font-size: 20px;
 }
 
-#about-us-subtitle {
+#info-subtitle {
   color: black;
   font-size: 26px;
   margin-bottom: 0px;

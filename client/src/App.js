@@ -19,6 +19,7 @@ import LandingPage from "./components/LandingPage";
 import AboutUs from "./components/AboutUs";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
+import HowItWorks from "./components/HowItWorks"
 
 
 toast.configure();
@@ -86,6 +87,17 @@ function App() {
                   <Redirect to="/dashboard"/>
                 ) : (
                   <AboutUs />
+                )  
+              }
+            />
+
+            <Route 
+              exact path="/howitworks" 
+              render={props => 
+                isAuthenticated ? (
+                  <Redirect to="/dashboard"/>
+                ) : (
+                  <HowItWorks />
                 )  
               }
             />

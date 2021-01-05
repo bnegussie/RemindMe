@@ -4,9 +4,9 @@ import "./../App.css"
 function AboutUs() {
     return (
         <Fragment>
-            <div className="about-us-container">
+            <div className="info-container">
                 <h1>About Us</h1>
-                <div className="about-us-message">
+                <div className="info-message">
                     <p>
                         We understand the domino effect is real. This is why we created this web application
                         to make the domino effect work in your favor. From the small tasks in the 
@@ -18,7 +18,7 @@ function AboutUs() {
                         your upcomming tasks, so you can always stay ahead.
                     </p>
                     <br/><br/>
-                    <p id="about-us-subtitle">Image credit:</p>
+                    <p id="info-subtitle">Image credit:</p>
                     <p>
                             The landing page photo was taken by Mr.Mockup. To check out more works
                         from him, simply checkout his Dribbble page: (https://dribbble.com/mrmockup).
