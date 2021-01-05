@@ -36,9 +36,35 @@
   margin-bottom: 0.5rem;
 }
 
+div.footer-container > a {
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  margin-top: 0px;
+}
+
 .footer-links a:hover {
-  color: #e9e9e9;
+  color: #C0C0C0;
   transition: 0.3s ease-out;
+}
+
+div.footer-container > a:hover {
+  color: #C0C0C0;
+  transition: 0.3s ease-out;
+}
+
+.modal-title.footer {
+  display: flex;
+  float: left;
+}
+
+.modal-body.footer {
+  display: flex;
+}
+
+#footer-email {
+  text-indent: 8px;
+  color: #8B4513;
 }
 /************************************ END: FOOTER.JS *********************************************/
 /************************************ START: ABOUTUS.JS ******************************************/
