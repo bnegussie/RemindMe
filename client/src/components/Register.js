@@ -36,9 +36,14 @@ const Register = ({ setAuth }) => {
             } else if (pwd !== pwd_confirm) {
                 toast.error("Passwords must match.", {autoClose: 3000});
                 return false;
-            } else if (p_num && !p_num.match(/^\d{10}$/)) {
+            } else if ( (p_num && !p_num.match(/^\d{10}$/)) || (p_num === "" && cellphoneCarrier !== "") ) {
 
                 toast.error("Please provide a valid phone number: 2065551234", {autoClose: 4000});
+                return false;
+            } else if (p_num !== "" && cellphoneCarrier === "") {
+                toast.error("Please specify your Cellphone Carrier.", {autoClose: 7500});
+                toast.info("This information allows us to send users free reminder text messages.", 
+                            {autoClose: 7500});
                 return false;
             }
             
@@ -128,13 +133,14 @@ const Register = ({ setAuth }) => {
                             onChange={e => setCellphoneCarrier(e.value)}
                             value={cellphoneCarrier.label}
                             placeholder="Cellphone carrier"
+                            className="my-3 cellphone-child"
                     />
                 
                     <input 
                         type="tel"
                         name="p_num"
-                        placeholder="Phone number (optional)"
-                        className="form-control my-3"
+                        placeholder="Phone number (optional, but highly recommended)"
+                        className="form-control my-3 cellphone-child"
                         value={p_num}
                         onChange={e => onChange(e)}
                     />                

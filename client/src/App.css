@@ -497,3 +497,18 @@ a.btn-mobile > button {
   height: 18px;
 }
 /***************************************** END: EDITREMINDER.JS **********************************/
+/***************************************** START: REGISTER.JS ************************************/
+#cellphone-container {
+  display: flex;
+}
+
+.my-3.cellphone-child {
+  width: 50%;
+  margin-right: 10px;
+}
+
+.form-control.my-3.cellphone-child {
+  width: 50%;
+  margin-right: 0px;
+}
+/***************************************** END: REGISTER.JS **************************************/
