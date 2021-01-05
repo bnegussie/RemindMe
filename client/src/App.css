@@ -53,11 +53,6 @@ div.footer-container > a:hover {
   transition: 0.3s ease-out;
 }
 
-.modal-title.footer {
-  display: flex;
-  float: left;
-}
-
 .modal-body.footer {
   display: flex;
 }

@@ -17,22 +17,22 @@ function Footer({ isAuthenticated }) {
 				Contact Us
 			</Link>
 
-			<div id="myModal" class="modal fade" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-                            <h4 class="modal-title footer">Contact Us</h4>
-                            <button type="button" class="close" data-dismiss="modal">
+			<div id="myModal" className="modal fade" role="dialog">
+				<div className="modal-dialog">
+					<div className="modal-content">
+						<div className="modal-header">
+                            <h4 className="modal-title">Contact Us</h4>
+                            <button type="button" className="close" data-dismiss="modal">
 								&times;
 							</button>
 							
 						</div>
-                        <div class="modal-body footer">
+                        <div className="modal-body footer">
                             <p>Email: </p>
                             <p id="footer-email"> brookninfo@gmail.com</p>
 						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">
+						<div className="modal-footer">
+							<button type="button" className="btn btn-default" data-dismiss="modal">
 								Close
 							</button>
 						</div>
