@@ -1,6 +1,5 @@
 import React, {Fragment, useState, useEffect} from 'react'
 import {Link} from 'react-router-dom';
-import {toast} from "react-toastify";
 
 import {Button} from "./Button.js";
 import DropDown from "./DropDown"
@@ -41,9 +40,9 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
 
     // Getting the username to display on the navbar button:
     useEffect(() => {
-        getUser();
+        getUsername();
 
-        async function getUser() {
+        async function getUsername() {
             if (isAuthenticated) {
                 try {
                     const response = await fetch(
@@ -64,15 +63,6 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
     }, [isAuthenticated]);
 
     window.addEventListener("resize", showButton);
-
-    // eslint-disable-next-line
-    const logout = ((e) => {
-        e.preventDefault();
-        localStorage.removeItem("token");
-        setAuth(false);
-        closeMenu(false);
-        toast.success("Successful logout.", {autoClose: 3000});
-    });
 
     if (isAuthenticated) {
         return (
