@@ -3,11 +3,14 @@ import {Link} from 'react-router-dom';
 import {toast} from "react-toastify";
 
 import {Button} from "./Button.js";
+import DropDown from "./DropDown"
+
 import "./../App.css";
 
 const Navbar = ({ setAuth, isAuthenticated }) => {
     const [click, setClick] = useState(false);
     const [button, setButton] = useState(true);
+    const [dropDown, setDropDown] = useState(false);
     
     const handleClick = () => { setClick(!click) };
     const closeMenu = () => { setClick(false) };
@@ -21,12 +24,23 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
         }
     };
 
+    const onMouseEnter = () => {
+        if (window.innerWidth <= 960) {
+            setDropDown(false);
+        } else {
+            setDropDown(true);
+        }
+    };
+
+    const onMouseLeave = () => { setDropDown(false) };
+
     useEffect(() => {
         showButton();
     }, []);
 
     window.addEventListener("resize", showButton);
 
+    // eslint-disable-next-line
     const logout = ((e) => {
         e.preventDefault();
         localStorage.removeItem("token");
@@ -50,8 +64,17 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
                             <li className="nav-item">
                                 <Link to="/dashboard" className="nav-links" onClick={closeMenu}>Home</Link>
                             </li>
-                            <li className="nav-item">
-                                <Link to="/" className="nav-links" onClick={(e) => logout(e)}>Logout</Link>
+                            <li 
+                                className="nav-item"
+                                onMouseEnter={onMouseEnter}
+                                onMouseLeave={onMouseLeave}
+                            >
+                                <Link to="#" className="nav-user-links">
+                                    Logout <i className="fas fa-caret-down" />
+                                </Link>
+                                {dropDown &&
+                                    <DropDown setAuth={setAuth} />
+                                }
                             </li>
                         </ul>
                     </div>
