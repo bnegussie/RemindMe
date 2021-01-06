@@ -331,6 +331,7 @@ a.btn-mobile > button {
 ul > li:nth-child(2) > a {
   text-decoration: none;
   color: #fff;
+  margin-right: min(30px, 0);
 }
 
 ul > li:nth-child(2) > a:hover {
@@ -574,7 +575,8 @@ ul > li:nth-child(2) > a:hover {
   list-style: none;
   text-align: start;
 
-  margin-left: -3%;
+  margin-left: -2.5%;
+  padding: 20px 10px;
 }
 
 .drop-down-menu li {

@@ -51,7 +51,18 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
                             headers: {token: localStorage.token}
                     });
                     const parseResp = await response.json();
-                    setUserName(parseResp.user_f_name);
+                    
+                    // Making sure to display the user's name starting with an uppercase, just in
+                    // case the user did not provide it in that fasion when they signed up.
+                    const starterUsername = parseResp.user_f_name;
+                    var finalUsername;
+                    if (starterUsername.length > 1) {
+                        finalUsername = starterUsername.charAt(0).toUpperCase() + starterUsername.slice(1);
+                    } else {
+                        finalUsername = starterUsername.charAt(0).toUpperCase();
+                    }
+
+                    setUserName(finalUsername);
 
                 } catch (error) {
                     console.error(error.message);
