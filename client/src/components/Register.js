@@ -41,7 +41,7 @@ const Register = ({ setAuth }) => {
                 toast.error("Please provide a valid phone number: 2065551234", {autoClose: 4000});
                 return false;
             } else if (p_num !== "" && cellphoneCarrier === "") {
-                toast.error("Please specify your Cellphone Carrier.", {autoClose: 7500});
+                toast.error("Please specify your Cell Phone Carrier.", {autoClose: 7500});
                 toast.info("This information allows us to send users free reminder text messages.", 
                             {autoClose: 7500});
                 return false;
@@ -72,7 +72,7 @@ const Register = ({ setAuth }) => {
         }
     };
 
-    // Getting all of the cellphone carriers and their email extension, so the app 
+    // Getting all of the cell phone carriers and their email extension, so the app 
     // can send text messages to the users.
 	useEffect(() => {
         getAllCellphoneCarriers();
@@ -132,7 +132,7 @@ const Register = ({ setAuth }) => {
                     <Select options={allCellphoneCarriers}
                             onChange={e => setCellphoneCarrier(e.value)}
                             value={cellphoneCarrier.label}
-                            placeholder="Cellphone carrier"
+                            placeholder="Cell phone carrier"
                             className="my-3 cellphone-child"
                     />
                 

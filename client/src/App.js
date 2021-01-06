@@ -20,6 +20,7 @@ import AboutUs from "./components/AboutUs";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import HowItWorks from "./components/HowItWorks"
+import FAQ from "./components/FAQ"
 
 
 toast.configure();
@@ -98,6 +99,17 @@ function App() {
                   <Redirect to="/dashboard"/>
                 ) : (
                   <HowItWorks />
+                )  
+              }
+            />
+
+            <Route 
+              exact path="/faq" 
+              render={props => 
+                isAuthenticated ? (
+                  <Redirect to="/dashboard"/>
+                ) : (
+                  <FAQ />
                 )  
               }
             />

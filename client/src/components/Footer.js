@@ -16,6 +16,10 @@ function Footer({ isAuthenticated }) {
         
             <div className="footer-links">
 				<Link to="/AboutUs">About Us</Link>
+			</div>
+			
+			<div className="footer-links">
+				<Link to="/FAQ">FAQ</Link>
             </div>
             
 
