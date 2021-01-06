@@ -11,6 +11,7 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
     const [click, setClick] = useState(false);
     const [button, setButton] = useState(true);
     const [dropDown, setDropDown] = useState(false);
+    const [userName, setUserName] = useState("");
     
     const handleClick = () => { setClick(!click) };
     const closeMenu = () => { setClick(false) };
@@ -37,6 +38,30 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
     useEffect(() => {
         showButton();
     }, []);
+
+    // Getting the username to display on the navbar button:
+    useEffect(() => {
+        getUser();
+
+        async function getUser() {
+            if (isAuthenticated) {
+                try {
+                    const response = await fetch(
+                        "http://localhost:5000/dashboard/user/username", {
+                            method: "GET",
+                            headers: {token: localStorage.token}
+                    });
+                    const parseResp = await response.json();
+                    setUserName(parseResp.user_f_name);
+
+                } catch (error) {
+                    console.error(error.message);
+                }
+            } else {
+                setUserName("");
+            }
+        }
+    }, [isAuthenticated]);
 
     window.addEventListener("resize", showButton);
 
@@ -70,7 +95,7 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
                                 onMouseLeave={onMouseLeave}
                             >
                                 <Link to="#" className="nav-user-links">
-                                    Logout <i className="fas fa-caret-down" />
+                                    {userName} <i className="fas fa-caret-down" />
                                 </Link>
                                 {dropDown &&
                                     <DropDown setAuth={setAuth} />

@@ -389,6 +389,19 @@ router.get("/reminder/cellphone-carriers", async (req, res) => {
     }
 });
 /************************************** END: cellphone_carriers DB *******************************/
+/************************************** START: USERS DB ******************************************/
+// Provides the user's first name:
+router.get("/user/username", authorization, async (req, res) => {
+    try {
+        const userName = await pool.query(
+            "SELECT user_f_name FROM users WHERE user_id = $1", [req.user]
+        )
+        res.status(200).json(userName.rows[0]);
+    } catch (error) {
+        console.error(error.message);
+    }
+})
+/************************************** END: USERS DB ********************************************/
 
 
 

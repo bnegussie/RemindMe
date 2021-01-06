@@ -319,6 +319,7 @@ a.btn-mobile > button {
 
 .nav-user-links {
   height: 80px;
+  width: 100%;
   color: #fff;
   display: flex;
   align-items: center;
@@ -568,7 +569,6 @@ ul > li:nth-child(2) > a:hover {
 /***************************************** END: REGISTER.JS **************************************/
 /***************************************** START: DROPDOWN.JS ************************************/
 .drop-down-menu {
-  width: 160px;
   position: absolute;
   top: 60px;
   list-style: none;
