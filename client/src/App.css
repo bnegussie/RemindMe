@@ -165,18 +165,12 @@ a.btn-mobile > button {
 /************************************ START: LANDINGPAGE.JS **************************************/
 .landing-container {
   background: url('./images/cafe.jpg') center center/cover no-repeat;
+  color: #fff;
+
+  position: fixed;
+  left: 0px;
+  width: 100vw;
   height: 100vh;
-  width: 95vw;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: -50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: left;
-  box-shadow: 0 0 0 100px rgba(0, 0, 0, 0);
-  object-fit: contain;
-  border-radius: 10px;
 }
 
 .landing-page-message {
@@ -185,8 +179,7 @@ a.btn-mobile > button {
   background-size: cover;
   text-align: left;
   
-  margin-left: 100px;
-  margin-right: 100px;
+  margin: 10vh 100px 0px 100px;
 
   font-weight: bold;
   padding: 10px;
@@ -206,21 +199,31 @@ a.btn-mobile > button {
 
 @media screen and (max-width: 960px) {
   #call-to-action {
-      font-size: 50px;
-  }
+    font-size: 40px;
+}
+
+.call-to-action-msg {
+    font-size: 30px;
+}
 }
 
 @media screen and (max-width: 768px) {
-  .landing-container {
-      margin-left: -25px;
+  #call-to-action {
+      font-size: 30px;
   }
-  
+
+  .call-to-action-msg {
+      font-size: 25px;
+  }
+}
+
+@media screen and (max-width: 600px) {
   #call-to-action {
       font-size: 25px;
   }
 
   .call-to-action-msg {
-      font-size: 15px;
+      font-size: 20px;
   }
 }
 /************************************ END: LANDINGPAGE.JS ****************************************/
