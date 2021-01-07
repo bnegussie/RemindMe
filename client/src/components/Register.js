@@ -109,6 +109,7 @@ const Register = ({ setAuth }) => {
                     value={f_name}
                     onChange={e => onChange(e)}
                     required
+                    autoFocus
                 />
                 <input
                     type="text"

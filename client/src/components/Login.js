@@ -62,6 +62,7 @@ const Login = ({ setAuth }) => {
                         className="form-control my-3"
                         value={email}
                         onChange ={e => onChange(e)} 
+                        autoFocus
                     />
                     <input 
                         type="password"
