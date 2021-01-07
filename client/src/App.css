@@ -400,6 +400,13 @@ ul > li:nth-child(2) > a:hover {
     display: table;
   }
 
+  .nav-user-links {
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    display: table;
+  }
+
   .nav-links:hover {
     background-color: #fff;
     color: #242424;
