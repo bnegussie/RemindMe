@@ -570,13 +570,11 @@ ul > li:nth-child(2) > a:hover {
 /***************************************** END: REGISTER.JS **************************************/
 /***************************************** START: DROPDOWN.JS ************************************/
 .drop-down-menu {
-  position: absolute;
-  top: 60px;
+  width: 250px;
   list-style: none;
-  text-align: start;
-
-  margin-left: -2.5%;
-  padding: 20px 10px;
+  
+  position: fixed;
+  right: 0px;
 }
 
 .drop-down-menu li {
