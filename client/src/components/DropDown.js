@@ -7,7 +7,7 @@ import {MenuItems} from "./MenuItems.js"
 
 import "./../App.css"
 
-function DropDown({setAuth}) {
+function DropDown({setAuth, onMouseLeave}) {
 
     const [click, setClick] = useState(false);
     const handleClick = () => setClick(!click);
@@ -17,6 +17,7 @@ function DropDown({setAuth}) {
         localStorage.removeItem("token");
         setAuth(false);
         setClick(false);
+        onMouseLeave();
         toast.success("Successful logout.", {autoClose: 3000});
     });
 

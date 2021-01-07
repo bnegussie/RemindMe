@@ -99,7 +99,7 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
                                     {userName} <i className="fas fa-caret-down" />
                                 </Link>
                                 {dropDown &&
-                                    <DropDown setAuth={setAuth} />
+                                    <DropDown setAuth={setAuth} onMouseLeave={onMouseLeave} />
                                 }
                             </li>
                         </ul>
