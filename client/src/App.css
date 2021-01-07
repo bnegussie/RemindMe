@@ -72,12 +72,8 @@ div.footer-container > a:hover {
 }
 
 .info-message {
-  margin-left: 100px;
-  margin-right: 100px;
-
   font-weight: bold;
   padding: 10px;
-  border-radius: 20px;
 }
 
 .info-container > h1 {
@@ -99,6 +95,10 @@ div.footer-container > a:hover {
 }
 /************************************ END: ABOUTUS.JS ********************************************/
 /************************************ START: FAQ.JS **********************************************/
+.faq-message {
+  padding: 10px;
+}
+
 .info-bulletin {
   font-weight: bold;
   font-size: 20px;

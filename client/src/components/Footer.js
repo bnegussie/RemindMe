@@ -23,11 +23,11 @@ function Footer({ isAuthenticated }) {
             </div>
             
 
-			<Link to="#" className="footer-links" data-toggle="modal" data-target="#myModal" >
+			<Link to="#" className="footer-links" data-toggle="modal" data-target="#contact-us-modal" >
 				Contact Us
 			</Link>
 
-			<div id="myModal" className="modal fade" role="dialog">
+			<div id="contact-us-modal" className="modal fade" role="dialog">
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">
