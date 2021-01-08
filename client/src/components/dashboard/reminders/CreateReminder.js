@@ -115,7 +115,7 @@ function CreateReminder() {
 
 									<textarea
 										maxLength="1000"
-										placeholder="Reminder details:"
+										placeholder="Reminder details: (optional)"
 										className="form-control reminder-details"
 										value={desc}
 										onChange={(e) => setDesc(e.target.value)}

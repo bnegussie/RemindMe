@@ -516,12 +516,17 @@ ul > li:nth-child(2) > a:hover {
 }
 
 .reminder-titles {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 #overdue-title {
   color: red;
   font-size: 20px;
+}
+
+.reminders-headers {
+  font-size: 20px;
+  color: #8B4513;
 }
 
 
@@ -654,6 +659,6 @@ ul > li:nth-child(2) > a:hover {
 }
 
 .manage-profile-options {
-  font-size: 26px;
+  font-size: 24px;
 }
 /***************************************** END: MANAGEPROFILE.JS *********************************/
