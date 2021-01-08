@@ -642,3 +642,18 @@ ul > li:nth-child(2) > a:hover {
   }
 }
 /***************************************** END: DROPDOWN.JS and MENUITEMS.JS *********************/
+/***************************************** START: MANAGEPROFILE.JS *******************************/
+.manage-profile-container > h1 {
+  text-align: center;
+  margin: 20px 0 20px 0;
+}
+
+.manage-profile-headers {
+  font-size: 20px;
+  color: #8B4513;
+}
+
+.manage-profile-options {
+  font-size: 26px;
+}
+/***************************************** END: MANAGEPROFILE.JS *********************************/

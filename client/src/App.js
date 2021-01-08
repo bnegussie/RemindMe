@@ -21,6 +21,7 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import HowItWorks from "./components/HowItWorks"
 import FAQ from "./components/FAQ"
+import ManageProfile from "./components/ManageProfile";
 
 
 toast.configure();
@@ -143,6 +144,17 @@ function App() {
                   <Dashboard {...props} />
                 ) : (
                   <Redirect to="/"/>
+                )  
+              }
+            />
+
+            <Route 
+              exact path="/manageprofile" 
+              render={props => 
+                isAuthenticated ? (
+                  <ManageProfile />
+                ) : (
+                  <LandingPage />
                 )  
               }
             />
