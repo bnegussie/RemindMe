@@ -110,6 +110,7 @@ function CreateReminder() {
 										className="form-control"
 										value={title}
 										onChange={(e) => setTitle(e.target.value)}
+										autoFocus
 									/>
 
 									<textarea

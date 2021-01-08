@@ -7,26 +7,26 @@ import DropDown from "./DropDown"
 import "./../App.css";
 
 const Navbar = ({ setAuth, isAuthenticated }) => {
-    const [click, setClick] = useState(false);
+    const [mobileMode, setMobileMode] = useState(false);
     const [button, setButton] = useState(true);
     const [dropDown, setDropDown] = useState(false);
     const [userName, setUserName] = useState("");
     
-    const handleClick = () => { setClick(!click) };
-    const closeMenu = () => { setClick(false) };
+    const handleClick = () => { setMobileMode(!mobileMode) };
+    const closeMenu = () => { setMobileMode(false) };
 
     const showButton = () => {
         if (window.innerWidth <= 960) {
             setButton(false);
         } else {
             setButton(true);
-            setClick(false);
+            setMobileMode(false);
         }
     };
 
     const onMouseEnter = () => {
         if (window.innerWidth <= 960) {
-            setDropDown(false);
+            setDropDown(true);
         } else {
             setDropDown(true);
         }
@@ -84,9 +84,9 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
                             RemindMe <i className="fas fa-angle-double-right" />
                         </Link>
                         <div className="menu-icon" onClick={handleClick}>
-                            <i className={click ? "fas fa-times" : "fas fa-bars"} />
+                            <i className={mobileMode ? "fas fa-times" : "fas fa-bars"} />
                         </div>
-                        <ul className={click ? "nav-menu active" : "nav-menu-logged-in"}>
+                        <ul className={mobileMode ? "nav-menu active" : "nav-menu-logged-in"}>
                             <li className="nav-item">
                                 <Link to="/dashboard" className="nav-links" onClick={closeMenu}>Home</Link>
                             </li>
@@ -117,9 +117,9 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
                         RemindMe <i className="fas fa-angle-double-right" />
                     </Link>
                     <div className="menu-icon" onClick={handleClick}>
-                        <i className={click ? "fas fa-times" : "fas fa-bars"} />
+                        <i className={mobileMode ? "fas fa-times" : "fas fa-bars"} />
                     </div>
-                    <ul className={click ? "nav-menu active" : "nav-menu"}>
+                    <ul className={mobileMode ? "nav-menu active" : "nav-menu"}>
                         <li className="nav-item">
                             <Link to="/AboutUs" className="nav-links" onClick={closeMenu}>About Us</Link>
                         </li>

@@ -578,7 +578,7 @@ ul > li:nth-child(2) > a:hover {
   margin-right: 0px;
 }
 /***************************************** END: REGISTER.JS **************************************/
-/***************************************** START: DROPDOWN.JS ************************************/
+/***************************************** START: DROPDOWN.JS and MENUITEMS.JS *******************/
 .drop-down-menu {
   width: 250px;
   list-style: none;
@@ -614,4 +614,31 @@ ul > li:nth-child(2) > a:hover {
   color: #C0C0C0;
   transition: 0.3s ease-out;
 }
-/***************************************** END: DROPDOWN.JS **************************************/
+
+@media screen and (max-width: 960px) {
+  .drop-down-menu {
+    display: flex;
+    flex-direction: column;
+    position: start;
+    top: 240px;
+    opacity: 1;
+    left: 0%;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .drop-down-link {
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    display: table;
+  }
+
+  .drop-down-link:hover {
+    background-color: #fff;
+    color: #242424;
+    border-radius: 0;
+    text-decoration: none;
+  }
+}
+/***************************************** END: DROPDOWN.JS and MENUITEMS.JS *********************/
