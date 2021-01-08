@@ -12,8 +12,8 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
     const [dropDown, setDropDown] = useState(false);
     const [userName, setUserName] = useState("");
     
-    const handleClick = () => { setMobileMode(!mobileMode) };
-    const closeMenu = () => { setMobileMode(false) };
+    const mModeToggle = () => { setMobileMode(!mobileMode) };
+    const closeMobileMenu = () => { setMobileMode(false) };
 
     const showButton = () => {
         if (window.innerWidth <= 960) {
@@ -24,15 +24,8 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
         }
     };
 
-    const onMouseEnter = () => {
-        if (window.innerWidth <= 960) {
-            setDropDown(true);
-        } else {
-            setDropDown(true);
-        }
-    };
-
-    const onMouseLeave = () => { setDropDown(false) };
+    const onMouseEnter = () => { setDropDown(true); };
+    const onMouseLeave = () => { setDropDown(false); };
 
     useEffect(() => {
         showButton();
@@ -80,15 +73,15 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
             <Fragment>
                 <nav className="navbar">
                     <div className="navbar-container">
-                        <Link to="/dashboard" className="navbar-logo" onClick={closeMenu}>
+                        <Link to="/dashboard" className="navbar-logo" onClick={closeMobileMenu}>
                             RemindMe <i className="fas fa-angle-double-right" />
                         </Link>
-                        <div className="menu-icon" onClick={handleClick}>
+                        <div className="menu-icon" onClick={mModeToggle}>
                             <i className={mobileMode ? "fas fa-times" : "fas fa-bars"} />
                         </div>
                         <ul className={mobileMode ? "nav-menu active" : "nav-menu-logged-in"}>
                             <li className="nav-item">
-                                <Link to="/dashboard" className="nav-links" onClick={closeMenu}>Home</Link>
+                                <Link to="/dashboard" className="nav-links" onClick={closeMobileMenu}>Home</Link>
                             </li>
                             <li 
                                 className="nav-item"
@@ -99,7 +92,11 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
                                     {userName} <i className="fas fa-caret-down" />
                                 </Link>
                                 {dropDown &&
-                                    <DropDown setAuth={setAuth} onMouseLeave={onMouseLeave} />
+                                    <DropDown 
+                                        setAuth={setAuth} 
+                                        onMouseLeave={onMouseLeave}
+                                        closeMobileMenu={closeMobileMenu}    
+                                    />
                                 }
                             </li>
                         </ul>
@@ -113,21 +110,21 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
         <Fragment>
             <nav className="navbar">
                 <div className="navbar-container">
-                    <Link to="/" className="navbar-logo" onClick={closeMenu}>
+                    <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
                         RemindMe <i className="fas fa-angle-double-right" />
                     </Link>
-                    <div className="menu-icon" onClick={handleClick}>
+                    <div className="menu-icon" onClick={mModeToggle}>
                         <i className={mobileMode ? "fas fa-times" : "fas fa-bars"} />
                     </div>
                     <ul className={mobileMode ? "nav-menu active" : "nav-menu"}>
                         <li className="nav-item">
-                            <Link to="/AboutUs" className="nav-links" onClick={closeMenu}>About Us</Link>
+                            <Link to="/AboutUs" className="nav-links" onClick={closeMobileMenu}>About Us</Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/register" className="nav-links" onClick={closeMenu}>Sign Up</Link>
+                            <Link to="/register" className="nav-links" onClick={closeMobileMenu}>Sign Up</Link>
                         </li>
                         <li>
-                            <Link to="/login" className="nav-links-mobile" onClick={closeMenu}>LOG IN</Link>
+                            <Link to="/login" className="nav-links-mobile" onClick={closeMobileMenu}>LOG IN</Link>
                         </li>
                     </ul>
                     {button && <Button to="/login" buttonStyle="btn--outline">

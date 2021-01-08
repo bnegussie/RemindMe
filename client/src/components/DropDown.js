@@ -7,23 +7,29 @@ import {MenuItems} from "./MenuItems.js"
 
 import "./../App.css"
 
-function DropDown({setAuth, onMouseLeave}) {
+function DropDown({setAuth, onMouseLeave, closeMobileMenu}) {
 
-    const [click, setClick] = useState(false);
-    const handleClick = () => setClick(!click);
+    const [dDownClicked, setDDownClicked] = useState(false);
+    const dDownClickToggle = () => setDDownClicked(!dDownClicked);
 
     const logout = ((e) => {
         e.preventDefault();
         localStorage.removeItem("token");
         setAuth(false);
-        setClick(false);
+        setDDownClicked(false);
         onMouseLeave();
+        closeMobileMenu();
         toast.success("Successful logout.", {autoClose: 3000});
     });
 
+    function dDownClickHandler() {
+        setDDownClicked(false);
+        closeMobileMenu();
+    }
+
     return (
         <Fragment>
-            <ul onClick={handleClick} className={click ? 'drop-down-menu clicked' : 'drop-down-menu'}>
+            <ul onClick={dDownClickToggle} className={dDownClicked ? 'drop-down-menu clicked' : 'drop-down-menu'}>
                 {
                     MenuItems.map(function(item, index) {
                         return (
@@ -31,7 +37,7 @@ function DropDown({setAuth, onMouseLeave}) {
                                 <Link 
                                     className={item.className} 
                                     to={item.path}
-                                    onClick={item.path === '' ? (e) => logout(e) : (e) => setClick(false)}
+                                    onClick={item.path === '' ? (e) => logout(e) : (e) => dDownClickHandler()}
                                 >
                                     {item.title}
                                 </Link>
