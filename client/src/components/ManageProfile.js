@@ -1,6 +1,8 @@
 import React from "react";
 import { Fragment } from "react";
 
+import UpdateProfile from "./manage_profile/UpdateProfile";
+
 function ManageProfile() {
 	return (
 		<Fragment>
@@ -17,7 +19,9 @@ function ManageProfile() {
 					<tbody>
 						<tr>
 							<td className="manage-profile-options">Update general information</td>
-							<td>UPDATE</td>
+                            <td>
+                                <UpdateProfile />
+                            </td>
 						</tr>
 						<tr>
 							<td className="manage-profile-options">Change password</td>
