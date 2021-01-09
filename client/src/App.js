@@ -143,7 +143,7 @@ function App() {
                 isAuthenticated ? (
                   <Dashboard {...props} />
                 ) : (
-                  <Redirect to="/"/>
+                  <LandingPage />
                 )  
               }
             />

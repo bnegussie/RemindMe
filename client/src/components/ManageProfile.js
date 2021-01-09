@@ -24,7 +24,10 @@ function ManageProfile() {
 							<td>CHANGE</td>
 						</tr>
 						<tr>
-							<td className="manage-profile-options">Delete account</td>
+                            <td className="manage-profile-options" 
+                                id="manage-profile-options-delete">
+                                Delete account
+                                </td>
 							<td>DELETE</td>
 						</tr>
 					</tbody>
