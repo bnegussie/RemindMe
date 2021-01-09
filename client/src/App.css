@@ -494,8 +494,10 @@ ul > li:nth-child(2) > a:hover {
 /***************************************** END: CREATEREMINDER.JS ********************************/
 /***************************************** START: REMINDERS.JS ***********************************/
 .reminders-container {
-  height: 75vh;
+  height: 100%;
+  width: auto;
   text-align: center;
+  overflow-x: hidden;
 }
 
 #reminders-table-row {
