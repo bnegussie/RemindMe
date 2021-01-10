@@ -27,6 +27,8 @@ app.use("/auth", require("./routes/jwtAuth"));
 
 app.use("/dashboard", require("./routes/dashboard"));
 
+app.use("/profile", require("./routes/manageProfile"))
+
 
 
 /************************************** START: Email and Text Message services *******************/
