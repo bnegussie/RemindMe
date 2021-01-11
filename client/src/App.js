@@ -14,14 +14,14 @@ import {
 import Dashboard from "./components/dashboard/Dashboard";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navbar/Navbar";
 import LandingPage from "./components/LandingPage";
-import AboutUs from "./components/AboutUs";
+import AboutUs from "./components/info_pages/AboutUs";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
-import HowItWorks from "./components/HowItWorks"
-import FAQ from "./components/FAQ"
-import ManageProfile from "./components/ManageProfile";
+import HowItWorks from "./components/info_pages/HowItWorks"
+import FAQ from "./components/info_pages/FAQ"
+import ManageProfile from "./components/manage_profile/ManageProfile";
 
 
 toast.configure();

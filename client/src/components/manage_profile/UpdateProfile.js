@@ -26,18 +26,18 @@ function UpdateProfile() {
 		<Fragment>
 			<button
 				type="button"
-				class="btn btn-warning"
+				class="btn btn-info"
 				data-toggle="modal"
 				data-target="#update-profile-modal"
 			>
-				Update
+				View
 			</button>
 
 			<div class="modal" id="update-profile-modal">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h4 class="modal-title">Update General Information</h4>
+							<h4 class="modal-title">Edit Profile</h4>
 							<button type="button" class="close" data-dismiss="modal">
 								&times;
 							</button>
@@ -49,7 +49,7 @@ function UpdateProfile() {
                             </div>
 
                             <div class="modal-footer">
-                                <input type="submit" value="Update" className="btn btn-success" />
+                                <input type="submit" value="Save" className="btn btn-success" />
 
                                 <button 
                                     type="button" 

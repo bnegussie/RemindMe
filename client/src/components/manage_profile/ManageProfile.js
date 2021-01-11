@@ -1,7 +1,7 @@
 import React from "react";
 import { Fragment } from "react";
 
-import UpdateProfile from "./manage_profile/UpdateProfile";
+import UpdateProfile from "./UpdateProfile";
 
 function ManageProfile() {
 	return (
@@ -18,19 +18,23 @@ function ManageProfile() {
 					</thead>
 					<tbody>
 						<tr>
-							<td className="manage-profile-options">Update general information</td>
+							<td className="manage-profile-options">My Profile</td>
                             <td>
                                 <UpdateProfile />
                             </td>
 						</tr>
 						<tr>
-							<td className="manage-profile-options">Change password</td>
+							<td className="manage-profile-options">My Password</td>
+							<td>CHANGE</td>
+						</tr>
+						<tr>
+							<td className="manage-profile-options">My General Reminder Time</td>
 							<td>CHANGE</td>
 						</tr>
 						<tr>
                             <td className="manage-profile-options" 
                                 id="manage-profile-options-delete">
-                                Delete account
+                                My Account
                                 </td>
 							<td>DELETE</td>
 						</tr>

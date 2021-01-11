@@ -5,7 +5,7 @@ import {toast} from "react-toastify"
 
 import {MenuItems} from "./MenuItems.js"
 
-import "./../App.css"
+import "./../../App.css"
 
 function DropDown({setAuth, onMouseLeave, closeMobileMenu}) {
 

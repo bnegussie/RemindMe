@@ -1,10 +1,10 @@
 import React, {Fragment, useState, useEffect} from 'react'
 import {Link} from 'react-router-dom';
 
-import {Button} from "./Button.js";
+import {Button} from "../Button.js";
 import DropDown from "./DropDown"
 
-import "./../App.css";
+import "./../../App.css";
 
 const Navbar = ({ setAuth, isAuthenticated }) => {
     const [mobileMode, setMobileMode] = useState(false);
