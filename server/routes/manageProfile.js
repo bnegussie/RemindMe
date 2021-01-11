@@ -2,6 +2,7 @@ const router = require("express").Router();
 const pool = require("../db");
 const authorization = require("../middleware/authorization");
 
+/************************************** START: MY PROFILE ****************************************/
 // Getting the general information from the user's profile:
 router.get("/general", authorization, async(req, res) => {
     try {
@@ -15,5 +16,21 @@ router.get("/general", authorization, async(req, res) => {
         console.error(error.message);
     }
 });
+
+router.put("/general", authorization, async(req, res) => {
+    try {
+        // Breaking down the data provided by the user:
+        const { fName, lName, email, cPhoneCarrier, pNum } = req.body;
+        const lowerCaseEmail = email.toLowerCase();
+        const userId = req.user;
+
+        //
+
+        
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+/************************************** END: MY PROFILE ******************************************/
 
 module.exports = router;

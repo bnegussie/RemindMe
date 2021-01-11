@@ -9,7 +9,7 @@ function ManageProfile() {
 			<div className="manage-profile-container">
 				<h1>Manage Profile</h1>
 
-				<table class="table">
+				<table className="table">
 					<thead>
 						<tr>
 							<th width="80%" className="manage-profile-headers">Options</th>

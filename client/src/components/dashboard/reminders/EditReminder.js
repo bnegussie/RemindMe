@@ -214,7 +214,7 @@ function EditReminder({ currReminder }) {
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">
-							<h4 className="modal-title">Edit reminder</h4>
+							<h4 className="modal-title">Edit Reminder</h4>
 							<button type="button" className="close" 
 								data-dismiss="modal" 
 								onClick={() => onCancelForm()}>
