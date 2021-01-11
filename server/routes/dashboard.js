@@ -43,7 +43,7 @@ router.post("/reminder/all", authorization, async(req, res) => {
 router.get("/reminder/all", authorization, async(req, res) => {
     try {
         const allReminders = await pool.query(
-            "SELECT * FROM all_reminders WHERE user_id = $1 ORDER BY reminder_due_date ASC, reminder_title ASC;", 
+            "SELECT * FROM all_reminders WHERE user_id = $1 ORDER BY reminder_due_date DESC, reminder_title ASC;", 
             [req.user]
         );
 
@@ -222,7 +222,7 @@ router.post("/reminder/completed", authorization, async(req, res) => {
 router.get("/reminder/completed", authorization, async(req, res) => {
     try {
         const allCompletedReminders = await pool.query(
-            "SELECT * FROM completed_reminders WHERE user_id = $1 ORDER BY reminder_due_date ASC, reminder_title ASC;",
+            "SELECT * FROM completed_reminders WHERE user_id = $1 ORDER BY reminder_due_date DESC, reminder_title ASC;",
             [req.user]
         );
 
