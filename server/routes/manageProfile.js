@@ -24,8 +24,26 @@ router.put("/general", authorization, async(req, res) => {
         const lowerCaseEmail = email.toLowerCase();
         const userId = req.user;
 
-        //
+        // Checking if the user is trying to change their email
+        // as this needs to be handled carefully:
+        const user = await pool.query("SELECT * FROM users WHERE user_id = $1", [userId] );
 
+        const userEmailInDB = user.rows[0].user_email;
+
+        if (lowerCaseEmail !== userEmailInDB) {
+            const user = await pool.query("SELECT * FROM users WHERE user_email = $1", [lowerCaseEmail] );
+            if (user.rows.length > 0) {
+                // Someone is already using this email address:
+                return res.status(401).json("A user with this email address already exists.");
+            }
+        }
+
+        const updateUserInfo = await pool.query(
+            "UPDATE users SET user_f_name = $1, user_l_name = $2, user_email = $3, user_cp_carrier_email_extn = $4, user_p_num = $5, WHERE user_id = $6",
+            [fName, lName, lowerCaseEmail, cPhoneCarrier, pNum, userId]
+        );
+
+        res.status(200).json("Successfully updated the user profile.");
         
     } catch (error) {
         console.error(error.message);
