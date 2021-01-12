@@ -6,7 +6,7 @@ import DropDown from "./DropDown"
 
 import "./../../App.css";
 
-const Navbar = ({ setAuth, isAuthenticated }) => {
+const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
     const [mobileMode, setMobileMode] = useState(false);
     const [button, setButton] = useState(true);
     const [dropDown, setDropDown] = useState(false);
@@ -71,7 +71,7 @@ const Navbar = ({ setAuth, isAuthenticated }) => {
     if (isAuthenticated) {
         return (
             <Fragment>
-                <nav className="navbar">
+                <nav className="navbar" onMouseEnter={isAuth} onMouseMove={isAuth} >
                     <div className="navbar-container">
                         <Link to="/dashboard" className="navbar-logo" onClick={closeMobileMenu}>
                             RemindMe <i className="fas fa-angle-double-right" />

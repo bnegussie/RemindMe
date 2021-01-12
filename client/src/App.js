@@ -63,7 +63,7 @@ function App() {
     <Fragment>
       <Router>
         <ScrollToTop />
-        <Navbar setAuth={setAuth} isAuthenticated={isAuthenticated} />
+        <Navbar setAuth={setAuth} isAuthenticated={isAuthenticated} isAuth={isAuth} />
         <Switch>
           <Route exact path='/' />
         </Switch>
