@@ -227,7 +227,7 @@ a.btn-mobile > button {
 
 @media screen and (max-width: 768px) {
   #call-to-action {
-      font-size: 30px;
+      font-size: 35px;
   }
 
   .call-to-action-msg {
@@ -237,7 +237,7 @@ a.btn-mobile > button {
 
 @media screen and (max-width: 600px) {
   #call-to-action {
-      font-size: 25px;
+      font-size: 30px;
   }
 
   .call-to-action-msg {
@@ -251,7 +251,7 @@ a.btn-mobile > button {
   }
 
   #call-to-action {
-      font-size: 20px;
+      font-size: 25px;
   }
 
   .call-to-action-msg {
