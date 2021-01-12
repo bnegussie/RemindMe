@@ -76,7 +76,7 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
     if (isAuthenticated) {
         return (
             <Fragment>
-                <nav className="navbar" onMouseEnter={isAuth} onMouseMove={isAuth} >
+                <nav className="navbar" onMouseMove={isAuth} >
                     <div className="navbar-container">
                         <Link to="/dashboard" className="navbar-logo" onClick={checkIsAuth}>
                             RemindMe <i className="fas fa-angle-double-right" />
