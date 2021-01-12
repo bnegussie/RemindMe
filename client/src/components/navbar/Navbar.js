@@ -68,12 +68,17 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
 
     window.addEventListener("resize", showButton);
 
+    function checkIsAuth() {
+        isAuth();
+        closeMobileMenu();
+    }
+
     if (isAuthenticated) {
         return (
             <Fragment>
                 <nav className="navbar" onMouseEnter={isAuth} onMouseMove={isAuth} >
                     <div className="navbar-container">
-                        <Link to="/dashboard" className="navbar-logo" onClick={closeMobileMenu}>
+                        <Link to="/dashboard" className="navbar-logo" onClick={checkIsAuth}>
                             RemindMe <i className="fas fa-angle-double-right" />
                         </Link>
                         <div className="menu-icon" onClick={mModeToggle}>
@@ -81,7 +86,7 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
                         </div>
                         <ul className={mobileMode ? "nav-menu active" : "nav-menu-logged-in"}>
                             <li className="nav-item">
-                                <Link to="/dashboard" className="nav-links" onClick={closeMobileMenu}>Home</Link>
+                                <Link to="/dashboard" className="nav-links" onClick={checkIsAuth}>Home</Link>
                             </li>
                             <li 
                                 className="nav-item"
@@ -94,6 +99,7 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
                                 {dropDown &&
                                     <DropDown 
                                         setAuth={setAuth} 
+                                        isAuth={isAuth}
                                         onMouseLeave={onMouseLeave}
                                         closeMobileMenu={closeMobileMenu}    
                                     />
