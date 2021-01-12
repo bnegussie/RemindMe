@@ -63,6 +63,18 @@ div.footer-container > a:hover {
   text-indent: 8px;
   color: #8B4513;
 }
+
+@media screen and (max-width: 500px) {
+  .footer-container {
+    font-size: 1.0rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .footer-container {
+    font-size: 0.8rem;
+  }
+}
 /************************************ END: FOOTER.JS *********************************************/
 /************************************ START: ABOUTUS.JS ******************************************/
 .info-container {
@@ -92,6 +104,12 @@ div.footer-container > a:hover {
   font-size: 26px;
   margin-bottom: 0px;
   text-indent: 0px;
+}
+
+@media screen and (max-width: 450px) {
+  .info-container {
+    margin-top: 20%;
+  }
 }
 /************************************ END: ABOUTUS.JS ********************************************/
 /************************************ START: FAQ.JS **********************************************/
@@ -224,6 +242,20 @@ a.btn-mobile > button {
 
   .call-to-action-msg {
       font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .landing-page-message {
+    margin: 10vh 50px 0px 50px;
+  }
+
+  #call-to-action {
+      font-size: 20px;
+  }
+
+  .call-to-action-msg {
+      font-size: 15px;
   }
 }
 /************************************ END: LANDINGPAGE.JS ****************************************/
