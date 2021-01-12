@@ -12,8 +12,14 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
     const [dropDown, setDropDown] = useState(false);
     const [userName, setUserName] = useState("");
     
-    const mModeToggle = () => { setMobileMode(!mobileMode) };
-    const closeMobileMenu = () => { setMobileMode(false) };
+    const mModeToggle = () => { 
+        setMobileMode(!mobileMode) 
+        isAuth();
+    };
+    const closeMobileMenu = () => { 
+        setMobileMode(false);
+        isAuth();
+    };
 
     const showButton = () => {
         if (window.innerWidth <= 960) {
@@ -99,7 +105,6 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
                                 {dropDown &&
                                     <DropDown 
                                         setAuth={setAuth} 
-                                        isAuth={isAuth}
                                         onMouseLeave={onMouseLeave}
                                         closeMobileMenu={closeMobileMenu}    
                                     />

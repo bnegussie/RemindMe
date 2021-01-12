@@ -7,7 +7,7 @@ import {MenuItems} from "./MenuItems.js"
 
 import "./../../App.css"
 
-function DropDown({setAuth, isAuth, onMouseLeave, closeMobileMenu}) {
+function DropDown({setAuth, onMouseLeave, closeMobileMenu}) {
 
     const [dDownClicked, setDDownClicked] = useState(false);
     const dDownClickToggle = () => setDDownClicked(!dDownClicked);
@@ -25,7 +25,6 @@ function DropDown({setAuth, isAuth, onMouseLeave, closeMobileMenu}) {
     function dDownClickHandler() {
         setDDownClicked(false);
         closeMobileMenu();
-        isAuth();
     }
 
     return (
