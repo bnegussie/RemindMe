@@ -6,6 +6,8 @@ function UpdateProfile() {
 	const [lName, setLName] = useState("");
 	const [email, setEmail] = useState("");
 	const [cPhoneCarrier, setCPhoneCarrier] = useState("");
+	// eslint-disable-next-line
+    const [cPhoneCarrierEmailExtn, setCPhoneCarrierEmailExtn] = useState("");
 	const [pNum, setPNum] = useState("");
 
 	// eslint-disable-next-line
@@ -15,7 +17,7 @@ function UpdateProfile() {
         e.preventDefault();
 
 		try {
-			const body = { fName, lName, email, cPhoneCarrier, pNum };
+			const body = { fName, lName, email, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum };
 
 			// Quick input validation:
             // eslint-disable-next-line
@@ -33,32 +35,29 @@ function UpdateProfile() {
                 return false;
 			}
 			
+			const putHeaders = new Headers();
+			putHeaders.append("Content-type", "application/json");
+			putHeaders.append("token", localStorage.token);
+
 			const response = await fetch("http://localhost:5000/profile/general", {
                 method: "PUT",
-                headers: {"Content-type": "application/json"},
+                headers: putHeaders,
                 body: JSON.stringify(body)
             });
             
             // parseResp now holds the JWT unless the server threw an error:
-            const parseResp = await response.json();
+			const parseResp = await response.json();
 
             if (response.status === 400) {
                 toast.error(parseResp, {autoClose: 4000});
                 return false;
             }
 
-
+			toast.success("Successful profile update!", { autoClose: 3000 });
 
 
 
             window.location = "/ManageProfile";
-		} catch (error) {
-			console.error(error.message);
-		}
-	}
-
-	function onCancelUpdate() {
-		try {
 		} catch (error) {
 			console.error(error.message);
 		}
@@ -75,7 +74,8 @@ function UpdateProfile() {
 			setFName(profile.user_f_name);
 			setLName(profile.user_l_name);
 			setEmail(profile.user_email);
-			setCPhoneCarrier(profile.user_cp_carrier_email_extn);
+			setCPhoneCarrier(profile.user_cp_carrier);
+			setCPhoneCarrierEmailExtn(profile.user_cp_carrier_email_extn)
 			setPNum(profile.user_p_num);
 
 		} catch (error) {
@@ -126,14 +126,50 @@ function UpdateProfile() {
 					<div className="modal-content">
 						<div className="modal-header">
 							<h4 className="modal-title">Edit Profile</h4>
-							<button type="button" className="close" data-dismiss="modal">
+							<button 
+								type="button" 
+								className="close" 
+								data-dismiss="modal"
+								onClick={() => getProfile()} >
 								&times;
 							</button>
 						</div>
 
                         <form onSubmit={(e) => update(e)}>
                             <div className="modal-body">
-                                Modal body..
+							
+								<input
+									type="text"
+									name="fName"
+									placeholder="First name"
+									className="form-control my-3"
+									value={fName}
+									onChange={e => setFName(e.target.value)}
+									required
+								/>
+
+								<input
+									type="text"
+									name="lName"
+									placeholder="Last name"
+									className="form-control my-3"
+									value={lName}
+									onChange={e => setLName(e.target.value)}
+									required
+								/>
+
+								<input
+									type="email"
+									name="email"
+									placeholder="Email"
+									className="form-control my-3"
+									value={email}
+									onChange={e => setEmail(e.target.value)}
+									required
+								/>
+							
+
+
                             </div>
 
                             <div className="modal-footer">
@@ -143,7 +179,7 @@ function UpdateProfile() {
                                     type="button" 
                                     className="btn btn-danger" 
                                     data-dismiss="modal"
-                                    onClick={() => onCancelUpdate()} >
+                                    onClick={() => getProfile()} >
                                     Close
                                 </button>
                             </div>
