@@ -12,7 +12,8 @@ const Register = ({ setAuth }) => {
         pwd: "",
         pwd_confirm: ""
     });
-    const [cellphoneCarrier, setCellphoneCarrier] = useState("");
+    const [cPhoneCarrier, setCPhoneCarrier] = useState("");
+    const [cPhoneCarrierEmailExtn, setCPhoneCarrierEmailExtn] = useState("");
     // eslint-disable-next-line
     const [allCellphoneCarriers, setAllCellphoneCarriers] = useState([]);
 
@@ -22,11 +23,17 @@ const Register = ({ setAuth }) => {
         setInputs({...inputs, [e.target.name] : e.target.value});
     };
 
+    function setCellPhoneOption(e) {
+        setCPhoneCarrier(e.label);
+        setCPhoneCarrierEmailExtn(e.value);
+    }
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const body = { f_name, l_name, email, cellphoneCarrier, p_num, pwd, pwd_confirm };
+            const body = { f_name, l_name, email, cPhoneCarrier, cPhoneCarrierEmailExtn, 
+                            p_num, pwd, pwd_confirm };
 
             // Quick input validation:
             // eslint-disable-next-line
@@ -36,11 +43,11 @@ const Register = ({ setAuth }) => {
             } else if (pwd !== pwd_confirm) {
                 toast.error("Passwords must match.", {autoClose: 3000});
                 return false;
-            } else if ( (p_num && !p_num.match(/^\d{10}$/)) || (p_num === "" && cellphoneCarrier !== "") ) {
+            } else if ( (p_num && !p_num.match(/^\d{10}$/)) || (p_num === "" && cPhoneCarrier !== "") ) {
 
                 toast.error("Please provide a valid phone number: 2065551234", {autoClose: 4000});
                 return false;
-            } else if (p_num !== "" && cellphoneCarrier === "") {
+            } else if (p_num !== "" && cPhoneCarrier === "") {
                 toast.error("Please specify your Cell Phone Carrier.", {autoClose: 7500});
                 toast.info("This information allows us to send users free reminder text messages.", 
                             {autoClose: 7500});
@@ -131,8 +138,8 @@ const Register = ({ setAuth }) => {
                 />
                 <div id="cellphone-container">
                     <Select options={allCellphoneCarriers}
-                            onChange={e => setCellphoneCarrier(e.value)}
-                            value={cellphoneCarrier.label}
+                            onChange={e => setCellPhoneOption(e)}
+                            value={cPhoneCarrier.label}
                             placeholder="Cell phone carrier"
                             className="my-3 cellphone-child"
                     />

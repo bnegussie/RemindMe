@@ -14,7 +14,7 @@ router.post("/register", validInfo, async(req, res) => {
     try {
 
         // 1) Break down the data the user provided (name, email, phone, pwd):
-        const {f_name, l_name, email, cellphoneCarrier, p_num, pwd} = req.body;
+        const {f_name, l_name, email, cPhoneCarrier, cPhoneCarrierEmailExtn, p_num, pwd} = req.body;
         const lowerCaseEmail = email.toLowerCase();
 
         
@@ -37,8 +37,8 @@ router.post("/register", validInfo, async(req, res) => {
 
         // 4) Insert the user into our DB:
         const newUser = await pool.query(
-            "INSERT INTO users (user_f_name, user_l_name, user_email, user_cp_carrier_email_extn, user_p_num, user_pwd) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", 
-            [f_name, l_name, lowerCaseEmail, cellphoneCarrier, p_num, bcryptPwd]
+            "INSERT INTO users (user_f_name, user_l_name, user_email, user_cp_carrier, user_cp_carrier_email_extn, user_p_num, user_pwd) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", 
+            [f_name, l_name, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, p_num, bcryptPwd]
         );
 
         

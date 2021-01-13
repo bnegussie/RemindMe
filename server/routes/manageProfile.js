@@ -7,7 +7,7 @@ const authorization = require("../middleware/authorization");
 router.get("/general", authorization, async(req, res) => {
     try {
         const generalInfo = await pool.query(
-            "SELECT user_f_name, user_l_name, user_email, user_cp_carrier_email_extn, user_p_num FROM users WHERE user_id = $1",
+            "SELECT user_f_name, user_l_name, user_email, user_cp_carrier, user_cp_carrier_email_extn, user_p_num FROM users WHERE user_id = $1",
             [req.user]
         );
         res.status(200).json(generalInfo.rows[0]);
@@ -20,7 +20,7 @@ router.get("/general", authorization, async(req, res) => {
 router.put("/general", authorization, async(req, res) => {
     try {
         // Breaking down the data provided by the user:
-        const { fName, lName, email, cPhoneCarrier, pNum } = req.body;
+        const { fName, lName, email, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum } = req.body;
         const lowerCaseEmail = email.toLowerCase();
         const userId = req.user;
 
@@ -39,8 +39,8 @@ router.put("/general", authorization, async(req, res) => {
         }
 
         const updateUserInfo = await pool.query(
-            "UPDATE users SET user_f_name = $1, user_l_name = $2, user_email = $3, user_cp_carrier_email_extn = $4, user_p_num = $5, WHERE user_id = $6",
-            [fName, lName, lowerCaseEmail, cPhoneCarrier, pNum, userId]
+            "UPDATE users SET user_f_name = $1, user_l_name = $2, user_email = $3, user_cp_carrier = $4, user_cp_carrier_email_extn = $5, user_p_num = $6, WHERE user_id = $7",
+            [fName, lName, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum, userId]
         );
 
         res.status(200).json("Successfully updated the user profile.");
