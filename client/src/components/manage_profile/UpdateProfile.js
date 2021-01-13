@@ -42,7 +42,7 @@ function UpdateProfile() {
             // parseResp now holds the JWT unless the server threw an error:
             const parseResp = await response.json();
 
-            if (response.status === 401 || response.status === 403) {
+            if (response.status === 400) {
                 toast.error(parseResp, {autoClose: 4000});
                 return false;
             }

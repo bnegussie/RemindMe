@@ -19,19 +19,19 @@ function ManageProfile({ isAuth }) {
 					<tbody>
 						<tr>
 							<td className="manage-profile-options">My Profile</td>
-                            <td onMouseEnter={isAuth} onClick={isAuth} >
+                            <td onClick={isAuth} >
                                 <UpdateProfile />
                             </td>
 						</tr>
 						<tr>
 							<td className="manage-profile-options">My Password</td>
-							<td onMouseEnter={isAuth} onClick={isAuth} >
+							<td onClick={isAuth} >
 								CHANGE
 							</td>
 						</tr>
 						<tr>
 							<td className="manage-profile-options">My General Reminder Time</td>
-							<td onMouseEnter={isAuth} onClick={isAuth} >
+							<td onClick={isAuth} >
 								CHANGE
 							</td>
 						</tr>
@@ -40,7 +40,7 @@ function ManageProfile({ isAuth }) {
                                 id="manage-profile-options-delete">
                                 My Account
                                 </td>
-							<td onMouseEnter={isAuth} onClick={isAuth} >
+							<td onClick={isAuth} >
 								DELETE
 							</td>
 						</tr>

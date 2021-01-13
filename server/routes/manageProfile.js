@@ -34,7 +34,7 @@ router.put("/general", authorization, async(req, res) => {
             const user = await pool.query("SELECT * FROM users WHERE user_email = $1", [lowerCaseEmail] );
             if (user.rows.length > 0) {
                 // Someone is already using this email address:
-                return res.status(401).json("A user with this email address already exists.");
+                return res.status(400).json("A user with this email address already exists.");
             }
         }
 
