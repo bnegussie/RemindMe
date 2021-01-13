@@ -3,7 +3,7 @@ import { Fragment } from "react";
 
 import UpdateProfile from "./UpdateProfile";
 
-function ManageProfile() {
+function ManageProfile({ isAuth }) {
 	return (
 		<Fragment>
 			<div className="manage-profile-container">
@@ -19,24 +19,30 @@ function ManageProfile() {
 					<tbody>
 						<tr>
 							<td className="manage-profile-options">My Profile</td>
-                            <td>
+                            <td onMouseEnter={isAuth} onClick={isAuth} >
                                 <UpdateProfile />
                             </td>
 						</tr>
 						<tr>
 							<td className="manage-profile-options">My Password</td>
-							<td>CHANGE</td>
+							<td onMouseEnter={isAuth} onClick={isAuth} >
+								CHANGE
+							</td>
 						</tr>
 						<tr>
 							<td className="manage-profile-options">My General Reminder Time</td>
-							<td>CHANGE</td>
+							<td onMouseEnter={isAuth} onClick={isAuth} >
+								CHANGE
+							</td>
 						</tr>
 						<tr>
                             <td className="manage-profile-options" 
                                 id="manage-profile-options-delete">
                                 My Account
                                 </td>
-							<td>DELETE</td>
+							<td onMouseEnter={isAuth} onClick={isAuth} >
+								DELETE
+							</td>
 						</tr>
 					</tbody>
                 </table>

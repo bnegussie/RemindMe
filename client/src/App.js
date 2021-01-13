@@ -50,6 +50,11 @@ function App() {
         parseResp ? setIsAuthenticated(true) : setIsAuthenticated(false);
       }
 
+      // Removing the JWT token; this is needed when the user's session has timed out.
+      if (parseResp === "Token is not valid." && localStorage.token) {
+        localStorage.removeItem("token");
+      }
+
     } catch (error) {
       console.error(error.message);
     }
@@ -141,7 +146,7 @@ function App() {
               exact path="/dashboard" 
               render={props => 
                 isAuthenticated ? (
-                  <Dashboard {...props} />
+                  <Dashboard {...props} isAuth={isAuth} />
                 ) : (
                   <LandingPage />
                 )  
@@ -152,7 +157,7 @@ function App() {
               exact path="/manageprofile" 
               render={props => 
                 isAuthenticated ? (
-                  <ManageProfile />
+                  <ManageProfile isAuth={isAuth} />
                 ) : (
                   <LandingPage />
                 )  

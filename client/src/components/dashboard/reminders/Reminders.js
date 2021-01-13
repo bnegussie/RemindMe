@@ -9,7 +9,7 @@ import "react-tabs/style/react-tabs.css";
 import EditReminder from "./EditReminder";
 import CreateReminder from "./CreateReminder";
 
-function Reminders() {
+function Reminders({ isAuth }) {
 	const [allActiveReminders, setAllActiveReminders] = useState([]);
 	const [allCompletedReminders, setAllCompletedReminders] = useState([]);
 	const [allOverdueReminders, setAllOverdueReminders] = useState([]);
@@ -329,7 +329,10 @@ function Reminders() {
 
 	return (
 		<Fragment>
-			<div id="new-reminder-btn-on-dashboard">
+			<div 
+				id="new-reminder-btn-on-dashboard" 
+				onMouseEnter={isAuth}
+				onClick={isAuth} >
 				<CreateReminder />
 			</div>
 
@@ -361,7 +364,7 @@ function Reminders() {
 							<tbody>
 								{allActiveReminders.map((currReminder) => (
 									<tr key={currReminder.reminder_id}>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<input
 												type="checkbox"
 												className="completed-checkboxes"
@@ -377,10 +380,10 @@ function Reminders() {
 										<td className="reminder-titles">
 											{currReminder.reminder_title}
 										</td>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<EditReminder currReminder={currReminder} />
 										</td>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<InlineConfirmButton
 												className="btn btn-danger"
 												textValues={textValues}
@@ -414,7 +417,7 @@ function Reminders() {
 							<tbody>
 								{allReminders.map((currReminder) => (
 									<tr key={currReminder.reminder_id}>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<input
 												type="checkbox"
 												className="completed-checkboxes"
@@ -430,10 +433,10 @@ function Reminders() {
 										<td className="reminder-titles">
 											{currReminder.reminder_title}
 										</td>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<EditReminder currReminder={currReminder} />
 										</td>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<InlineConfirmButton
 												className="btn btn-danger"
 												textValues={textValues}
@@ -467,7 +470,7 @@ function Reminders() {
 							<tbody>
 								{allCompletedReminders.map((currReminder) => (
 									<tr key={currReminder.reminder_id}>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<input
 												type="checkbox"
 												className="completed-checkboxes"
@@ -484,10 +487,10 @@ function Reminders() {
 										<td className="reminder-titles">
 											{currReminder.reminder_title}
 										</td>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<EditReminder currReminder={currReminder} />
 										</td>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<InlineConfirmButton
 												className="btn btn-danger"
 												textValues={textValues}
@@ -521,7 +524,7 @@ function Reminders() {
 							<tbody>
 								{allOverdueReminders.map((currReminder) => (
 									<tr key={currReminder.reminder_id}>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<input
 												type="checkbox"
 												className="completed-checkboxes"
@@ -536,10 +539,10 @@ function Reminders() {
 											/>
 										</td>
 										<td id="overdue-title">{currReminder.reminder_title}</td>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<EditReminder currReminder={currReminder} />
 										</td>
-										<td>
+										<td onMouseEnter={isAuth} onClick={isAuth} >
 											<InlineConfirmButton
 												className="btn btn-danger"
 												textValues={textValues}
