@@ -33,7 +33,7 @@ const Register = ({ setAuth }) => {
 
         try {
             const body = { f_name, l_name, email, cPhoneCarrier, cPhoneCarrierEmailExtn, 
-                            p_num, pwd, pwd_confirm };
+                            p_num, pwd };
 
             // Quick input validation:
             // eslint-disable-next-line

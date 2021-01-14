@@ -1,7 +1,10 @@
 import React from "react";
 import { Fragment } from "react";
 
+import ChangePassword from "./ChangePassword";
 import UpdateProfile from "./UpdateProfile";
+
+import "./../../App.css"
 
 function ManageProfile({ isAuth }) {
 	return (
@@ -26,7 +29,7 @@ function ManageProfile({ isAuth }) {
 						<tr>
 							<td className="manage-profile-options">My Password</td>
 							<td onClick={isAuth} >
-								CHANGE
+								<ChangePassword />
 							</td>
 						</tr>
 						<tr>

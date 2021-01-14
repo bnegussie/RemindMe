@@ -2,6 +2,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Select from "react-select"
 
+import "./../../App.css"
+
 function UpdateProfile() {
 	const [fName, setFName] = useState("");
 	const [lName, setLName] = useState("");
@@ -120,7 +122,7 @@ function UpdateProfile() {
 		<Fragment>
 			<button
 				type="button"
-				className="btn btn-info"
+				className="btn btn-info manage-profile"
 				data-toggle="modal"
 				data-target="#update-profile-modal"
 			>

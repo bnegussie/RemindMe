@@ -699,4 +699,8 @@ ul > li:nth-child(2) > a:hover {
 #manage-profile-options-delete {
   color: red;
 }
+
+.btn.btn-info.manage-profile {
+  width: 50%;
+}
 /***************************************** END: MANAGEPROFILE.JS *********************************/
