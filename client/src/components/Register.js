@@ -24,8 +24,13 @@ const Register = ({ setAuth }) => {
     };
 
     function setCellPhoneOption(e) {
-        setCPhoneCarrier(e.label);
-        setCPhoneCarrierEmailExtn(e.value);
+        if (e) {
+            setCPhoneCarrier(e.label);
+            setCPhoneCarrierEmailExtn(e.value);
+        } else {
+            setCPhoneCarrier("");
+            setCPhoneCarrierEmailExtn("");
+        }
     }
 
     const onSubmit = async (e) => {
@@ -145,6 +150,7 @@ const Register = ({ setAuth }) => {
                             value={cPhoneCarrier.label}
                             placeholder="Cell phone carrier"
                             className="my-3 cellphone-child"
+                            isClearable
                     />
                 
                     <input 

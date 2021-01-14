@@ -266,6 +266,7 @@ function EditReminder({ currReminder }) {
 										timeIntervals={15}
 										dateFormat="MMMM d, yyyy h:mm aa"
 										popperModifiers={{ preventOverflow: { enabled: true, }, }}
+										isClearable
 									/>
 
 									<DatePicker
@@ -280,6 +281,7 @@ function EditReminder({ currReminder }) {
 										timeIntervals={15}
 										dateFormat="MMMM d, yyyy h:mm aa"
 										popperModifiers={{ preventOverflow: { enabled: true, }, }}
+										isClearable
 									/>
 								</div>
 							</div>

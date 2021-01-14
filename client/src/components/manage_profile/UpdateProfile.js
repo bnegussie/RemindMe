@@ -53,9 +53,9 @@ function UpdateProfile() {
             if (response.status === 400) {
                 return toast.error(parseResp, {autoClose: 4000});
             } else if (response.status === 200) {
-                toast.success("Successful profile update!", {autoClose: 2000});
+                toast.success("Successful profile update!", {autoClose: 1500});
                 
-                setTimeout(() => { window.location = "/ManageProfile"; }, 2000);
+                setTimeout(() => { window.location = "/ManageProfile"; }, 1500);
 
             } else {
                 return toast.error("Something went wrong. ", [parseResp]);
@@ -77,9 +77,14 @@ function UpdateProfile() {
 			setFName(profile.user_f_name);
 			setLName(profile.user_l_name);
 			setEmail(profile.user_email);
-			setCPhoneCarrier(profile.user_cp_carrier);
-			setCPhoneCarrierEmailExtn(profile.user_cp_carrier_email_extn)
-			setPNum(profile.user_p_num);
+			
+			// Some odd behavior occurs if this check is not implemented where the user
+			// gets a white space (undefined) from the DB and this causes UI issues.
+			if (profile.user_cp_carrier) {
+				setCPhoneCarrier(profile.user_cp_carrier);
+				setCPhoneCarrierEmailExtn(profile.user_cp_carrier_email_extn);
+				setPNum(profile.user_p_num);
+			}
 
 		} catch (error) {
 			console.error(error.message);
@@ -87,8 +92,13 @@ function UpdateProfile() {
 	}
 
 	function setCellPhoneOption(e) {
-		setCPhoneCarrier(e.label);
-		setCPhoneCarrierEmailExtn(e.value);
+		if (e) {
+            setCPhoneCarrier(e.label);
+            setCPhoneCarrierEmailExtn(e.value);
+        } else {
+            setCPhoneCarrier("");
+            setCPhoneCarrierEmailExtn("");
+        }
 	}
 
 	// Getting all of the cell phone carriers and their email extension, so the app 
@@ -181,11 +191,12 @@ function UpdateProfile() {
 
 								<div id="cellphone-container">
 									<Select
-										value={{label: cPhoneCarrier}}
+										value={cPhoneCarrier && {label: cPhoneCarrier}}
 										onChange={e => setCellPhoneOption(e)}
 										options={allCellphoneCarriers}
 										className="my-3 cellphone-child"
 										placeholder="Cell phone carrier"
+										isClearable
 									/>
 							
 									<input 

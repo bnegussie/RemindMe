@@ -134,6 +134,7 @@ function CreateReminder() {
 											timeIntervals={15}
 											dateFormat="MMMM d, yyyy h:mm aa"
 											popperModifiers={{ preventOverflow: { enabled: true, }, }}
+											isClearable
 										/>
 
 										<DatePicker
@@ -148,6 +149,7 @@ function CreateReminder() {
 											timeIntervals={15}
 											dateFormat="MMMM d, yyyy h:mm aa"
 											popperModifiers={{ preventOverflow: { enabled: true, }, }}
+											isClearable
 										/>
 									</div>
 								</div>
