@@ -46,12 +46,12 @@ function ChangePassword() {
             if (response.status === 401) {
                 return toast.error(parseResp);
             } else if (response.status === 200) {
-                toast.success("Your password has been successfully changed.", {autoClose: 2500});
+                toast.success("Your password has been successfully changed!", {autoClose: 2500});
                 
                 setTimeout(() => { window.location = "/ManageProfile"; }, 2500);
 
             } else {
-                return toast.error("Something went wrong.");
+                return toast.error("Something went wrong. ", [parseResp]);
             }            
             
         } catch (error) {

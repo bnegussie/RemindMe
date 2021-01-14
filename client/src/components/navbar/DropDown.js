@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { Fragment } from 'react'
 import {Link} from "react-router-dom"
 import {toast} from "react-toastify"
+import { useHistory } from "react-router-dom"
 
 import {MenuItems} from "./MenuItems.js"
 
@@ -12,10 +13,13 @@ function DropDown({setAuth, onMouseLeave, closeMobileMenu}) {
     const [dDownClicked, setDDownClicked] = useState(false);
     const dDownClickToggle = () => setDDownClicked(!dDownClicked);
 
+    let history = useHistory();
+
     const logout = ((e) => {
         e.preventDefault();
         localStorage.removeItem("token");
         setAuth(false);
+        history.push("/");
         setDDownClicked(false);
         onMouseLeave();
         closeMobileMenu();

@@ -42,7 +42,7 @@ const Login = ({ setAuth }) => {
 
             localStorage.setItem("token", parseResp.token);
             setAuth(true);
-            toast.success("Successful login.", {autoClose: 3000});
+            toast.success("Successful login!", {autoClose: 3000});
 
         } catch (error) {
             console.error(error.message);

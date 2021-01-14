@@ -58,7 +58,7 @@ function UpdateProfile() {
                 setTimeout(() => { window.location = "/ManageProfile"; }, 2000);
 
             } else {
-                return toast.error("Something went wrong.");
+                return toast.error("Something went wrong. ", [parseResp]);
 			}
 			
 		} catch (error) {
