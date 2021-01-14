@@ -53,6 +53,7 @@ function App() {
       // Removing the JWT token; this is needed when the user's session has timed out.
       if (parseResp === "Token is not valid." && localStorage.token) {
         localStorage.removeItem("token");
+        toast.info("Your session has expired. Please log back in.", {autoClose: 4000});
       }
 
     } catch (error) {
