@@ -15,7 +15,7 @@ function AboutUs() {
                     </p>
                     <p>
                         Our reminder application will send you email and text message reminders, based on 
-                        your upcomming tasks, so you can always stay ahead.
+                        your upcomming tasks, so you always stay ahead.
                     </p>
                     <br/><br/>
                     <p id="info-subtitle">Image credit:</p>

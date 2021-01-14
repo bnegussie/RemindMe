@@ -38,7 +38,7 @@ function FAQ() {
                     <p>
                         In this case, we will not be able to do anything at this moment. Our current
                         text message feature is using all of the available cell phone carrier extensions,
-                        to be able to send text messages through an email. We will work to keep our 
+                        to be able to send text messages through an email account. We will work to keep our 
                         cell phone carrier list up to date. Sorry for the inconvenience.
                     </p>
                 </div>

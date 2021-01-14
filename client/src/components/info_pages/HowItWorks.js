@@ -10,14 +10,14 @@ function HowItWorks() {
                     <p>
                         As we all know, the more times we see something, the easier it is to remember. 
                         So we have built in two reminder features to not only remind you about specific
-                        tasks, but to frequently send you reminders about your upcoming tasks so always 
+                        tasks, but to frequently send you reminders about your upcoming tasks so you always 
                         stay ahead.
                     </p>
                     <p>
-                        Our first reminder feature is the build in reminder when you create or edit 
-                        a reminder task; at this specified time, our system will send you an email
-                        and a text message (if you provided a phone number) with all of the reminder
-                        details.
+                        Our first reminder feature is the built in reminder, when you create or edit 
+                        a reminder task; at the time, which you have specified, our system will send
+                        you an email and a text message (if you provided a phone number) with all of
+                        the reminder details.
                     </p>
                     <p>
                         Our second reminder feature is a daily general reminder, where it lists 
