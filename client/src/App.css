@@ -616,6 +616,28 @@ ul > li:nth-child(2) > a:hover {
   width: 50%;
   margin-right: 0px;
 }
+
+@media screen and (max-width: 600px) {
+  .my-3.cellphone-child {
+    font-size: 16px;
+  }
+  
+  .form-control.my-3.cellphone-child {
+    font-size: 10px;
+    height: 35px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .my-3.cellphone-child {
+    font-size: 12px;
+  }
+  
+  .form-control.my-3.cellphone-child {
+    font-size: 8px;
+    height: 35px;
+  }
+}
 /***************************************** END: REGISTER.JS **************************************/
 /***************************************** START: DROPDOWN.JS and MENUITEMS.JS *******************/
 .drop-down-menu {
