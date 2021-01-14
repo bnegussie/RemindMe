@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from "react";
+import { toast } from "react-toastify";
 
 import "./../../App.css"
 
@@ -18,6 +19,40 @@ function ChangePassword() {
         e.preventDefault();
 
         try {
+            const body = { currentPwd, newPwd };
+
+            // Quick validation:
+            if (newPwd !== confirmNewPwd) {
+                return toast.error("The new password must match the confirmation password.", 
+                            {autoClose: 4000});
+
+            } else if (newPwd.length < 6) {
+                return toast.error("Your new password must be at least six characters long.", 
+                            {autoClose: 4000});
+            }
+
+            const pwdHeaders = new Headers();
+            pwdHeaders.append("Content-type", "application/json");
+            pwdHeaders.append("token", localStorage.token);
+
+            const response = await fetch("http://localhost:5000/profile/pwd", {
+                method: "PUT",
+                headers: pwdHeaders,
+                body: JSON.stringify(body)
+            });
+
+            const parseResp = await response.json();
+
+            if (response.status === 401) {
+                return toast.error(parseResp);
+            } else if (response.status === 200) {
+                toast.success("Your password has been successfully changed.", {autoClose: 2500});
+                
+                setTimeout(() => { window.location = "/ManageProfile"; }, 2500);
+
+            } else {
+                return toast.error("Something went wrong.");
+            }            
             
         } catch (error) {
             console.log(error.message);
@@ -61,6 +96,7 @@ function ChangePassword() {
                                     className="form-control my-3"
                                     value={currentPwd}
                                     onChange ={e => setCurrentPwd(e.target.value)}
+                                    required
                                 />
                                 <hr />
                                 <input 
@@ -70,6 +106,7 @@ function ChangePassword() {
                                     className="form-control my-3"
                                     value={newPwd}
                                     onChange ={e => setNewPwd(e.target.value)}
+                                    required
                                 />
                                 <input 
                                     type="password"
@@ -78,6 +115,7 @@ function ChangePassword() {
                                     className="form-control my-3"
                                     value={confirmNewPwd}
                                     onChange ={e => setConfirmNewPwd(e.target.value)}
+                                    required
                                 />
                             </div>
 

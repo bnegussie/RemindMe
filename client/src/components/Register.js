@@ -43,6 +43,9 @@ const Register = ({ setAuth }) => {
             } else if (pwd !== pwd_confirm) {
                 toast.error("Passwords must match.", {autoClose: 3000});
                 return false;
+            } else if (pwd.length < 6) {
+                return toast.error("Your password must be at least six characters long.", 
+                            {autoClose: 4000});
             } else if ( (p_num && !p_num.match(/^\d{10}$/)) || (p_num === "" && cPhoneCarrier !== "") ) {
 
                 toast.error("Please provide a valid phone number: 2065551234", {autoClose: 4000});

@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const pool = require("../db");
 const authorization = require("../middleware/authorization");
+const bcryptLib = require("bcrypt");
 
 /************************************** START: MY PROFILE ****************************************/
 // Getting the general information from the user's profile:
@@ -52,5 +53,39 @@ router.put("/general", authorization, async(req, res) => {
     }
 });
 /************************************** END: MY PROFILE ******************************************/
+/************************************** START: MY PASSWORD ***************************************/
+router.put("/pwd", authorization, async (req, res) => {
+    try {
+        const { currentPwd, newPwd } = req.body;
+        const userId = req.user;
 
+        const currentUserPwd = await pool.query("SELECT user_pwd FROM users WHERE user_id = $1",
+            [userId]
+        );
+
+        // The password is currently encrypted so we have to decrpt it before
+        // we compare it with the password the user claims to be their password.
+        const validPwd = await bcryptLib.compare(currentPwd, currentUserPwd.rows[0].user_pwd);
+
+        if (!validPwd) {
+            return res.status(401).json("Please check your Current Password and try again.");
+        }
+
+        // Encrypting the new password:
+        const saltRound = 10;
+        const salt = await bcryptLib.genSalt(saltRound);
+        const bcryptPwd = await bcryptLib.hash(newPwd, salt);
+
+        const changePwd = await pool.query("UPDATE users SET user_pwd = $1 WHERE user_id = $2", 
+            [bcryptPwd, userId]
+        );
+
+        res.status(200).json("Password has been updated.");
+
+
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+});
+/************************************** END: MY PASSWORD *****************************************/
 module.exports = router;

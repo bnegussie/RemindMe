@@ -51,13 +51,16 @@ function UpdateProfile() {
 			const parseResp = await response.json();
 
             if (response.status === 400) {
-                toast.error(parseResp, {autoClose: 4000});
-                return false;
-            }
+                return toast.error(parseResp, {autoClose: 4000});
+            } else if (response.status === 200) {
+                toast.success("Successful profile update!", {autoClose: 2000});
+                
+                setTimeout(() => { window.location = "/ManageProfile"; }, 2000);
 
-			toast.success("Successful profile update!", { autoClose: 3000 });
-
-            window.location = "/ManageProfile";
+            } else {
+                return toast.error("Something went wrong.");
+			}
+			
 		} catch (error) {
 			console.error(error.message);
 		}
