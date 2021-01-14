@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Select from "react-select"
 
 function UpdateProfile() {
 	const [fName, setFName] = useState("");
 	const [lName, setLName] = useState("");
 	const [email, setEmail] = useState("");
 	const [cPhoneCarrier, setCPhoneCarrier] = useState("");
-	// eslint-disable-next-line
-    const [cPhoneCarrierEmailExtn, setCPhoneCarrierEmailExtn] = useState("");
+	const [cPhoneCarrierEmailExtn, setCPhoneCarrierEmailExtn] = useState("");
 	const [pNum, setPNum] = useState("");
 
 	// eslint-disable-next-line
@@ -55,8 +55,6 @@ function UpdateProfile() {
 
 			toast.success("Successful profile update!", { autoClose: 3000 });
 
-
-
             window.location = "/ManageProfile";
 		} catch (error) {
 			console.error(error.message);
@@ -83,6 +81,11 @@ function UpdateProfile() {
 		}
 	}
 
+	function setCellPhoneOption(e) {
+		setCPhoneCarrier(e.label);
+		setCPhoneCarrierEmailExtn(e.value);
+	}
+
 	// Getting all of the cell phone carriers and their email extension, so the app 
     // can send text messages to the users.
 	useEffect(() => {
@@ -104,11 +107,14 @@ function UpdateProfile() {
                 console.error(error.message);
             }
         }
-    }, [allCellphoneCarriers]);
+	}, [allCellphoneCarriers]);
+	
 
 	useEffect(() => {
 		getProfile();
 	}, []);
+
+	
 
 	return (
 		<Fragment>
@@ -167,8 +173,25 @@ function UpdateProfile() {
 									onChange={e => setEmail(e.target.value)}
 									required
 								/>
-							
 
+								<div id="cellphone-container">
+									<Select
+										value={{label: cPhoneCarrier}}
+										onChange={e => setCellPhoneOption(e)}
+										options={allCellphoneCarriers}
+										className="my-3 cellphone-child"
+										placeholder="Cell phone carrier"
+									/>
+							
+									<input 
+										type="tel"
+										name="pNum"
+										placeholder="Phone number (optional, but highly recommended)"
+										className="form-control my-3 cellphone-child"
+										value={pNum}
+										onChange={e => setPNum(e.target.value)}
+									/>                
+								</div>
 
                             </div>
 
