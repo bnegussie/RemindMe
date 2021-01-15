@@ -6,8 +6,9 @@ import { useHistory } from "react-router-dom";
 
 import ChangePassword from "./ChangePassword";
 import UpdateProfile from "./UpdateProfile";
+import ChangeGeneralReminderTime from "./ChangeGeneralReminderTime";
 
-import "./../../App.css"
+import "./../../App.css";
 
 function ManageProfile({ isAuth, setAuth }) {
 
@@ -70,7 +71,7 @@ function ManageProfile({ isAuth, setAuth }) {
 						<tr>
 							<td className="manage-profile-options">My General Reminder Time</td>
 							<td onClick={isAuth} >
-								CHANGE
+								<ChangeGeneralReminderTime />
 							</td>
 						</tr>
 						<tr>
