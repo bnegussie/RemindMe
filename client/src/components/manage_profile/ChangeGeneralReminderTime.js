@@ -1,24 +1,78 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import TimePicker from "react-time-picker";
+import { toast } from "react-toastify";
 
 import "./../../App.css"
 
 function ChangeGeneralReminderTime() {
 
-    const [generalReminderTime, setGeneralReminderTime] = useState("6:00");
+    const [generalReminderTime, setGeneralReminderTime] = useState("0:00");
 
+	async function getGRT() {
+		try {
+			const response = await fetch("http://localhost:5000/profile/general/reminder", {
+				method: "GET",
+				headers: {"token": localStorage.token}
+			});
+			const parseResp = await response.json();
+
+			if (response.status === 200) {
+				let setHour = parseResp.user_general_reminder_time;
+				let time = setHour + ":00";
+				setGeneralReminderTime( time );
+
+            } else {
+                return toast.error("Something went wrong. ", [parseResp]);
+            }
+		} catch (error) {
+			console.log(error.message);
+		}
+	}
 
     function onCancel() {
         setGeneralReminderTime("6:00");
     }
 
-    function changeGRT(e) {
-		if (e) {
-			setGeneralReminderTime(e);
-		} else {
-			setGeneralReminderTime("");
+    async function setGRT(e) {
+		e.preventDefault();
+
+		// Parsing the data provided.
+		var setTime = generalReminderTime.split(":");
+		var hour = parseInt(setTime[0]);
+
+		try {
+			const body = { hour };
+
+			const gRTHeaders = new Headers();
+			gRTHeaders.append("Content-type", "application/json");
+			gRTHeaders.append("token", localStorage.token);
+
+			const response = await fetch("http://localhost:5000/profile/general/reminder", {
+				method: "PUT",
+				headers: gRTHeaders,
+				body: JSON.stringify(body)
+			});
+
+			const parseResp = await response.json();
+
+			if (response.status === 200) {
+				toast.success("The General Reminder Time has now been changed.", {autoClose: 2500});
+
+				setTimeout(() => { window.location = "/ManageProfile"; }, 2500);
+
+            } else {
+				return toast.error("Something went wrong. ", [parseResp]);
+			}
+			
+		} catch (error) {
+			console.log(error.message);
 		}
-    }
+	}
+	
+	useEffect(() => {
+		getGRT();
+		
+	}, [])
 
 	return (
 		<Fragment>
@@ -47,11 +101,11 @@ function ChangeGeneralReminderTime() {
 							</button>
 						</div>
 
-						<form onSubmit={(e) => changeGRT(e)}>
+						<form onSubmit={(e) => setGRT(e)}>
                             <div className="modal-body">
                             
 								<TimePicker
-									onChange={changeGRT}
+									onChange={(e) => setGeneralReminderTime(e)}
 									value={generalReminderTime}
 									format="h a"
 									hourAriaLabel="Hour"

@@ -729,8 +729,5 @@ ul > li:nth-child(2) > a:hover {
 /***************************************** START: CHANGEGENERALREMINDERTIME.JS *******************/
 #change-general-reminder-time-modal {
   height: 75vh;
-
-  position: absolute;
-  top: 20%; 
 }
 /***************************************** END: CHANGEGENERALREMINDERTIMES.JS ********************/

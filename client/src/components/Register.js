@@ -37,8 +37,12 @@ const Register = ({ setAuth }) => {
         e.preventDefault();
 
         try {
+            // If the user has any upcoming reminders, within seven days, they will get
+            // daily reminders sent out at 6:00 am;
+            const generalReminderTime = 6;
+            
             const body = { f_name, l_name, email, cPhoneCarrier, cPhoneCarrierEmailExtn, 
-                            p_num, pwd };
+                            p_num, pwd, generalReminderTime };
 
             // Quick input validation:
             // eslint-disable-next-line

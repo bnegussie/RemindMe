@@ -116,4 +116,35 @@ router.delete("/account", authorization, async (req, res) => {
     }
 });
 /************************************** END: MY ACCOUNT ******************************************/
+/************************************** START: MY GENERAL REMINDER TIME **************************/
+router.get("/general/reminder", authorization, async (req, res) => {
+    try {
+        const userId = req.user;
+
+        const gReminderTime = await pool.query("SELECT user_general_reminder_time FROM users WHERE user_id = $1",
+            [userId]
+        );
+        res.status(200).json(gReminderTime.rows[0]);
+
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+});
+
+router.put("/general/reminder", authorization, async (req, res) => {
+    try {
+        const { hour } = req.body;
+        const userId = req.user;
+
+        const gReminderTime = await pool.query("UPDATE users SET user_general_reminder_time = $1 WHERE user_id = $2",
+            [hour, userId]
+        );
+        res.status(200).json("Successfully update the General Reminder Time.");
+
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+});
+/************************************** END: MY GENERAL REMINDER TIME ****************************/
+
 module.exports = router;
