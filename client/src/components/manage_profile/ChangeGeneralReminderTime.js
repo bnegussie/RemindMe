@@ -6,7 +6,8 @@ import "./../../App.css"
 
 function ChangeGeneralReminderTime() {
 
-    const [generalReminderTime, setGeneralReminderTime] = useState("0:00");
+	const [reminderHour, setReminderHour] = useState("");
+	const [generalReminderTime, setGeneralReminderTime] = useState(null);
 
 	async function getGRT() {
 		try {
@@ -17,31 +18,41 @@ function ChangeGeneralReminderTime() {
 			const parseResp = await response.json();
 
 			if (response.status === 200) {
-				let setHour = parseResp.user_general_reminder_time;
+				const finalTime = new Date(parseResp.user_general_reminder_time);
+				setGeneralReminderTime( finalTime );
+
+				// This seperate group of variables are needed in order to display the data
+				// to the user in the Manage Profile section of this web application.
+				let setHour = finalTime.getHours();
 				let time = setHour + ":00";
-				setGeneralReminderTime( time );
+				setReminderHour( time );
 
             } else {
                 return toast.error("Something went wrong. ", [parseResp]);
-            }
+			}
+			
 		} catch (error) {
 			console.log(error.message);
 		}
 	}
 
     function onCancel() {
-        setGeneralReminderTime("6:00");
+		let hour = generalReminderTime.getHours();
+		setReminderHour(hour + ":00");
     }
 
     async function setGRT(e) {
 		e.preventDefault();
 
 		// Parsing the data provided.
-		var setTime = generalReminderTime.split(":");
+		var setTime = reminderHour.split(":");
 		var hour = parseInt(setTime[0]);
 
+		// Setting the actual data which will be stored in the DB:
+		generalReminderTime.setHours(hour);		
+
 		try {
-			const body = { hour };
+			const body = { generalReminderTime };
 
 			const gRTHeaders = new Headers();
 			gRTHeaders.append("Content-type", "application/json");
@@ -72,7 +83,7 @@ function ChangeGeneralReminderTime() {
 	useEffect(() => {
 		getGRT();
 		
-	}, [])
+	}, []);
 
 	return (
 		<Fragment>
@@ -105,8 +116,8 @@ function ChangeGeneralReminderTime() {
                             <div className="modal-body">
                             
 								<TimePicker
-									onChange={(e) => setGeneralReminderTime(e)}
-									value={generalReminderTime}
+									onChange={(e) => setReminderHour(e)}
+									value={reminderHour}
 									format="h a"
 									hourAriaLabel="Hour"
 									required

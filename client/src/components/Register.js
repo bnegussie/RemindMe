@@ -37,9 +37,18 @@ const Register = ({ setAuth }) => {
         e.preventDefault();
 
         try {
-            // If the user has any upcoming reminders, within seven days, they will get
-            // daily reminders sent out at 6:00 am;
-            const generalReminderTime = 6;
+            /* As the user has upcoming reminders, within the following seven days, that user
+             * will get daily reminders sent out at 6:00 am (default);
+             *
+             * The generalReminderTime is stored as a date so that the timezone, which the user is in,
+             * can be properly stored so they can get alerted at their 6:00 am and not the UTC 6:00 am.
+             */
+            var generalReminderTime = new Date();
+            generalReminderTime.setHours(6);
+            generalReminderTime.setMinutes(0);
+            generalReminderTime.setSeconds(0);
+            generalReminderTime.setMilliseconds(0);
+
             
             const body = { f_name, l_name, email, cPhoneCarrier, cPhoneCarrierEmailExtn, 
                             p_num, pwd, generalReminderTime };
