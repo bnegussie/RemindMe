@@ -9,6 +9,7 @@ function ChangeGeneralReminderTime() {
 	const [reminderHour, setReminderHour] = useState("");
 	const [generalReminderTime, setGeneralReminderTime] = useState(null);
 
+
 	async function getGRT() {
 		try {
 			const response = await fetch("http://localhost:5000/profile/general/reminder", {
@@ -19,7 +20,7 @@ function ChangeGeneralReminderTime() {
 
 			if (response.status === 200) {
 				const finalTime = new Date(parseResp.user_general_reminder_time);
-				setGeneralReminderTime( finalTime );
+				setGeneralReminderTime(finalTime)
 
 				// This seperate group of variables are needed in order to display the data
 				// to the user in the Manage Profile section of this web application.
@@ -47,12 +48,23 @@ function ChangeGeneralReminderTime() {
 		// Parsing the data provided.
 		var setTime = reminderHour.split(":");
 		var hour = parseInt(setTime[0]);
+		var newGRT;
 
-		// Setting the actual data which will be stored in the DB:
-		generalReminderTime.setHours(hour);		
+		const now = new Date();
+		/* Setting the actual data which will be stored in the DB:
+		 * Creating a new Date object because if the user has moved into a new Timezone,
+		 * the new Date will capture that information so the user gets notified at the right time.
+		 */
+		if (hour > now.getHours()) {
+			newGRT = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, 0, 0, 0);
+			
+		} else {
+			newGRT = new Date(now.getFullYear(), now.getMonth(), (now.getDate() + 1), hour, 0, 0, 0);
+		}
+		setGeneralReminderTime(newGRT);
 
 		try {
-			const body = { generalReminderTime };
+			const body = { newGRT };
 
 			const gRTHeaders = new Headers();
 			gRTHeaders.append("Content-type", "application/json");
@@ -67,9 +79,9 @@ function ChangeGeneralReminderTime() {
 			const parseResp = await response.json();
 
 			if (response.status === 200) {
-				toast.success("The General Reminder Time has now been changed.", {autoClose: 2500});
+				toast.success("Your General Reminder Time has now been successfully updated!", {autoClose: 3000});
 
-				setTimeout(() => { window.location = "/ManageProfile"; }, 2500);
+				setTimeout(() => { window.location = "/ManageProfile"; }, 3000);
 
             } else {
 				return toast.error("Something went wrong. ", [parseResp]);
@@ -84,6 +96,7 @@ function ChangeGeneralReminderTime() {
 		getGRT();
 		
 	}, []);
+	
 
 	return (
 		<Fragment>
@@ -93,14 +106,14 @@ function ChangeGeneralReminderTime() {
 				data-toggle="modal"
 				data-target="#change-general-reminder-time-modal"
 			>
-				Change
+				View
 			</button>
 
 			<div id="change-general-reminder-time-modal" className="modal fade" role="dialog">
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">
-							<h4 className="modal-title">Change General Reminder Time</h4>
+							<h4 className="modal-title">Edit General Reminder Time</h4>
 
 							<button
 								type="button"

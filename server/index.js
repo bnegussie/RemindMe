@@ -35,8 +35,8 @@ app.use("/profile", require("./routes/manageProfile"))
 
 async function processAllUserReminders() {
     try {
-        // The way in which this data is process reverses the data so
-        // we end up looking at the upcoming reminders first, categorized by each user.
+        // The way in which this data is processed is reversed so this script will end up
+        // looking at the upcoming reminders first, categorized by each user.
         const activeRemindersPlusUserData = await pool.query(
             "SELECT * FROM active_reminders AS a_r INNER JOIN users AS u ON a_r.user_id = u.user_id ORDER BY a_r.user_id DESC, a_r.reminder_due_date DESC, a_r.reminder_title DESC;");
         
@@ -81,20 +81,24 @@ async function processAllUserReminders() {
 
 
 
-// Setting up the time trigger to send the user, their daily list of reminders.--------------------------
+// Setting up the time trigger to send the users, their daily list of reminders.--------------------------
+var initialGRHasNotBeenSent = true;
 var timeNow = new Date();
-var millisTillSixAM = new Date(timeNow.getFullYear(), timeNow.getMonth(), 
-                                timeNow.getDate(), 9, 0, 0, 0) - timeNow;
+var nextAvailableGR = new Date(timeNow.getFullYear(), timeNow.getMonth(), 
+                                timeNow.getDate(), (timeNow.getHours() + 1), 0, 0, 0) - timeNow;
 
-if (millisTillSixAM < 0) {
-    millisTillSixAM += new Date(timeNow.getFullYear(), timeNow.getMonth(), 
-                (timeNow.getDate()  + 1), 9, 0, 0, 0).getTime(); // it's after 6am, try 6am tomorrow.
-} else {
-    setTimeout( triggerGeneralEmail, millisTillSixAM );		
-}
+setTimeout(function() {
+    // Cheching every hour because users can adjust their General Reminder to different hours of the day.
+    // And since the users can live in different timezones, we want the system to send the email
+    // at the appropriate time.
+    setInterval(triggerGeneralEmail, (1000 * 60 * 60));
 
+    if (initialGRHasNotBeenSent) {
+        initialGRHasNotBeenSent = false;
+        triggerGeneralEmail();
+    }
 
-
+}, nextAvailableGR);
 
 async function triggerGeneralEmail() {
     try {
@@ -102,76 +106,106 @@ async function triggerGeneralEmail() {
 
         allUserReminders.forEach(function(currUserAllActiveReminders, index) {
             const allActive = currUserAllActiveReminders;
+            
+            // Checking to see if the current hour is the time the user wants our system to send
+            // out the general reminder, if they have any upcoming tasks for the week.
+            const thisMoment = new Date();
+            const thisSpecificMoment = new Date(thisMoment.getFullYear(), thisMoment.getMonth(), 
+                                            thisMoment.getDate(), thisMoment.getHours(), 0, 0, 0);
+            const specifiedTime = new Date( allActive[0].user_general_reminder_time );
+            // Checking if our server failed to send a general reminder, maybe because it was down:
+            var userGRHasNotBeenSent = false;
 
-            const userEmail = allActive[0].user_email;
-            const userCPCarrierEmailExtn = allActive[0].user_cp_carrier_email_extn;
-            const userPNum = allActive[0].user_p_num;
-            const userFName = allActive[0].user_f_name;
-
-            var lookedThroughTheUpcomingWeekReminders = false;
-            var activeLength = allActive.length;
-            var activeIndex = 0;
-
-            if (activeLength === 0) {
-                return
+            if ( (specifiedTime.getTime() + (1000 * 60 * 60 * 24)) < thisSpecificMoment.getTime() ) {
+                // This means 24 hours or more has past since the last General Reminder has been
+                // checked to be sent to this user:
+                userGRHasNotBeenSent = true;
+                while (specifiedTime.getTime() < thisSpecificMoment.getTime()) {
+                    specifiedTime.setDate(specifiedTime.getDate() + 1);
+                }
             }
 
-            const today = new Date();
-            var oneWeek = new Date();
-            oneWeek.setDate(oneWeek.getDate() + 7);
-            /* The email will list out the upcoming reminders in the next seven days.
-            * For each day there is the time (in ms) at 12:00 am and another time at 11:45 pm
-            * to make sure the date time comparison is always going to be accurate.
-            */
-            const upcomingDates = [today.getTime(), 
-                (new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 45, 59, 59)).getTime(),
-                (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 1), 0, 0, 0, 0)).getTime(),
-                (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 1), 23, 45, 59, 59)).getTime(),
-                (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 2), 0, 0, 0, 0)).getTime(),
-                (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 2), 23, 45, 59, 59)).getTime(),
-                (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 3), 0, 0, 0, 0)).getTime(),
-                (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 3), 23, 45, 59, 59)).getTime(),
-                oneWeek.getTime()];
-            
-            
-            // [0, 			1,			 2,					3,				 4,							 5]
-            // [Due today, Due tomorrow, Due in two days, Due in three days, Due in less than a week, Overdue]
-            var reminders = ["", "", "", "", "", ""];
+            if ( thisSpecificMoment.getTime() === specifiedTime.getTime() || userGRHasNotBeenSent ) {
 
-            const dueDate = new Date(allActive[activeIndex].reminder_due_date);
-            const dueDateTime = dueDate.getTime();
+                if (!userGRHasNotBeenSent) {
+                    specifiedTime.setDate(specifiedTime.getDate() + 1);
+                }
+                userGRHasNotBeenSent = false;
 
-            if (dueDateTime >= upcomingDates[8]) {
-                // There are not any reminders within the next seven days.				
-                return
-            }
+                const updateGR = pool.query("UPDATE users SET user_general_reminder_time = $1 WHERE user_id = $2;",
+                    [specifiedTime, allActive[0].user_id]
+                );
 
-            while (activeIndex < activeLength && !lookedThroughTheUpcomingWeekReminders) {
+
+                const userEmail = allActive[0].user_email;
+                const userCPCarrierEmailExtn = allActive[0].user_cp_carrier_email_extn;
+                const userPNum = allActive[0].user_p_num;
+                const userFName = allActive[0].user_f_name;
+
+                var lookedThroughTheUpcomingWeekReminders = false;
+                var activeLength = allActive.length;
+                var activeIndex = 0;
+
+                if (activeLength === 0) {
+                    return
+                }
+
+                const today = new Date();
+                var oneWeek = new Date();
+                oneWeek.setDate(oneWeek.getDate() + 7);
+                /* The email will list out the upcoming reminders in the next seven days.
+                * For each day there is the time (in ms) at 12:00 am and another time at 11:45 pm
+                * to make sure the date time comparison is always going to be accurate.
+                */
+                const upcomingDates = [today.getTime(), 
+                    (new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 45, 59, 59)).getTime(),
+                    (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 1), 0, 0, 0, 0)).getTime(),
+                    (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 1), 23, 45, 59, 59)).getTime(),
+                    (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 2), 0, 0, 0, 0)).getTime(),
+                    (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 2), 23, 45, 59, 59)).getTime(),
+                    (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 3), 0, 0, 0, 0)).getTime(),
+                    (new Date(today.getFullYear(), today.getMonth(), (today.getDate() + 3), 23, 45, 59, 59)).getTime(),
+                    oneWeek.getTime()];
+                
+                
+                // [0, 			1,			 2,					3,				 4,							 5]
+                // [Due today, Due tomorrow, Due in two days, Due in three days, Due in less than a week, Overdue]
+                var reminders = ["", "", "", "", "", ""];
 
                 const dueDate = new Date(allActive[activeIndex].reminder_due_date);
                 const dueDateTime = dueDate.getTime();
 
-                if (dueDateTime < upcomingDates[0]) { // Overdue
-                    reminders[5] += "<br/>" + allActive[activeIndex].reminder_title;
-                } else if (dueDateTime >= upcomingDates[0] && dueDateTime <= upcomingDates[1]) { // Due Today
-                    reminders[0] += "<br/>" + allActive[activeIndex].reminder_title;
-                } else if (dueDateTime >= upcomingDates[2] && dueDateTime <= upcomingDates[3]) { // Due tomorrow
-                    reminders[1] += "<br/>" + allActive[activeIndex].reminder_title;
-                } else if (dueDateTime >= upcomingDates[4] && dueDateTime <= upcomingDates[5]) { // Due in two days
-                    reminders[2] += "<br/>" + allActive[activeIndex].reminder_title;
-                } else if (dueDateTime >= upcomingDates[6] && dueDateTime <= upcomingDates[7]) { // Due in three days
-                    reminders[3] += "<br/>" + allActive[activeIndex].reminder_title;
-                } else if (dueDateTime < upcomingDates[8]) { // Due in less than one week
-                    reminders[4] += "<br/>" + allActive[activeIndex].reminder_title;
-                } else {
-                    lookedThroughTheUpcomingWeekReminders = true;
+                if (dueDateTime >= upcomingDates[8]) {
+                    // There are not any reminders within the next seven days, for the current user.		
+                    return
                 }
 
-                activeIndex++;
-            }
+                while (activeIndex < activeLength && !lookedThroughTheUpcomingWeekReminders) {
 
-            // eslint-disable-next-line
-            sendGeneralReminderEmail(reminders, userEmail, userCPCarrierEmailExtn, userPNum, userFName);
+                    const dueDate = new Date(allActive[activeIndex].reminder_due_date);
+                    const dueDateTime = dueDate.getTime();
+
+                    if (dueDateTime < upcomingDates[0]) { // Overdue
+                        reminders[5] += "<br/>" + allActive[activeIndex].reminder_title;
+                    } else if (dueDateTime >= upcomingDates[0] && dueDateTime <= upcomingDates[1]) { // Due Today
+                        reminders[0] += "<br/>" + allActive[activeIndex].reminder_title;
+                    } else if (dueDateTime >= upcomingDates[2] && dueDateTime <= upcomingDates[3]) { // Due tomorrow
+                        reminders[1] += "<br/>" + allActive[activeIndex].reminder_title;
+                    } else if (dueDateTime >= upcomingDates[4] && dueDateTime <= upcomingDates[5]) { // Due in two days
+                        reminders[2] += "<br/>" + allActive[activeIndex].reminder_title;
+                    } else if (dueDateTime >= upcomingDates[6] && dueDateTime <= upcomingDates[7]) { // Due in three days
+                        reminders[3] += "<br/>" + allActive[activeIndex].reminder_title;
+                    } else if (dueDateTime < upcomingDates[8]) { // Due in less than one week
+                        reminders[4] += "<br/>" + allActive[activeIndex].reminder_title;
+                    } else {
+                        lookedThroughTheUpcomingWeekReminders = true;
+                    }
+
+                    activeIndex++;
+                }
+
+                sendGeneralReminderEmail(reminders, userEmail, userCPCarrierEmailExtn, userPNum, userFName);
+            }
         });
 
     } catch (error) {
@@ -210,7 +244,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
             let task = todayTasks.pop();
             todayEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
                     <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
                         ${task}
                     </p>
@@ -236,7 +270,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
             let task = tmrTasks.pop();
             tomorrowEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
                     <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
                         ${task}
                     </p>
@@ -262,7 +296,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
             let task = tasksInTwoDays.pop();
             inTwoDaysEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
                     <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
                         ${task}
                     </p>
@@ -288,7 +322,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
             let task = tasksInThreeDays.pop();
             inThreeDaysEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
                     <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
                         ${task}
                     </p>
@@ -314,7 +348,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
             let task = tasksInLessThanAWeek.pop();
             inLessThanAWeekEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
                     <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
                         ${task}
                     </p>
@@ -341,7 +375,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
             let task = overdueTasks.pop();
             overdueEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
                     <p style="font-size:18px; display: inline-block; padding:0; margin:0; color:red;">
                         ${task}
                     </p>
@@ -435,36 +469,37 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
 
 
 // Setting a timer to check if one or more Reminders need to be sent ------------------------------
-// out every five minutes; and if so, the server sends out an email and a text message:
-const possibleMinutes = [0, 5];
+// and if so, the server sends out an email and a text message:
+var initialSpecificReminderHasNotBeenSent = true;
+const possibleMinutes = [0, 15, 30, 45];
 const now = new Date();
 var nextAvailable;
-var finalMinute;
 
-const smallMinute = now.getMinutes() % 10;
-const bigMinute = Math.floor(now.getMinutes() / 10);
+const currentMinute = now.getMinutes();
 
-if (smallMinute < possibleMinutes[1]) {
-    if (bigMinute === 0) {
-        finalMinute = possibleMinutes[1];
-    } else {
-        finalMinute = bigMinute * 10 + possibleMinutes[1];
-    }
-
+if (currentMinute < possibleMinutes[1]) {
+    nextAvailable = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 
+                    now.getHours(), possibleMinutes[1], 0, 0);
+} else if (currentMinute < possibleMinutes[2]) {
+    nextAvailable = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 
+                    now.getHours(), possibleMinutes[2], 0, 0);
+} else if (currentMinute < possibleMinutes[3]) {
+    nextAvailable = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 
+                    now.getHours(), possibleMinutes[3], 0, 0);
 } else {
-    if (bigMinute === 0) {
-        finalMinute = possibleMinutes[0];
-    } else {
-        finalMinute = (bigMinute + 1) * 10 + possibleMinutes[0];
-    }
+    nextAvailable = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 
+                    (now.getHours() + 1), possibleMinutes[0], 0, 0);
 }
-nextAvailable = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 
-                        now.getHours(), finalMinute, 0, 0);
 
 const remainingMS = nextAvailable - now;
 
 setTimeout(function() {
-    setInterval(triggerSpecifiedReminderEmailAndSMS, (1000 * 60 * 5));
+    setInterval(triggerSpecifiedReminderEmailAndSMS, (1000 * 60 * 15));
+
+    if (initialSpecificReminderHasNotBeenSent) {
+        initialSpecificReminderHasNotBeenSent = false;
+        triggerSpecifiedReminderEmailAndSMS();
+    }
 }, remainingMS);
 
 
@@ -541,7 +576,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             } else if (index % 4 === 1) {
                 emailReminders += `
                     <div style="white-space: nowrap; overflow-x: auto;">
-                        <h3 style="display: inline-block; padding:0; margin:0;">Details:</h3>
+                        <h3 style="display: inline-block; padding:0; margin:0;">Details: </h3>
                         <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
                             ${reminderData}
                         </p>
@@ -550,7 +585,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             } else if (index % 4 === 2) {
                 emailReminders += `
                     <div style="white-space: nowrap; overflow-x: auto;">
-                        <h3 style="display: inline-block; padding:0; margin:0;">Due Date:</h3>
+                        <h3 style="display: inline-block; padding:0; margin:0;">Due Date: </h3>
                         <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
                             ${reminderData}
                         </p>
@@ -559,7 +594,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             } else {
                 emailReminders += `
                     <div style="white-space: nowrap; overflow-x: auto;">
-                        <h3 style="display: inline-block; padding:0; margin:0;">Reminder Date:</h3>
+                        <h3 style="display: inline-block; padding:0; margin:0;">Reminder Date: </h3>
                         <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
                             ${reminderData}
                         </p>

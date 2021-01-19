@@ -53,9 +53,9 @@ function UpdateProfile() {
             if (response.status === 400) {
                 return toast.error(parseResp, {autoClose: 4000});
             } else if (response.status === 200) {
-                toast.success("Successful profile update!", {autoClose: 1500});
+                toast.success("Your Profile has now been successfully update!", {autoClose: 2000});
                 
-                setTimeout(() => { window.location = "/ManageProfile"; }, 1500);
+                setTimeout(() => { window.location = "/ManageProfile"; }, 2000);
 
             } else {
                 return toast.error("Something went wrong. ", [parseResp]);

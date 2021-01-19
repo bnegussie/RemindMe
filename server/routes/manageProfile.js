@@ -133,11 +133,11 @@ router.get("/general/reminder", authorization, async (req, res) => {
 
 router.put("/general/reminder", authorization, async (req, res) => {
     try {
-        const { generalReminderTime } = req.body;
+        const { newGRT } = req.body;
         const userId = req.user;
 
         const gReminderTime = await pool.query("UPDATE users SET user_general_reminder_time = $1 WHERE user_id = $2",
-            [generalReminderTime, userId]
+            [newGRT, userId]
         );
         res.status(200).json("Successfully update the General Reminder Time.");
 
