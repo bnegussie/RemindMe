@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 import "./../../../App.css"
 
-function EditReminder({ currReminder }) {
+function EditReminder({ currReminder, redirectTo }) {
 	const [completed, setCompleted] = useState( currReminder.reminder_completed );
 	const [title, setTitle] = useState(currReminder.reminder_title);
 	const [desc, setDesc] = useState(currReminder.reminder_desc);
@@ -177,9 +177,10 @@ function EditReminder({ currReminder }) {
 					headers: myHeaders,
 					body: JSON.stringify(body)
 			});
-			
 
-			window.location = "/";
+			const finalDest = redirectTo ? redirectTo : "/";
+			window.location = finalDest;
+
 		} catch (error) {
 			console.error(error.message);
 		}
@@ -287,7 +288,7 @@ function EditReminder({ currReminder }) {
 							</div>
 
 							<div className="modal-footer">
-								<input type="submit"value="Save" className="btn btn-success" />
+								<input type="submit" value="Save" className="btn btn-success" />
 
 								<button type="button" 
 									className="btn btn-danger" 

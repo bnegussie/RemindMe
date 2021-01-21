@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import InlineConfirmButton from "react-inline-confirm";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import {Link} from "react-router-dom";
 
 import "./../../../App.css";
 import "react-tabs/style/react-tabs.css";
@@ -329,11 +330,16 @@ function Reminders({ isAuth }) {
 
 	return (
 		<Fragment>
-			<div 
-				id="new-reminder-btn-on-dashboard" 
-				onClick={isAuth} >
-				<CreateReminder />
+			<div className="main-dashboard-btns">
+				<div className="dashboard-btns" onClick={isAuth} onMouseEnter={isAuth}>
+					<CreateReminder />
+
+					<Link className='search-btn-on-dashboard' to="/dashboard/Search">
+						<i className="fas fa-search"  />
+					</Link>
+				</div>
 			</div>
+						
 
 			<Tabs>
 				<TabList className="reminder-tabs">
@@ -399,6 +405,7 @@ function Reminders({ isAuth }) {
 								))}
 							</tbody>
 						</table>
+						{allActiveReminders.length === 0 && <p>You do not have any active reminders.</p>}
 					</div>
 				</TabPanel>
 
@@ -452,6 +459,7 @@ function Reminders({ isAuth }) {
 								))}
 							</tbody>
 						</table>
+						{allReminders.length === 0 && <p>You do not have any reminders.</p>}
 					</div>
 				</TabPanel>
 
@@ -506,6 +514,7 @@ function Reminders({ isAuth }) {
 								))}
 							</tbody>
 						</table>
+						{allCompletedReminders.length === 0 && <p>You do not have any completed reminders.</p>}
 					</div>
 				</TabPanel>
 
@@ -558,6 +567,7 @@ function Reminders({ isAuth }) {
 								))}
 							</tbody>
 						</table>
+						{allOverdueReminders.length === 0 && <p>You do not have any overdue reminders.</p>}
 					</div>
 				</TabPanel>
 			</Tabs>

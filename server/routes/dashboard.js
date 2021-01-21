@@ -4,23 +4,6 @@ const authorization = require("../middleware/authorization");
 
 
 
-// Getting all of the user's Reminders:
-router.get("/", authorization, async(req, res) => {
-    try {
-        // Now req.user has the payload:
-        const user = await pool.query(
-            "SELECT u.user_id, all_r.reminder_id, all_r.reminder_completed, all_r.reminder_title, all_r.reminder_desc, all_r.reminder_due_date, all_r.reminder_reminder_date FROM users AS u LEFT JOIN all_reminders AS all_r ON u.user_id = all_r.user_id WHERE u.user_id = $1",
-            [req.user]
-        );
-
-        res.json(user.rows);
-
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json("Server error");
-    }
-});
-
 /************************************** STARTS: all_reminders DB ******************************/
 // (Creating) Placing a new reminder into the all_reminders DB table:
 router.post("/reminder/all", authorization, async(req, res) => {
@@ -402,6 +385,23 @@ router.get("/user/username", authorization, async (req, res) => {
     }
 })
 /************************************** END: USERS DB ********************************************/
+/************************************** START: SEARCH BAR ACCESSING all_reminders DB *************/
+router.get("/search", authorization, async (req, res) => {
+    try {
+        const { title } = req.query;
+        const userId = req.user;
+
+        const result = await pool.query("SELECT * FROM all_reminders WHERE user_id = $1 AND reminder_title ILIKE $2 ORDER BY reminder_due_date DESC, reminder_title ASC;",
+            [userId, `%${title}%`]
+        );
+
+        res.status(200).json(result.rows);
+
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+/************************************** END: SEARCH BAR ACCESSING all_reminders DB ***************/
 
 
 

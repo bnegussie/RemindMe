@@ -516,7 +516,15 @@ ul > li:nth-child(2) > a:hover {
 }
 
 #createreminder-new-btn {
-  float: right;
+  font-size: 20px;
+  background: #1e7e34;
+  
+  display: grid;  
+}
+
+#createreminder-new-btn:hover {
+  background: #0dcaf0;
+  transition: 0.3s ease-out;
 }
 
 .form-control.reminder-details {
@@ -536,9 +544,14 @@ ul > li:nth-child(2) > a:hover {
   text-align: center;
 }
 
-#new-reminder-btn-on-dashboard {
+.main-dashboard-btns {
+  display: grid;
   padding: 20px;
-  margin-bottom: 50px;
+  justify-content: right;
+}
+
+.dashboard-btns {
+  display: flex;
 }
 
 .reminder-tabs {
@@ -563,6 +576,22 @@ ul > li:nth-child(2) > a:hover {
   color: #8B4513;
 }
 
+.search-btn-on-dashboard {
+  text-decoration: none;
+  font-size: 30px;
+  color: #fff;
+  background: #0dcaf0;
+  border-radius: 4px;
+
+  padding: 0px 8px 0px 8px;
+  margin: 10px 0px 15px 0;
+}
+
+.search-btn-on-dashboard:hover {
+  color: #fff;
+  background: #1e7e34;
+  transition: 0.3s ease-out;
+}
 
 
 ::-webkit-input-placeholder {
@@ -731,3 +760,27 @@ ul > li:nth-child(2) > a:hover {
   height: 75vh;
 }
 /***************************************** END: CHANGEGENERALREMINDERTIMES.JS ********************/
+/***************************************** START: SEARCH.JS **************************************/
+.search-top-component {
+  padding: 20px;
+  margin: 20px 0px 20px 0px;
+}
+
+.form-control.search {
+  font-size: 25px;
+}
+
+.search-btn-on-search {
+  font-size: 35px;
+  color: #fff;
+  background: #0dcaf0;
+  border-radius: 4px;
+
+  padding: 0px 8px 0px 8px;
+}
+
+.search-btn-on-search:hover {
+  background: #1e7e34;
+  transition: 0.3s ease-out;
+}
+/***************************************** END: SEARCH.JS ****************************************/

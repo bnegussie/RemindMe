@@ -22,6 +22,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import HowItWorks from "./components/info_pages/HowItWorks"
 import FAQ from "./components/info_pages/FAQ"
 import ManageProfile from "./components/manage_profile/ManageProfile";
+import Search from "./components/dashboard/reminders/Search";
 
 
 toast.configure();
@@ -139,6 +140,17 @@ function App() {
                   <Redirect to="/dashboard"/> 
                 ) : (
                   <Register {...props} setAuth={setAuth} />
+                )  
+              }
+            />
+
+            <Route 
+              exact path="/dashboard/search" 
+              render={props => 
+                isAuthenticated ? (
+                  <Search {...props} isAuth={isAuth} />
+                ) : (
+                  <LandingPage />
                 )  
               }
             />
