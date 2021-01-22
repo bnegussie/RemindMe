@@ -50,7 +50,7 @@ function UpdateProfile() {
             // parseResp now holds the JWT unless the server threw an error:
 			const parseResp = await response.json();
 
-            if (response.status === 400) {
+            if (response.status === 401) {
                 return toast.error(parseResp, {autoClose: 4000});
             } else if (response.status === 200) {
                 toast.success("Your Profile has now been successfully update!", {autoClose: 2000});
@@ -77,13 +77,15 @@ function UpdateProfile() {
 			setFName(profile.user_f_name);
 			setLName(profile.user_l_name);
 			setEmail(profile.user_email);
-			
-			// Some odd behavior occurs if this check is not implemented where the user
+			setCPhoneCarrier(profile.user_cp_carrier);
+			setCPhoneCarrierEmailExtn(profile.user_cp_carrier_email_extn);
+
+			// Some odd behavior occurs if this check is not implemented here; what happens is the user
 			// gets a white space (undefined) from the DB and this causes UI issues.
-			if (profile.user_cp_carrier) {
-				setCPhoneCarrier(profile.user_cp_carrier);
-				setCPhoneCarrierEmailExtn(profile.user_cp_carrier_email_extn);
-				setPNum(profile.user_p_num);
+			if (profile.user_cp_carrier === "") {
+				// The DB ends up storing the value of the phone number as an empty string with
+				// ten spaces, which is why there is a manual entry below:
+				setPNum("");
 			}
 
 		} catch (error) {

@@ -64,22 +64,3 @@ CREATE TABLE overdue_reminders(
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (reminder_id) REFERENCES all_reminders(reminder_id)
 );
-
-
-
-
-
--- Inserting a test user:
-
-INSERT INTO users (user_f_name, user_l_name, user_email, user_p_num, user_pwd)
-VALUES ('jonh', 'doe', 'jdoe@gmail.com', '2535558979', 'testing123');
-
-INSERT INTO all_reminders (user_id, reminder_completed, reminder_title, reminder_desc, reminder_due_date, reminder_reminder_date) 
-VALUES ('99e9a2f7-76d9-4343-ae46-a4759c470c71', FALSE, 'Order rental car', 'make sure to keep the receipt', '2021-01-02', '2021-01-02');
-
-INSERT INTO active_reminders (reminder_id, user_id, reminder_completed, reminder_title, reminder_desc, reminder_due_date, reminder_reminder_date) 
-VALUES (1, '99e9a2f7-76d9-4343-ae46-a4759c470c71', FALSE, 'Call Sacramento client', 'Finalize deal', '2021-01-04', '2021-01-04');
-
-SELECT * FROM users INNER JOIN all_reminders ON users.user_id = all_reminders.user_id;
-
-SELECT * FROM users LEFT JOIN all_reminders ON users.user_id = all_reminders.user_id;

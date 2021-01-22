@@ -37,7 +37,17 @@ router.put("/general", authorization, async(req, res) => {
             const desiredUserEmail = await pool.query("SELECT * FROM users WHERE user_email = $1;", [lowerCaseEmail] );
             if (desiredUserEmail.rows.length > 0) {
                 // Someone is already using this email address:
-                return res.status(400).json("A user with this email address already exists.");
+                return res.status(401).json("A user with this email address already exists.");
+            }
+        }
+
+        if (pNum !== "") {
+            const userWithPNum = await pool.query("SELECT * FROM users WHERE user_p_num = $1", 
+                [pNum]
+            );
+            if (userWithPNum.rows.length !== 0) {
+                // 401 = unauthenticated (user already exists):
+                return res.status(401).json("A user with this phone number already exists.");
             }
         }
 

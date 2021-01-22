@@ -21,14 +21,23 @@ router.post("/register", validInfo, async(req, res) => {
 
         
         // 2) Check if user exists (if user exists, throw error):
-        const user = await pool.query("SELECT * FROM users WHERE user_email = $1", 
+        const userWithEmail = await pool.query("SELECT * FROM users WHERE user_email = $1", 
             [lowerCaseEmail]
         );
-
-        if (user.rows.length !== 0) {
+        if (userWithEmail.rows.length !== 0) {
             // 401 = unauthenticated (user already exists):
             return res.status(401).json("A user with this email address already exists.");
-        } 
+        }
+
+        if (p_num !== "") {
+            const userWithPNum = await pool.query("SELECT * FROM users WHERE user_p_num = $1", 
+                [p_num]
+            );
+            if (userWithPNum.rows.length !== 0) {
+                // 401 = unauthenticated (user already exists):
+                return res.status(401).json("A user with this phone number already exists.");
+            }
+        }
 
         
         // 3) Bcrypt the user's pwd:
