@@ -116,9 +116,11 @@ async function triggerGeneralEmail() {
             // Checking if our server failed to send a general reminder, maybe because it was down:
             var userGRHasNotBeenSent = false;
 
-            if ( (specifiedTime.getTime() + (1000 * 60 * 60 * 24)) < thisSpecificMoment.getTime() ) {
-                // This means 24 hours or more has past since the last General Reminder has been
-                // checked to be sent to this user:
+            if ( specifiedTime.getTime()  < thisSpecificMoment.getTime() ) {
+                /* If this check is correct, it could have fallen behind because the user
+                 * didn't have any upcomming reminds for the week, for at least a day
+                 * so the look below helps our system get the data in the DB up to date.
+                 */
                 userGRHasNotBeenSent = true;
                 while (specifiedTime.getTime() < thisSpecificMoment.getTime()) {
                     specifiedTime.setDate(specifiedTime.getDate() + 1);
