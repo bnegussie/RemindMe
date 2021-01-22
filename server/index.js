@@ -180,6 +180,8 @@ async function triggerGeneralEmail() {
                     return
                 }
 
+                var numOfReminders = 0;
+
                 while (activeIndex < activeLength && !lookedThroughTheUpcomingWeekReminders) {
 
                     const dueDate = new Date(allActive[activeIndex].reminder_due_date);
@@ -201,10 +203,19 @@ async function triggerGeneralEmail() {
                         lookedThroughTheUpcomingWeekReminders = true;
                     }
 
+                    if (dueDateTime < upcomingDates[8]) {
+                        /* Separate check needed so if there is more than one reminder, within the 
+                         * upcoming week, the grammar needs to be slightly different in the reminder 
+                         * email and text message.
+                         */
+                        numOfReminders++;
+                    }
+
                     activeIndex++;
                 }
 
-                sendGeneralReminderEmail(reminders, userEmail, userCPCarrierEmailExtn, userPNum, userFName);
+                sendGeneralReminderEmail(reminders, userEmail, userCPCarrierEmailExtn, 
+                                        userPNum, userFName, numOfReminders);
             }
         });
 
@@ -213,7 +224,8 @@ async function triggerGeneralEmail() {
     }
 }
 
-async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, userPNum, userFName) {
+async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
+                                        userPNum, userFName, numOfReminders) {
     
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
@@ -387,6 +399,11 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
         allSMSReminders += "\n";
     }
 
+    var initialGreeting = "We just wanted to remind you about your upcoming task."
+    if (numOfReminders > 1) {
+        initialGreeting = "We just wanted to remind you about your upcoming tasks."
+    }
+
     // Step 2, part 1: sending email with defined transport object:
     let emailInfo = {
         from: "RemindMe <brookninfo@gmail.com>",
@@ -398,8 +415,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
 
         <h3>Hi ${userFName},</h3>
         <h3 style="text-indent: 50px;"> 
-        We just wanted to remind you about your upcoming tasks. We hope that you make 
-        the most out of this day!
+        ${initialGreeting} We hope that you make the most out of this day!
         </h3>
         <br/>
         
@@ -444,7 +460,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
             to: `${userPNum}${userCPCarrierEmailExtn}`,
             subject: "RemindMe: General Daily Reminders",
             text: `Hi ${userFName},
-            We just wanted to remind you about your upcoming tasks. We hope that you make the most out of this day!
+            ${initialGreeting} We hope that you make the most out of this day!
             ${allSMSReminders}
             Click here to view all of your reminders: 
             http://localhost:3000
@@ -519,7 +535,7 @@ async function triggerSpecifiedReminderEmailAndSMS() {
         
         const allActive = currUserAllActiveReminders;
 
-        // For each reminder, this array will contain 4 things, each in seperate indexes.
+        // For each reminder, this array will contain 4 things, each in separate indexes.
         // [Reminder title, Reminder details, Due date, Reminder date]
         var reminders = [];
 
@@ -604,6 +620,16 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
         });
     } 
 
+    var initialGreeting = "Here is the task";
+
+    /* 4 because each reminder contains four components: [title, details, due date, reminder date].
+     * So if there are more than 4, we know there are at least two reminders so the grammar needs 
+     * to be adjusted.
+     */
+    if (req.length > 4) {
+        initialGreeting = "Here are the tasks";
+    }
+
     // Step 2, part 1: sending email with defined transport object:
     let emailInfo = {
         from: "RemindMe <brookninfo@gmail.com>",
@@ -614,7 +640,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
 
         <h3>Hi ${userFName},</h3>
         <h3 style="text-indent: 50px;"> 
-        Here are the tasks which you wanted us to remind you about. We hope that you 
+        ${initialGreeting} which you wanted us to remind you about. We hope that you 
         make the most out of this day!
         </h3><br/>
         
@@ -649,7 +675,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             to: `${userPNum}${userCPCarrierEmailExtn}`,
             subject: "RemindMe: Specific Reminders",
             text: `Hi ${userFName},
-            Here are the tasks which you wanted us to remind you about. We hope that you make the most out of this day!
+            ${initialGreeting} which you wanted us to remind you about. We hope that you make the most out of this day!
             ${smsReminders}
             Click here to view all of your reminders: 
             http://localhost:3000 `
