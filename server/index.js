@@ -8,6 +8,7 @@ const corsLib = require("cors");
 
 // Connecting to the DB:
 const pool = require("./db");
+const { response } = require("express");
 require("dotenv").config();
 
 // Allowing client to access data from the client side:
@@ -546,13 +547,15 @@ async function triggerSpecifiedReminderEmailAndSMS() {
                                 current.getHours(), current.getMinutes(), 0, 0);
 
         
-        allActive.forEach(function(activeReminder, index) {
+        allActive.forEach(async function(activeReminder, index) {
             const specifiedReminder = new Date(activeReminder.reminder_reminder_date);
             const updatedSpecifiedReminder = new Date(specifiedReminder.getFullYear(), 
                                 specifiedReminder.getMonth(), specifiedReminder.getDate(), 
                                 specifiedReminder.getHours(), specifiedReminder.getMinutes(), 0, 0);
 
-            if (updatedSpecifiedReminder.getTime() === currentReminderTime.getTime()) {
+            if ( updatedSpecifiedReminder.getTime() === currentReminderTime.getTime() || 
+                (updatedSpecifiedReminder.getTime() < currentReminderTime.getTime() && !activeReminder.reminder_reminder_sent) ) {
+
                 var dateOptions = { dateStyle: "full", timeStyle: "short" }
 
                 reminders.push( activeReminder.reminder_title );
@@ -561,6 +564,39 @@ async function triggerSpecifiedReminderEmailAndSMS() {
                     (new Date(activeReminder.reminder_due_date)).toLocaleString("en-US", dateOptions) );
                 reminders.push( 
                     (new Date(activeReminder.reminder_reminder_date)).toLocaleString("en-US", dateOptions) );
+
+                
+                try {
+                    // Updating the DB that this reminder has been sent.-------------------------------------
+                    const updateActiveReminders = await pool.query(
+                        "UPDATE active_reminders SET reminder_reminder_sent = $1 WHERE user_id = $2 AND reminder_id = $3;",
+                        [true, activeReminder.user_id, activeReminder.reminder_id]
+                    );
+
+                    const updateAllReminders = await pool.query(
+                        "UPDATE all_reminders SET reminder_reminder_sent = $1 WHERE user_id = $2 AND reminder_id = $3;",
+                        [true, activeReminder.user_id, activeReminder.reminder_id]
+                    );
+
+                    // Checking if the Overdue table has this reminder, and if so, 
+                    // update the sent state as well:
+                    const checkOverdueContains = await pool.query(
+                        "SELECT * FROM overdue_reminders WHERE user_id = $1 AND reminder_id = $2;", 
+                        [activeReminder.user_id, activeReminder.reminder_id]
+                    );
+
+                    if (checkOverdueContains.rows.length > 0) {
+                        const updateOverdueReminders = await pool.query(
+                            "UPDATE overdue_reminders SET reminder_reminder_sent = $1 WHERE user_id = $2 AND reminder_id = $3;",
+                            [true, activeReminder.user_id, activeReminder.reminder_id]
+                        );
+                    }
+                    // Finished updating the DB that this reminder has been sent.----------------------------
+                
+                } catch (error) {
+                    console.error(error.message);
+                }
+
             }
         });
 

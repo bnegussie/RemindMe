@@ -133,93 +133,105 @@ function Reminders({ isAuth }) {
 		myHeaders.append("Content-type", "application/json");
 		myHeaders.append("token", localStorage.token);
 
-		if (reminder_completed) {
-			// The Completed checkbox just got the check marked.
+		try {
+			if (reminder_completed) {
+				// The Completed checkbox just got the check marked.
+	
+				const respActiveReminders = await fetch(
+					`http://localhost:5000/dashboard/reminder/active/${reminder_id}`, {
+						method: "DELETE",
+						headers: {token: localStorage.token}
+					}
+				);
+	
+				// eslint-disable-next-line
+				const respOverdueReminders = await fetch(
+					`http://localhost:5000/dashboard/reminder/overdue/${reminder_id}`, {
+						method: "DELETE",
+						headers: {token: localStorage.token}
+					}
+				);
 
-			const respActiveReminders = await fetch( `http://localhost:5000/dashboard/reminder/active/${reminder_id}`, {
-					method: "DELETE",
-					headers: {token: localStorage.token}
-				}
-			);
+				const parseResp = await respActiveReminders.json();
+				
+				const id = reminder_id;
+				const completed = reminder_completed,
+					title = parseResp.reminder_title,
+					desc = parseResp.reminder_desc,
+					dueDate = parseResp.reminder_due_date,
+					reminderDate = parseResp.reminder_reminder_date,
+					reminderSent = parseResp.reminder_reminder_sent;
+	
+				const body = { completed, title, desc, dueDate, reminderDate, reminderSent };
+				const bodyPlusId = { id, completed, title, desc, dueDate, reminderDate, reminderSent };
+	
+				// eslint-disable-next-line
+				const respAllReminders = await fetch(
+					`http://localhost:5000/dashboard/reminder/all/${reminder_id}`,
+					{
+						method: "PUT",
+						headers: myHeaders,
+						body: JSON.stringify(body)
+					}
+				);
+	
+				// eslint-disable-next-line
+				const respCompletedReminders = await fetch(
+					"http://localhost:5000/dashboard/reminder/completed", {
+						method: "POST",
+						headers: myHeaders,
+						body: JSON.stringify(bodyPlusId)
+				});
+	
+			} else {
+				// The Completed checkbox has now been unchecked.
+	
+				// eslint-disable-next-line
+				const respCompletedReminders = await fetch(
+					`http://localhost:5000/dashboard/reminder/completed/${reminder_id}`,
+					{
+						method: "DELETE",
+						headers: {token: localStorage.token}
+					}
+				);
+	
+				const parseResp = await respCompletedReminders.json();
+	
+				const id = reminder_id;
+				const completed = reminder_completed,
+					title = parseResp.reminder_title,
+					desc = parseResp.reminder_desc,
+					dueDate = parseResp.reminder_due_date,
+					reminderDate = parseResp.reminder_reminder_date,
+					reminderSent = parseResp.reminder_reminder_sent;
+	
+				const body = { completed, title, desc, dueDate, reminderDate, reminderSent };
+				const bodyPlusId = { id, completed, title, desc, dueDate, reminderDate, reminderSent };
+	
+				// eslint-disable-next-line
+				const respAllReminders = await fetch(
+					`http://localhost:5000/dashboard/reminder/all/${reminder_id}`,
+					{
+						method: "PUT",
+						headers: myHeaders,
+						body: JSON.stringify(body)
+					}
+				);
+	
+				// eslint-disable-next-line
+				const respActiveReminders = await fetch(
+					"http://localhost:5000/dashboard/reminder/active", {
+						method: "POST",
+						headers: myHeaders,
+						body: JSON.stringify(bodyPlusId)
+				});
+			}
+	
+			window.location = "/";
 
-			// eslint-disable-next-line
-			const respOverdueReminders = await fetch( `http://localhost:5000/dashboard/reminder/overdue/${reminder_id}`, {
-					method: "DELETE",
-					headers: {token: localStorage.token}
-				}
-			);
-
-			const parseResp = await respActiveReminders.json();
-
-			const id = reminder_id;
-			const completed = reminder_completed,
-				title = parseResp.reminder_title,
-				desc = parseResp.reminder_desc,
-				dueDate = parseResp.reminder_due_date,
-				reminderDate = parseResp.reminder_reminder_date;
-
-			const body = { completed, title, desc, dueDate, reminderDate };
-			const bodyPlusId = { id, completed, title, desc, dueDate, reminderDate };
-
-			// eslint-disable-next-line
-			const respAllReminders = await fetch(
-				`http://localhost:5000/dashboard/reminder/all/${reminder_id}`,
-				{
-					method: "PUT",
-					headers: myHeaders,
-					body: JSON.stringify(body),
-				}
-			);
-
-			// eslint-disable-next-line
-			const respCompletedReminders = await fetch("http://localhost:5000/dashboard/reminder/completed", {
-				method: "POST",
-				headers: myHeaders,
-				body: JSON.stringify(bodyPlusId),
-			});
-		} else {
-			// The Completed checkbox has now been unchecked.
-
-			// eslint-disable-next-line
-			const respCompletedReminders = await fetch(
-				`http://localhost:5000/dashboard/reminder/completed/${reminder_id}`,
-				{
-					method: "DELETE",
-					headers: {token: localStorage.token}
-				}
-			);
-
-			const parseResp = await respCompletedReminders.json();
-
-			const id = reminder_id;
-			const completed = reminder_completed,
-				title = parseResp.reminder_title,
-				desc = parseResp.reminder_desc,
-				dueDate = parseResp.reminder_due_date,
-				reminderDate = parseResp.reminder_reminder_date;
-
-			const body = { completed, title, desc, dueDate, reminderDate };
-			const bodyPlusId = { id, completed, title, desc, dueDate, reminderDate };
-
-			// eslint-disable-next-line
-			const respAllReminders = await fetch(
-				`http://localhost:5000/dashboard/reminder/all/${reminder_id}`,
-				{
-					method: "PUT",
-					headers: myHeaders,
-					body: JSON.stringify(body),
-				}
-			);
-
-			// eslint-disable-next-line
-			const respActiveReminders = await fetch("http://localhost:5000/dashboard/reminder/active", {
-				method: "POST",
-				headers: myHeaders,
-				body: JSON.stringify(bodyPlusId),
-			});
+		} catch (error) {
+			console.error(error.message);
 		}
-
-		window.location = "/";
 	}
 
 	useEffect(() => {
@@ -286,9 +298,11 @@ function Reminders({ isAuth }) {
 								title = activeReminder.reminder_title,
 								desc = activeReminder.reminder_desc,
 								dueDate = activeReminder.reminder_due_date,
-								reminderDate = activeReminder.reminder_reminder_date;
+								reminderDate = activeReminder.reminder_reminder_date,
+								reminderSent = activeReminder.reminder_reminder_sent;
 
-							var bodyPlusId = { id, completed, title, desc, dueDate, reminderDate };
+							var bodyPlusId = { id, completed, title, desc, dueDate, 
+												reminderDate, reminderSent };
 
 							const myHeaders = new Headers();
 							myHeaders.append("Content-type", "application/json");
@@ -369,7 +383,7 @@ function Reminders({ isAuth }) {
 							<tbody>
 								{allActiveReminders.map((currReminder) => (
 									<tr key={currReminder.reminder_id}>
-										<td onClick={isAuth} >
+										<td onClick={isAuth} onMouseEnter={isAuth} >
 											<input
 												type="checkbox"
 												className="completed-checkboxes"
@@ -405,7 +419,9 @@ function Reminders({ isAuth }) {
 								))}
 							</tbody>
 						</table>
-						{allActiveReminders.length === 0 && <p>You do not have any active reminders.</p>}
+						{allActiveReminders.length === 0 && 
+							<p className="no-data-available-msg">You do not have any active reminders.</p>
+						}
 					</div>
 				</TabPanel>
 
@@ -423,7 +439,7 @@ function Reminders({ isAuth }) {
 							<tbody>
 								{allReminders.map((currReminder) => (
 									<tr key={currReminder.reminder_id}>
-										<td onClick={isAuth} >
+										<td onClick={isAuth} onMouseEnter={isAuth} >
 											<input
 												type="checkbox"
 												className="completed-checkboxes"
@@ -459,7 +475,9 @@ function Reminders({ isAuth }) {
 								))}
 							</tbody>
 						</table>
-						{allReminders.length === 0 && <p>You do not have any reminders.</p>}
+						{allReminders.length === 0 && 
+							<p className="no-data-available-msg">You do not have any reminders.</p>
+						}
 					</div>
 				</TabPanel>
 
@@ -477,7 +495,7 @@ function Reminders({ isAuth }) {
 							<tbody>
 								{allCompletedReminders.map((currReminder) => (
 									<tr key={currReminder.reminder_id}>
-										<td onClick={isAuth} >
+										<td onClick={isAuth} onMouseEnter={isAuth} >
 											<input
 												type="checkbox"
 												className="completed-checkboxes"
@@ -514,7 +532,9 @@ function Reminders({ isAuth }) {
 								))}
 							</tbody>
 						</table>
-						{allCompletedReminders.length === 0 && <p>You do not have any completed reminders.</p>}
+						{allCompletedReminders.length === 0 && 
+							<p className="no-data-available-msg">You do not have any completed reminders.</p>
+						}
 					</div>
 				</TabPanel>
 
@@ -532,7 +552,7 @@ function Reminders({ isAuth }) {
 							<tbody>
 								{allOverdueReminders.map((currReminder) => (
 									<tr key={currReminder.reminder_id}>
-										<td onClick={isAuth} >
+										<td onClick={isAuth} onMouseEnter={isAuth} >
 											<input
 												type="checkbox"
 												className="completed-checkboxes"
@@ -567,7 +587,9 @@ function Reminders({ isAuth }) {
 								))}
 							</tbody>
 						</table>
-						{allOverdueReminders.length === 0 && <p>You do not have any overdue reminders.</p>}
+						{allOverdueReminders.length === 0 && 
+							<p className="no-data-available-msg">You do not have any overdue reminders.</p>
+						}
 					</div>
 				</TabPanel>
 			</Tabs>

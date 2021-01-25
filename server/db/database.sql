@@ -18,11 +18,12 @@ CREATE TABLE users (
 CREATE TABLE all_reminders(
     reminder_id SERIAL PRIMARY KEY NOT NULL,
     user_id UUID,
-    reminder_completed BOOLEAN,
+    reminder_completed BOOLEAN NOT NULL,
     reminder_title VARCHAR(100) NOT NULL,
     reminder_desc VARCHAR(1000),
     reminder_due_date TIMESTAMPTZ NOT NULL,
     reminder_reminder_date TIMESTAMPTZ NOT NULL,
+    reminder_reminder_sent BOOLEAN NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
@@ -30,11 +31,12 @@ CREATE TABLE active_reminders(
     reminder_local_id SERIAL PRIMARY KEY NOT NULL,
     reminder_id INTEGER NOT NULL UNIQUE,
     user_id UUID,
-    reminder_completed BOOLEAN,
+    reminder_completed BOOLEAN NOT NULL,
     reminder_title VARCHAR(100) NOT NULL,
     reminder_desc VARCHAR(1000),
     reminder_due_date TIMESTAMPTZ NOT NULL,
     reminder_reminder_date TIMESTAMPTZ NOT NULL,
+    reminder_reminder_sent BOOLEAN NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (reminder_id) REFERENCES all_reminders(reminder_id)
 );
@@ -43,11 +45,12 @@ CREATE TABLE completed_reminders(
     reminder_local_id SERIAL PRIMARY KEY NOT NULL,
     reminder_id INTEGER NOT NULL UNIQUE,
     user_id UUID,
-    reminder_completed BOOLEAN,
+    reminder_completed BOOLEAN NOT NULL,
     reminder_title VARCHAR(100) NOT NULL,
     reminder_desc VARCHAR(1000),
     reminder_due_date TIMESTAMPTZ NOT NULL,
     reminder_reminder_date TIMESTAMPTZ NOT NULL,
+    reminder_reminder_sent BOOLEAN NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (reminder_id) REFERENCES all_reminders(reminder_id)
 );
@@ -56,11 +59,12 @@ CREATE TABLE overdue_reminders(
     reminder_local_id SERIAL PRIMARY KEY NOT NULL,
     reminder_id INTEGER NOT NULL UNIQUE,
     user_id UUID,
-    reminder_completed BOOLEAN,
+    reminder_completed BOOLEAN NOT NULL,
     reminder_title VARCHAR(100) NOT NULL,
     reminder_desc VARCHAR(1000),
     reminder_due_date TIMESTAMPTZ NOT NULL,
     reminder_reminder_date TIMESTAMPTZ NOT NULL,
+    reminder_reminder_sent BOOLEAN NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (reminder_id) REFERENCES all_reminders(reminder_id)
 );

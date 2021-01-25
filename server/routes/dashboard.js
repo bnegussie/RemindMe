@@ -8,11 +8,11 @@ const authorization = require("../middleware/authorization");
 // (Creating) Placing a new reminder into the all_reminders DB table:
 router.post("/reminder/all", authorization, async(req, res) => {
     try {
-        const {completed, title, desc, dueDate, reminderDate} = req.body;
+        const {completed, title, desc, dueDate, reminderDate, reminderSent} = req.body;
 
         const addingToAllReminders = await pool.query(
-            "INSERT INTO all_reminders (user_id, reminder_completed, reminder_title, reminder_desc, reminder_due_date, reminder_reminder_date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-            [req.user, completed, title, desc, dueDate, reminderDate]
+            "INSERT INTO all_reminders (user_id, reminder_completed, reminder_title, reminder_desc, reminder_due_date, reminder_reminder_date, reminder_reminder_sent) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+            [req.user, completed, title, desc, dueDate, reminderDate, reminderSent]
         );
 
         res.status(200).json(addingToAllReminders.rows[0]);
@@ -59,11 +59,11 @@ router.get("/reminder/all/:id", authorization, async (req, res) => {
 router.put("/reminder/all/:id", authorization, async (req, res) => {
     try {
         const {id} = req.params;
-        const {completed, title, desc, dueDate, reminderDate} = req.body;
+        const {completed, title, desc, dueDate, reminderDate, reminderSent} = req.body;
 
         const updatingAllReminders = await pool.query(
-            "UPDATE all_reminders SET reminder_completed = $1, reminder_title = $2, reminder_desc = $3, reminder_due_date = $4, reminder_reminder_date = $5 WHERE reminder_id = $6 AND user_id = $7 RETURNING *",
-            [completed, title, desc, dueDate, reminderDate, id, req.user]
+            "UPDATE all_reminders SET reminder_completed = $1, reminder_title = $2, reminder_desc = $3, reminder_due_date = $4, reminder_reminder_date = $5, reminder_reminder_sent = $8 WHERE reminder_id = $6 AND user_id = $7 RETURNING *",
+            [completed, title, desc, dueDate, reminderDate, id, req.user, reminderSent]
         );
         if (updatingAllReminders.rows.length === 0 ) {
             return res.status(403).json("Unauthorized to perform this update.");
@@ -97,11 +97,11 @@ router.delete("/reminder/all/:id", authorization, async (req, res) => {
 // (Creating) Placing a new reminder into the active_reminders DB table:
 router.post("/reminder/active", authorization, async(req, res) => {
     try {
-        const {id, completed, title, desc, dueDate, reminderDate} = req.body;
+        const {id, completed, title, desc, dueDate, reminderDate, reminderSent} = req.body;
 
         const addingToActiveReminders = await pool.query(
-            "INSERT INTO active_reminders (user_id, reminder_id, reminder_completed, reminder_title, reminder_desc, reminder_due_date, reminder_reminder_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-            [req.user, id, completed, title, desc, dueDate, reminderDate]
+            "INSERT INTO active_reminders (user_id, reminder_id, reminder_completed, reminder_title, reminder_desc, reminder_due_date, reminder_reminder_date, reminder_reminder_sent) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+            [req.user, id, completed, title, desc, dueDate, reminderDate, reminderSent]
         );
 
         res.status(200).json(addingToActiveReminders.rows[0]);
@@ -148,11 +148,11 @@ router.get("/reminder/active/:id", authorization, async (req, res) => {
 router.put("/reminder/active/:id", authorization, async (req, res) => {
     try {
         const {id} = req.params;
-        const {completed, title, desc, dueDate, reminderDate} = req.body;
+        const {completed, title, desc, dueDate, reminderDate, reminderSent} = req.body;
 
         const updatingActiveReminders = await pool.query(
-            "UPDATE active_reminders SET reminder_completed = $1, reminder_title = $2, reminder_desc = $3, reminder_due_date = $4, reminder_reminder_date = $5 WHERE EXISTS (SELECT reminder_id FROM active_reminders WHERE reminder_id = $6) AND reminder_id = $6 AND user_id = $7 RETURNING *",
-            [completed, title, desc, dueDate, reminderDate, id, req.user]
+            "UPDATE active_reminders SET reminder_completed = $1, reminder_title = $2, reminder_desc = $3, reminder_due_date = $4, reminder_reminder_date = $5, reminder_reminder_sent = $8 WHERE EXISTS (SELECT reminder_id FROM active_reminders WHERE reminder_id = $6) AND reminder_id = $6 AND user_id = $7 RETURNING *",
+            [completed, title, desc, dueDate, reminderDate, id, req.user, reminderSent]
         );
         if (updatingActiveReminders.rows.length === 0 ) {
             return res.status(403).json("Unauthorized to perform this update.");
@@ -169,15 +169,25 @@ router.put("/reminder/active/:id", authorization, async (req, res) => {
 router.delete("/reminder/active/:id", authorization, async (req, res) => {
     try {
         const {id} = req.params;
-        const delTodoResp = await pool.query(
-            "DELETE FROM active_reminders WHERE EXISTS (SELECT reminder_id FROM active_reminders WHERE reminder_id = $1) AND reminder_id = $1 AND user_id = $2 RETURNING *", 
-            [id, req.user]
+        const userId = req.user;
+
+        // Checking if this reminder even exists in this DB table:
+        const checkReminder = await pool.query(
+            "SELECT * FROM active_reminders WHERE user_id = $1 AND reminder_id = $2;",
+            [userId, id]
         );
-        if (delTodoResp.rows.length === 0 ) {
-            return res.status(403).json("Unauthorized to perform this deletion.");
+
+        if (checkReminder.rows.length > 0) {
+            const deletingResponse = await pool.query(
+                "DELETE FROM active_reminders WHERE user_id = $1 AND reminder_id = $2 RETURNING *", 
+                [userId, id]
+            );
+            res.status(200).json(deletingResponse.rows[0]);
+
+        } else {
+            res.status(200).json("No reminders with the specified id.");
         }
 
-        res.status(200).json(delTodoResp.rows[0]);
     } catch (error) {
         console.error(error.message);
     }
@@ -187,11 +197,11 @@ router.delete("/reminder/active/:id", authorization, async (req, res) => {
 // Reminder task completed so it's being added to the completed list.
 router.post("/reminder/completed", authorization, async(req, res) => {
     try {
-        const {id, completed, title, desc, dueDate, reminderDate} = req.body;
+        const {id, completed, title, desc, dueDate, reminderDate, reminderSent} = req.body;
 
         const addingToCompletedReminders = await pool.query(
-            "INSERT INTO completed_reminders (user_id, reminder_id, reminder_completed, reminder_title, reminder_desc, reminder_due_date, reminder_reminder_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-            [req.user, id, completed, title, desc, dueDate, reminderDate]
+            "INSERT INTO completed_reminders (user_id, reminder_id, reminder_completed, reminder_title, reminder_desc, reminder_due_date, reminder_reminder_date, reminder_reminder_sent) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+            [req.user, id, completed, title, desc, dueDate, reminderDate, reminderSent]
         );
 
         res.status(200).json(addingToCompletedReminders.rows[0]);
@@ -237,11 +247,11 @@ router.get("/reminder/completed/:id", authorization, async (req, res) => {
 router.put("/reminder/completed/:id", authorization, async (req, res) => {
     try {
         const {id} = req.params;
-        const {completed, title, desc, dueDate, reminderDate} = req.body;
+        const {completed, title, desc, dueDate, reminderDate, reminderSent} = req.body;
 
         const updatingCompletedReminders = await pool.query(
-            "UPDATE completed_reminders SET reminder_completed = $1, reminder_title = $2, reminder_desc = $3, reminder_due_date = $4, reminder_reminder_date = $5 WHERE EXISTS (SELECT reminder_id FROM completed_reminders WHERE reminder_id = $6) AND reminder_id = $6 AND user_id = $7 RETURNING *",
-            [completed, title, desc, dueDate, reminderDate, id, req.user]
+            "UPDATE completed_reminders SET reminder_completed = $1, reminder_title = $2, reminder_desc = $3, reminder_due_date = $4, reminder_reminder_date = $5, reminder_reminder_sent = $8 WHERE EXISTS (SELECT reminder_id FROM completed_reminders WHERE reminder_id = $6) AND reminder_id = $6 AND user_id = $7 RETURNING *",
+            [completed, title, desc, dueDate, reminderDate, id, req.user, reminderSent]
         );
         if (updatingCompletedReminders.rows.length === 0 ) {
             return res.status(403).json("Unauthorized to perform this update.");
@@ -258,15 +268,25 @@ router.put("/reminder/completed/:id", authorization, async (req, res) => {
 router.delete("/reminder/completed/:id", authorization, async (req, res) => {
     try {
         const {id} = req.params;
-        const deletingResponse = await pool.query(
-            "DELETE FROM completed_reminders WHERE EXISTS (SELECT reminder_id FROM completed_reminders WHERE reminder_id = $1) AND reminder_id = $1 AND user_id = $2 RETURNING *", 
-            [id, req.user]
+        const userId = req.user;
+
+        // Checking if this reminder even exists in this DB table:
+        const checkReminder = await pool.query(
+            "SELECT * FROM completed_reminders WHERE user_id = $1 AND reminder_id = $2;",
+            [userId, id]
         );
-        if (deletingResponse.rows.length === 0 ) {
-            return res.status(403).json("Unauthorized to perform this deletion.");
+
+        if (checkReminder.rows.length > 0) {
+            const deletingResponse = await pool.query(
+                "DELETE FROM completed_reminders WHERE user_id = $1 AND reminder_id = $2 RETURNING *", 
+                [userId, id]
+            );
+            res.status(200).json(deletingResponse.rows[0]);
+
+        } else {
+            res.status(200).json("No reminders with the specified id.");
         }
 
-        res.status(200).json(deletingResponse.rows[0]);
     } catch (error) {
         console.error(error.message);
     }
@@ -276,11 +296,11 @@ router.delete("/reminder/completed/:id", authorization, async (req, res) => {
 // Ading to the overdue reminder list.
 router.post("/reminder/overdue", authorization, async(req, res) => {
     try {
-        const {id, completed, title, desc, dueDate, reminderDate} = req.body;
+        const {id, completed, title, desc, dueDate, reminderDate, reminderSent} = req.body;
 
         const addingToOverdueReminders = await pool.query(
-            "INSERT INTO overdue_reminders (user_id, reminder_id, reminder_completed, reminder_title, reminder_desc, reminder_due_date, reminder_reminder_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-            [req.user, id, completed, title, desc, dueDate, reminderDate]
+            "INSERT INTO overdue_reminders (user_id, reminder_id, reminder_completed, reminder_title, reminder_desc, reminder_due_date, reminder_reminder_date, reminder_reminder_sent) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+            [req.user, id, completed, title, desc, dueDate, reminderDate, reminderSent]
         );
 
         res.status(200).json(addingToOverdueReminders.rows[0]);
@@ -326,11 +346,11 @@ router.get("/reminder/overdue/:id", authorization, async (req, res) => {
 router.put("/reminder/overdue/:id", authorization, async (req, res) => {
     try {
         const {id} = req.params;
-        const {completed, title, desc, dueDate, reminderDate} = req.body;
+        const {completed, title, desc, dueDate, reminderDate, reminderSent} = req.body;
 
         const updatingOverdueReminder = await pool.query(
-            "UPDATE overdue_reminders SET reminder_completed = $1, reminder_title = $2, reminder_desc = $3, reminder_due_date = $4, reminder_reminder_date = $5 WHERE EXISTS (SELECT reminder_id FROM overdue_reminders WHERE reminder_id = $6) AND reminder_id = $6 AND user_id = $7 RETURNING *",
-            [completed, title, desc, dueDate, reminderDate, idm, req.user]
+            "UPDATE overdue_reminders SET reminder_completed = $1, reminder_title = $2, reminder_desc = $3, reminder_due_date = $4, reminder_reminder_date = $5, reminder_reminder_sent = $8 WHERE EXISTS (SELECT reminder_id FROM overdue_reminders WHERE reminder_id = $6) AND reminder_id = $6 AND user_id = $7 RETURNING *",
+            [completed, title, desc, dueDate, reminderDate, idm, req.user, reminderSent]
         );
         if (updatingOverdueReminder.rows.length === 0 ) {
             return res.status(403).json("Unauthorized to perform this update.");
@@ -347,15 +367,22 @@ router.put("/reminder/overdue/:id", authorization, async (req, res) => {
 router.delete("/reminder/overdue/:id", authorization, async (req, res) => {
     try {
         const {id} = req.params;
-        const deletingResponse = await pool.query(
-            "DELETE FROM overdue_reminders WHERE EXISTS (SELECT reminder_id FROM overdue_reminders WHERE reminder_id = $1) AND reminder_id = $1 AND user_id = $2 RETURNING *", 
-            [id, req.user]
-        );
-        if (deletingResponse.rows.length === 0 ) {
-            return res.status(403).json("Unauthorized to perform this deletion.");
-        }
+        const userId = req.user;
 
-        res.status(200).json(deletingResponse.rows[0]);
+        // Checking if this reminder even exists in this DB table:
+        const checkReminder = await pool.query(
+            "SELECT * FROM overdue_reminders WHERE user_id = $1 AND reminder_id = $2;",
+            [userId, id]
+        );
+
+        if (checkReminder.rows.length > 0) {
+            const deletingResponse = await pool.query(
+                "DELETE FROM overdue_reminders WHERE user_id = $1 AND reminder_id = $2;", 
+                [userId, id]
+            );
+        }
+        res.status(200).json("Deleted reminder if it exists on this table.")
+
     } catch (error) {
         console.error(error.message);
     }

@@ -523,7 +523,7 @@ ul > li:nth-child(2) > a:hover {
 }
 
 #createreminder-new-btn:hover {
-  background: #0dcaf0;
+  background: #00AB28;
   transition: 0.3s ease-out;
 }
 
@@ -568,7 +568,7 @@ ul > li:nth-child(2) > a:hover {
 
 #overdue-title {
   color: red;
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .reminders-headers {
@@ -576,11 +576,15 @@ ul > li:nth-child(2) > a:hover {
   color: #8B4513;
 }
 
+.no-data-available-msg {
+  font-size: 18px;
+}
+
 .search-btn-on-dashboard {
   text-decoration: none;
   font-size: 30px;
   color: #fff;
-  background: #0dcaf0;
+  background: #1e7e34;
   border-radius: 4px;
 
   padding: 0px 8px 0px 8px;
@@ -589,7 +593,7 @@ ul > li:nth-child(2) > a:hover {
 
 .search-btn-on-dashboard:hover {
   color: #fff;
-  background: #1e7e34;
+  background: #00AB28;
   transition: 0.3s ease-out;
 }
 
@@ -773,14 +777,14 @@ ul > li:nth-child(2) > a:hover {
 .search-btn-on-search {
   font-size: 35px;
   color: #fff;
-  background: #0dcaf0;
+  background: #1e7e34;
   border-radius: 4px;
 
   padding: 0px 8px 0px 8px;
 }
 
 .search-btn-on-search:hover {
-  background: #1e7e34;
+  background: #00AB28;
   transition: 0.3s ease-out;
 }
 /***************************************** END: SEARCH.JS ****************************************/

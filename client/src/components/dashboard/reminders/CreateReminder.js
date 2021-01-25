@@ -32,7 +32,8 @@ function CreateReminder() {
 		}
 
 		const completed = false;
-		const body = {completed, title, desc, dueDate, reminderDate};
+		const reminderSent = false;
+		const body = {completed, title, desc, dueDate, reminderDate, reminderSent};
 
 		try {
 			const myHeaders = new Headers();
@@ -49,7 +50,7 @@ function CreateReminder() {
 			const parseResp = await respAllReminders.json();
 			const id = parseResp.reminder_id;
 
-			const bodyPlusId = {id, completed, title, desc, dueDate, reminderDate}
+			const bodyPlusId = {id, completed, title, desc, dueDate, reminderDate, reminderSent}
 			
 			// eslint-disable-next-line
 			const respActiveReminders = await fetch("http://localhost:5000/dashboard/reminder/active", {

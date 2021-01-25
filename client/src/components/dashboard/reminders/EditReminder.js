@@ -16,8 +16,8 @@ function EditReminder({ currReminder, redirectTo }) {
 		e.preventDefault();
 
 		const now = new Date().getTime();
-		const givenDueDate = new Date(dueDate).getTime();
-		const givenReminderDate = new Date(reminderDate).getTime();
+		const givenDueDate = dueDate.getTime();
+		const givenReminderDate = reminderDate.getTime();
 
 		if (givenDueDate <= now && !completed) {
 			toast.error("Please provide a Due Date that is in the future.");
@@ -26,7 +26,15 @@ function EditReminder({ currReminder, redirectTo }) {
 			toast.error("Please provide a Reminder Date that is in the future.");
 			return false;
 		}
+		// Finished validating input.------------------------------------------------
 
+		
+		var reminderSent = currReminder.reminder_reminder_sent;
+
+		const originalReminderDate = new Date( currReminder.reminder_reminder_date );
+		if (originalReminderDate.getTime() !== reminderDate.getTime()) {
+			reminderSent = false;
+		}
 
 		try {
 			const id = currReminder.reminder_id;
@@ -35,9 +43,10 @@ function EditReminder({ currReminder, redirectTo }) {
 				title: title,
 				desc: desc,
 				dueDate: dueDate,
-				reminderDate: reminderDate
+				reminderDate: reminderDate,
+				reminderSent: reminderSent
 			};
-			const bodyPlusId = {id, completed, title, desc, dueDate, reminderDate};
+			const bodyPlusId = {id, completed, title, desc, dueDate, reminderDate, reminderSent};
 
 			// The possibility that the Completed check box state being 
 			// altered makes this a bit more complicated function. 
