@@ -171,21 +171,31 @@ router.delete("/reminder/active/:id", authorization, async (req, res) => {
         const {id} = req.params;
         const userId = req.user;
 
-        // Checking if this reminder even exists in this DB table:
-        const checkReminder = await pool.query(
-            "SELECT * FROM active_reminders WHERE user_id = $1 AND reminder_id = $2;",
+        // Checking if this user actually owns this reminder:
+        const authorizationCheck = await pool.query(
+            "SELECT * FROM all_reminders WHERE user_id = $1 AND reminder_id = $2;",
             [userId, id]
         );
 
-        if (checkReminder.rows.length > 0) {
-            const deletingResponse = await pool.query(
-                "DELETE FROM active_reminders WHERE user_id = $1 AND reminder_id = $2 RETURNING *", 
+        if (authorizationCheck.rows.length > 0) {
+            // Checking if that reminder exists in this table:
+            const validationCheck = await pool.query(
+                "SELECT * FROM active_reminders WHERE user_id = $1 AND reminder_id = $2;",
                 [userId, id]
             );
-            res.status(200).json(deletingResponse.rows[0]);
+    
+            if (validationCheck.rows.length > 0) {
+                const deletingResponse = await pool.query(
+                    "DELETE FROM active_reminders WHERE user_id = $1 AND reminder_id = $2 RETURNING *", 
+                    [userId, id]
+                );
+                return res.status(200).json(deletingResponse.rows[0]);
+            } else {
+                return res.status(200).json("This reminder does not exist.");
+            }
 
         } else {
-            res.status(200).json("No reminders with the specified id.");
+            return res.status(403).json("Unauthorized to perform this delete action.");
         }
 
     } catch (error) {
@@ -270,21 +280,31 @@ router.delete("/reminder/completed/:id", authorization, async (req, res) => {
         const {id} = req.params;
         const userId = req.user;
 
-        // Checking if this reminder even exists in this DB table:
-        const checkReminder = await pool.query(
-            "SELECT * FROM completed_reminders WHERE user_id = $1 AND reminder_id = $2;",
+        // Checking if this user actually owns this reminder:
+        const authorizationCheck = await pool.query(
+            "SELECT * FROM all_reminders WHERE user_id = $1 AND reminder_id = $2;",
             [userId, id]
         );
 
-        if (checkReminder.rows.length > 0) {
-            const deletingResponse = await pool.query(
-                "DELETE FROM completed_reminders WHERE user_id = $1 AND reminder_id = $2 RETURNING *", 
+        if (authorizationCheck.rows.length > 0) {
+            // Checking if that reminder exists in this table:
+            const validationCheck = await pool.query(
+                "SELECT * FROM completed_reminders WHERE user_id = $1 AND reminder_id = $2;",
                 [userId, id]
             );
-            res.status(200).json(deletingResponse.rows[0]);
+    
+            if (validationCheck.rows.length > 0) {
+                const deletingResponse = await pool.query(
+                    "DELETE FROM completed_reminders WHERE user_id = $1 AND reminder_id = $2 RETURNING *", 
+                    [userId, id]
+                );
+                return res.status(200).json(deletingResponse.rows[0]);
+            } else {
+                return res.status(200).json("This reminder does not exist.");
+            }
 
         } else {
-            res.status(200).json("No reminders with the specified id.");
+            return res.status(403).json("Unauthorized to perform this delete action.");
         }
 
     } catch (error) {
@@ -369,20 +389,33 @@ router.delete("/reminder/overdue/:id", authorization, async (req, res) => {
         const {id} = req.params;
         const userId = req.user;
 
-        // Checking if this reminder even exists in this DB table:
-        const checkReminder = await pool.query(
-            "SELECT * FROM overdue_reminders WHERE user_id = $1 AND reminder_id = $2;",
+        // Checking if this user actually owns this reminder:
+        const authorizationCheck = await pool.query(
+            "SELECT * FROM all_reminders WHERE user_id = $1 AND reminder_id = $2;",
             [userId, id]
         );
 
-        if (checkReminder.rows.length > 0) {
-            const deletingResponse = await pool.query(
-                "DELETE FROM overdue_reminders WHERE user_id = $1 AND reminder_id = $2;", 
+        if (authorizationCheck.rows.length > 0) {
+            // Checking if that reminder exists in this table:
+            const validationCheck = await pool.query(
+                "SELECT * FROM overdue_reminders WHERE user_id = $1 AND reminder_id = $2;",
                 [userId, id]
             );
-        }
-        res.status(200).json("Deleted reminder if it exists on this table.")
+    
+            if (validationCheck.rows.length > 0) {
+                const deletingResponse = await pool.query(
+                    "DELETE FROM overdue_reminders WHERE user_id = $1 AND reminder_id = $2;", 
+                    [userId, id]
+                );
+                return res.status(200).json("Successfully deleted the reminder.");
+            } else {
+                return res.status(200).json("This reminder does not exist.");
+            }
 
+        } else {
+            return res.status(403).json("Unauthorized to perform this delete action.");
+        }
+        
     } catch (error) {
         console.error(error.message);
     }
