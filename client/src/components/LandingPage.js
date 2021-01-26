@@ -11,7 +11,7 @@ function LandingPage() {
                         will you forget the big or small tasks in your day.
                     </p>
                     <p className="call-to-action-msg">
-                        Get started with our free and elegant reminder application.
+                        Get started with this free and elegant reminder application.
                     </p>
                 </div>
             </div>

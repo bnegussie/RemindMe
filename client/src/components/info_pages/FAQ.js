@@ -14,17 +14,18 @@ function FAQ() {
                         </li>
                     </ul>
                     <p>
-                        We would first suggest going to your Manage Profile page and checking that you 
-                        have selected the correct cell phone carrier. We have several providers who use an
-                        almost identical name and this usually trips people up.
+                        First go to your Manage Profile page and checking that you have selected the
+                        correct cell phone carrier. There are several providers who use an almost
+                        identical name and this may have caused you to select another provider.
                     </p>
                     <p>
                         If that is not the issue, then please also double check the cell phone 
-                        number, which you have provided, to make sure it is correct.
+                        number, which you have provided.
                     </p>
                     <p>
-                        If none of these are the issue, and your cell phone carrier is listed on our page,
-                        then please reach out to us and we will see what we can do for you. Thank you.
+                        If none of these are the issue, and your cell phone carrier is listed on the 
+                        Sign Up page, then please reach out to me and I will see what we can do for you.
+                        Thank you.
                     </p>
 
                     <br/> <br/>
@@ -36,10 +37,9 @@ function FAQ() {
                         </li>
                     </ul>
                     <p>
-                        In this case, we will not be able to do anything at this moment. Our current
-                        text message feature is using all of the available cell phone carrier extensions,
-                        to be able to send text messages through an email account. We will work to keep our 
-                        cell phone carrier list up to date. Sorry for the inconvenience.
+                        Sorry for the inconvenience, but at this moment this application is working with
+                        all of the wireless providers who have an email extension publically available
+                        to be able to send text messages through an email account. 
                     </p>
                 </div>
             </div>

@@ -106,6 +106,10 @@ div.footer-container > a:hover {
   text-indent: 0px;
 }
 
+#img-credit {
+  text-decoration: none;
+}
+
 @media screen and (max-width: 450px) {
   .info-container {
     margin-top: 20%;

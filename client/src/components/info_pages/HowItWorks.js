@@ -8,25 +8,40 @@ function HowItWorks() {
                 <h1>How It Works</h1>
                 <div className="info-message">
                     <p>
-                        As we all know, the more times we see something, the easier it is to remember. 
-                        So we have built in two reminder features to not only remind you about specific
-                        tasks, but to frequently send you reminders about your upcoming tasks so you always 
-                        stay ahead.
+                        This web application is utilizing the scientific discovery that through 
+                        iterative repetitions, individuals are able to move ideas from their short
+                        term memory to their long term memory, to ensure that you remember all of
+                        your tasks and always remain a few steps ahead.
                     </p>
                     <p>
-                        Our first reminder feature is the built in reminder, when you create or edit 
-                        a reminder task; at the time, which you have specified, our system will send
-                        you an email and a text message (if you provided a phone number) with all of
-                        the reminder details.
+                        This web application consists of two reminder features. The first reminder feature is 
+                        the one you specify when you create a new reminder task and the second reminder
+                        feature is a daily general reminder, where it lists all of your tasks for the
+                        upcoming week. Both of these reminders will be sent via email and text message
+                        (if you provided a phone number).
                     </p>
                     <p>
-                        Our second reminder feature is a daily general reminder, where it lists 
-                        all of your tasks for the upcoming week. This reminder will be sent via
-                        email and text message (if you provided a phone number).
+                        This web application also tracks the state of your reminder tasks in three 
+                        categories (Active, Overdue, and Completed) to hold you accountable and to
+                        give you that extra push to finish what you started.
                     </p>
-                    <br/>
                     <p>
-                        We hope you enjoy our service!
+                        With that being said, sign up for a free account and let us worry about your
+                        upcoming tasks, so you can keep moving forward and keep making the most out
+                        of this day!
+                    </p>
+                    <br/><br/>
+                    <p id="info-subtitle">Terms and Conditions:</p>
+                    <p>
+                        The RemindMe text message feature is free of charge, but this application does
+                        not take any financial responsibility for any additional charges you may receive
+                        from your wireless provider.
+                    </p>
+                    <p>
+                        If you are traveling abroad and text messages are not free, with your wireless
+                        provider, please go to your Manage Profile page and remove your cell phone number.
+                        Once you have returned from your trip, feel free to add your cell phone number
+                        back so you can receive the full benefit of this reminder application.
                     </p>
                 </div>
             </div>

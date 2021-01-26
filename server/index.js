@@ -39,7 +39,8 @@ async function processAllUserReminders() {
         // The way in which this data is processed is reversed so this script will end up
         // looking at the upcoming reminders first, categorized by each user.
         const activeRemindersPlusUserData = await pool.query(
-            "SELECT * FROM active_reminders AS a_r INNER JOIN users AS u ON a_r.user_id = u.user_id ORDER BY a_r.user_id DESC, a_r.reminder_due_date DESC, a_r.reminder_title DESC;");
+            "SELECT * FROM active_reminders AS a_r INNER JOIN users AS u ON a_r.user_id = u.user_id ORDER BY a_r.user_id DESC, a_r.reminder_due_date DESC, a_r.reminder_title DESC;"
+        );
         
         const reminderLength = activeRemindersPlusUserData.rowCount;
         var rIndex = 0;
@@ -105,12 +106,13 @@ async function triggerGeneralEmail() {
     try {
         const allUserReminders = await processAllUserReminders();
 
-        allUserReminders.forEach(function(currUserAllActiveReminders, index) {
+        allUserReminders.forEach(async function(currUserAllActiveReminders, index) {
             const allActive = currUserAllActiveReminders;
             
             // Checking to see if the current hour is the time the user wants our system to send
             // out the general reminder, if they have any upcoming tasks for the week.
             const thisMoment = new Date();
+            // Make sure this variable is not assigned to a Date variable which is later modified.
             const thisSpecificMoment = new Date(thisMoment.getFullYear(), thisMoment.getMonth(), 
                                             thisMoment.getDate(), thisMoment.getHours(), 0, 0, 0);
             const specifiedTime = new Date( allActive[0].user_general_reminder_time );
@@ -135,8 +137,9 @@ async function triggerGeneralEmail() {
                 }
                 userGRHasNotBeenSent = false;
 
-                const updateGR = pool.query("UPDATE users SET user_general_reminder_time = $1 WHERE user_id = $2;",
-                    [specifiedTime, allActive[0].user_id]
+                const updateGR = await pool.query(
+                    "UPDATE users SET user_general_reminder_time = $1 WHERE user_id = $2;",
+                        [specifiedTime, allActive[0].user_id]
                 );
 
 
@@ -153,9 +156,12 @@ async function triggerGeneralEmail() {
                     return
                 }
 
-                const today = new Date();
+                const today = thisSpecificMoment;
                 var oneWeek = new Date();
                 oneWeek.setDate(oneWeek.getDate() + 7);
+                oneWeek.setMinutes(0);
+                oneWeek.setSeconds(0);
+                oneWeek.setMilliseconds(0);
                 /* The email will list out the upcoming reminders in the next seven days.
                 * For each day there is the time (in ms) at 12:00 am and another time at 11:45 pm
                 * to make sure the date time comparison is always going to be accurate.
@@ -249,8 +255,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
         const todayTasksLength = todayTasks.length;
         let todayTasksIndex = 0;
 
-        todayEmail = `<li> <h2>Due today:</h2> </li>`;
-        allSMSReminders += "        Due today: \n";
+        todayEmail = `<h2 style="text-indent: 40px;">Due today:</h2>`;
+        allSMSReminders += "            Due today: \n";
 
         // The last element is empty:
         todayTasks.pop();
@@ -259,8 +265,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
             let task = todayTasks.pop();
             todayEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
-                    <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <p style="font-size:18px; display: inline-block; padding:0; margin:0; text-indent: 5px;">
                         ${task}
                     </p>
                 </div>`;
@@ -275,8 +281,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
         const tmrTasksLength = tmrTasks.length;
         let tmrTasksIndex = 0;
 
-        tomorrowEmail = `<li> <h2>Due tomorrow:</h2> </li>`;
-        allSMSReminders += "        Due tomorrow: \n";
+        tomorrowEmail = `<h2 style="text-indent: 40px;">Due tomorrow:</h2>`;
+        allSMSReminders += "            Due tomorrow: \n";
 
         // The last element is empty:
         tmrTasks.pop();
@@ -285,8 +291,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
             let task = tmrTasks.pop();
             tomorrowEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
-                    <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <p style="font-size:18px; display: inline-block; padding:0; margin:0; text-indent: 5px;">
                         ${task}
                     </p>
                 </div>`;
@@ -301,8 +307,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
         const tasksInTwoDaysLength = tasksInTwoDays.length;
         let tasksInTwoDaysIndex = 0;
 
-        inTwoDaysEmail = `<li> <h2>Due in two days:</h2> </li>`;
-        allSMSReminders += "        Due in two days: \n"
+        inTwoDaysEmail = `<h2 style="text-indent: 40px;">Due in two days:</h2>`;
+        allSMSReminders += "            Due in two days: \n"
 
         // The last element is empty:
         tasksInTwoDays.pop();
@@ -311,8 +317,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
             let task = tasksInTwoDays.pop();
             inTwoDaysEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
-                    <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <p style="font-size:18px; display: inline-block; padding:0; margin:0; text-indent: 5px;">
                         ${task}
                     </p>
                 </div>`;
@@ -327,8 +333,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
         const tasksInThreeDaysLength = tasksInThreeDays.length;
         let tasksInThreeDaysIndex = 0;
 
-        inThreeDaysEmail = `<li> <h2>Due in three days:</h2> </li>`;
-        allSMSReminders += "        Due in three days: \n";
+        inThreeDaysEmail = `<h2 style="text-indent: 40px;">Due in three days:</h2>`;
+        allSMSReminders += "            Due in three days: \n";
 
         // The last element is empty:
         tasksInThreeDays.pop();
@@ -337,8 +343,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
             let task = tasksInThreeDays.pop();
             inThreeDaysEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
-                    <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <p style="font-size:18px; display: inline-block; padding:0; margin:0; text-indent: 5px;">
                         ${task}
                     </p>
                 </div>`;
@@ -353,8 +359,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
         const tasksInLessThanAWeekLength = tasksInLessThanAWeek.length;
         let tasksInLessThanAWeekIndex = 0;
 
-        inLessThanAWeekEmail = `<li> <h2>Due in less than a week:</h2> </li>`;
-        allSMSReminders += "        Due in less than a week: \n";
+        inLessThanAWeekEmail = `<h2 style="text-indent: 40px;">Due in less than a week:</h2>`;
+        allSMSReminders += "            Due in less than a week: \n";
 
         // The last element is empty:
         tasksInLessThanAWeek.pop();
@@ -363,8 +369,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
             let task = tasksInLessThanAWeek.pop();
             inLessThanAWeekEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
-                    <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <p style="font-size:18px; display: inline-block; padding:0; margin:0; text-indent: 5px;">
                         ${task}
                     </p>
                 </div>`;
@@ -380,8 +386,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
         const overdueTasksLength = overdueTasks.length;
         let overdueTasksIndex = 0;
 
-        overdueEmail = `<li> <h2 style="color:red;">Overdue:</h2> </li>`;
-        allSMSReminders += "        Overdue: \n";
+        overdueEmail = `<h2 style="color:red; text-indent: 40px;">Overdue:</h2>`;
+        allSMSReminders += "            Overdue: \n";
 
         // The last element is empty:
         overdueTasks.pop();
@@ -390,8 +396,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
             let task = overdueTasks.pop();
             overdueEmail += `
                 <div style="white-space: nowrap; overflow-x: auto;">
-                    <h3 style="display: inline-block; padding:0; margin:0;">Task: </h3>
-                    <p style="font-size:18px; display: inline-block; padding:0; margin:0; color:red;">
+                    <h3 style="display: inline-block; padding:0; margin:0;">Task:</h3>
+                    <p style="font-size:18px; display: inline-block; padding:0; margin:0; color:red; text-indent: 5px;">
                         ${task}
                     </p>
                 </div>`;
@@ -402,9 +408,9 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
         allSMSReminders += "\n";
     }
 
-    var initialGreeting = "We just wanted to remind you about your upcoming task."
+    var initialGreeting = "Here is your upcoming task for the week."
     if (numOfReminders > 1) {
-        initialGreeting = "We just wanted to remind you about your upcoming tasks."
+        initialGreeting = "Here are your upcoming tasks for the week."
     }
 
     // Step 2, part 1: sending email with defined transport object:
@@ -418,7 +424,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
 
         <h3>Hi ${userFName},</h3>
         <h3 style="text-indent: 50px;"> 
-        ${initialGreeting} We hope that you make the most out of this day!
+        ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day!
         </h3>
         <br/>
         
@@ -463,7 +469,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
             to: `${userPNum}${userCPCarrierEmailExtn}`,
             subject: "RemindMe: General Daily Reminders",
             text: `Hi ${userFName},
-            ${initialGreeting} We hope that you make the most out of this day!
+            ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day!
             ${allSMSReminders}
             Click here to view all of your reminders: 
             http://localhost:3000
@@ -625,13 +631,13 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
         req.forEach(function(reminderData, index) {
 
             if (index % 4 === 0) {
-                emailReminders += `<li> <h2>${reminderData}</h2> </li>`;
-                smsReminders += "        " + reminderData + "\n";
+                emailReminders += `<h1 style="text-indent: 40px;">${reminderData}</h1>`;
+                smsReminders += "            " + reminderData + "\n";
             } else if (index % 4 === 1) {
                 emailReminders += `
                     <div style="white-space: nowrap; overflow-x: auto;">
-                        <h3 style="display: inline-block; padding:0; margin:0;">Details: </h3>
-                        <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
+                        <h3 style="display: inline-block; padding:0; margin:0;">Details:</h3>
+                        <p style="font-size:18px; display: inline-block; padding:0; margin:0; text-indent: 5px;">
                             ${reminderData}
                         </p>
                     </div>`;
@@ -639,8 +645,8 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             } else if (index % 4 === 2) {
                 emailReminders += `
                     <div style="white-space: nowrap; overflow-x: auto;">
-                        <h3 style="display: inline-block; padding:0; margin:0;">Due Date: </h3>
-                        <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
+                        <h3 style="display: inline-block; padding:0; margin:0;">Due Date:</h3>
+                        <p style="font-size:18px; display: inline-block; padding:0; margin:0; text-indent: 5px;">
                             ${reminderData}
                         </p>
                     </div>`;
@@ -648,8 +654,8 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             } else {
                 emailReminders += `
                     <div style="white-space: nowrap; overflow-x: auto;">
-                        <h3 style="display: inline-block; padding:0; margin:0;">Reminder Date: </h3>
-                        <p style="font-size:18px; display: inline-block; padding:0; margin:0;">
+                        <h3 style="display: inline-block; padding:0; margin:0;">Reminder Date:</h3>
+                        <p style="font-size:18px; display: inline-block; padding:0; margin:0; text-indent: 5px;">
                             ${reminderData}
                         </p>
                     </div>`;
@@ -677,9 +683,9 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
         <center><h1>RemindMe</h1></center>
 
         <h3>Hi ${userFName},</h3>
-        <h3 style="text-indent: 50px;"> 
-        ${initialGreeting} which you wanted us to remind you about. We hope that you 
-        make the most out of this day!
+        <h3 style="text-indent: 40px;"> 
+        ${initialGreeting} which you wanted to be reminded about. 
+        Make sure to keep moving forward and keep making the most out of this day!
         </h3><br/>
         
         ${emailReminders}
@@ -713,7 +719,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             to: `${userPNum}${userCPCarrierEmailExtn}`,
             subject: "RemindMe: Specific Reminders",
             text: `Hi ${userFName},
-            ${initialGreeting} which you wanted us to remind you about. We hope that you make the most out of this day!
+            ${initialGreeting} which you wanted to be reminded about. Make sure to keep moving forward and keep making the most out of this day!
             ${smsReminders}
             Click here to view all of your reminders: 
             http://localhost:3000 `
