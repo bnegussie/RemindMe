@@ -40,7 +40,7 @@ function ChangeGeneralReminderTime() {
     function onCancel() {
 		let hour = generalReminderTime.getHours();
 		setReminderHour(hour + ":00");
-    }
+	}
 
     async function setGRT(e) {
 		e.preventDefault();
@@ -126,7 +126,21 @@ function ChangeGeneralReminderTime() {
 						</div>
 
 						<form onSubmit={(e) => setGRT(e)}>
-                            <div className="modal-body">
+							<div className="modal-body grt">
+							
+								<div className="info-message-grt">
+									<p>
+										Everyday at this time, you will receive your Daily General 
+										Reminder (if you have any tasks for the upcoming week).
+									</p>
+									<p>
+										The default reminder time is 6:00 AM because seeing an overview of 
+										your upcoming tasks right as you wake up or as you head to the office
+										makes it easier to remember your upcoming tasks.
+									</p>
+								</div>
+
+								<hr />
                             
 								<TimePicker
 									onChange={(e) => setReminderHour(e)}

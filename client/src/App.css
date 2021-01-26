@@ -764,8 +764,10 @@ ul > li:nth-child(2) > a:hover {
 }
 /***************************************** END: MANAGEPROFILE.JS *********************************/
 /***************************************** START: CHANGEGENERALREMINDERTIME.JS *******************/
-#change-general-reminder-time-modal {
-  height: 75vh;
+.info-message-grt > p{
+  color: #8B4513;
+  text-indent: 40px;
+  font-size: 16px;
 }
 /***************************************** END: CHANGEGENERALREMINDERTIMES.JS ********************/
 /***************************************** START: SEARCH.JS **************************************/
