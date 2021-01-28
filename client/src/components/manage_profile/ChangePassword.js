@@ -89,34 +89,64 @@ function ChangePassword() {
                         
                         <form onSubmit={(e) => changePwd(e)}>
                             <div className="modal-body">
-                                <input 
-                                    type="password"
-                                    name="currentPwd"
-                                    placeholder="Current password"
-                                    className="form-control my-3"
-                                    value={currentPwd}
-                                    onChange ={e => setCurrentPwd(e.target.value)}
-                                    required
-                                />
+                                <div className="form-group change-pwd">
+                                    <input 
+                                        type="password"
+                                        name="currentPwd"
+                                        id="currentPwd"
+                                        placeholder=" "
+                                        className="form-control"
+                                        value={currentPwd}
+                                        onChange ={e => setCurrentPwd(e.target.value)}
+                                        required
+                                    />
+                                    <label 
+                                        htmlFor="currentPwd" 
+                                        className="form-label update-profile">
+                                        
+                                        Current password:
+									</label>
+                                </div>
+                            
                                 <hr />
-                                <input 
-                                    type="password"
-                                    name="newPwd"
-                                    placeholder="New password"
-                                    className="form-control my-3"
-                                    value={newPwd}
-                                    onChange ={e => setNewPwd(e.target.value)}
-                                    required
-                                />
-                                <input 
-                                    type="password"
-                                    name="confirmNewPwd"
-                                    placeholder="Confirm new password"
-                                    className="form-control my-3"
-                                    value={confirmNewPwd}
-                                    onChange ={e => setConfirmNewPwd(e.target.value)}
-                                    required
-                                />
+
+                                <div className="form-group change-pwd">
+                                    <input 
+                                        type="password"
+                                        name="newPwd"
+                                        id="newPwd"
+                                        placeholder=" "
+                                        className="form-control"
+                                        value={newPwd}
+                                        onChange ={e => setNewPwd(e.target.value)}
+                                        required
+                                    />
+                                    <label 
+                                        htmlFor="newPwd" 
+                                        className="form-label update-profile">
+                                        
+                                        New password:
+									</label>
+                                </div>
+
+                                <div className="form-group change-pwd">
+                                    <input 
+                                        type="password"
+                                        name="confirmNewPwd"
+                                        id="confirmNewPwd"
+                                        placeholder= " "
+                                        className="form-control"
+                                        value={confirmNewPwd}
+                                        onChange ={e => setConfirmNewPwd(e.target.value)}
+                                        required
+                                    />
+                                    <label 
+                                        htmlFor="confirmNewPwd" 
+                                        className="form-label update-profile">
+                                        
+                                        Confirm new password:
+									</label>
+                                </div>
                             </div>
 
                             <div className="modal-footer">

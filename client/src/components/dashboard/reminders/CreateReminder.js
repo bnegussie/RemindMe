@@ -103,55 +103,88 @@ function CreateReminder() {
 
 							<form onSubmit={e => onCreateForm(e)}>
 								<div className="modal-body">
-									<input
-										type="text"
-										required
-										maxLength="100"
-										placeholder="Reminder title:"
-										className="form-control"
-										value={title}
-										onChange={(e) => setTitle(e.target.value)}
-										autoFocus
-									/>
+									<div className="form-group reminders">
+										<input
+											type="text"
+											required
+											id="create-reminder-title"
+											maxLength="100"
+											placeholder=" "
+											className="form-control"
+											value={title}
+											onChange={(e) => setTitle(e.target.value)}
+											autoFocus
+										/>
+										<label htmlFor="create-reminder-title" className="form-label">
+											Reminder title:
+										</label>
+									</div>
 
-									<textarea
-										maxLength="1000"
-										placeholder="Reminder details: (optional)"
-										className="form-control reminder-details"
-										value={desc}
-										onChange={(e) => setDesc(e.target.value)}
-									/>
+									<div className="form-group reminders">
+										<textarea
+											maxLength="1000"
+											id="create-reminder-details"
+											placeholder=" "
+											className="form-control reminder-details"
+											value={desc}
+											onChange={(e) => setDesc(e.target.value)}
+										/>
+										<label 
+											htmlFor="create-reminder-details" 
+											className="form-label reminder-details">
 
+											Reminder details: (optional):
+										</label>
+									</div>
+								
 									<div className="inputTextBoxDateFormat">
-										<DatePicker
-											selected={dueDate}
-											required
-											className="form-control"
-											onChange={(date) => setDueDate(date)}
-											minDate={new Date()}
-											placeholderText="Due Date:"
-											showTimeSelect
-											timeFormat="h:mm a"
-											timeIntervals={15}
-											dateFormat="MMMM d, yyyy h:mm aa"
-											popperModifiers={{ preventOverflow: { enabled: true, }, }}
-											isClearable
-										/>
+										<div className="form-group reminders">
+											<DatePicker
+												selected={dueDate}
+												required
+												id="create-reminder-due-date"
+												className="form-control"
+												onChange={(date) => setDueDate(date)}
+												minDate={new Date()}
+												placeholderText=" "
+												showTimeSelect
+												timeFormat="h:mm a"
+												timeIntervals={15}
+												dateFormat="MMMM d, yyyy h:mm aa"
+												popperModifiers={{ preventOverflow: { enabled: true, }, }}
+												isClearable
+											/>
+											<label 
+												htmlFor="create-reminder-due-date" 
+												className="form-label">
 
-										<DatePicker
-											selected={reminderDate}
-											required
-											className="form-control"
-											onChange={(date) => setReminderDate(date)}
-											minDate={new Date()}
-											placeholderText="Reminder Date:"
-											showTimeSelect
-											timeFormat="h:mm a"
-											timeIntervals={15}
-											dateFormat="MMMM d, yyyy h:mm aa"
-											popperModifiers={{ preventOverflow: { enabled: true, }, }}
-											isClearable
-										/>
+												Due Date:
+											</label>
+										</div>
+
+										<div className="form-group reminders">
+											<DatePicker
+												selected={reminderDate}
+												required
+												id="create-reminder-reminder-date"
+												className="form-control"
+												onChange={(date) => setReminderDate(date)}
+												minDate={new Date()}
+												placeholderText=" "
+												showTimeSelect
+												timeFormat="h:mm a"
+												timeIntervals={15}
+												dateFormat="MMMM d, yyyy h:mm aa"
+												popperModifiers={{ preventOverflow: { enabled: true, }, }}
+												isClearable
+											/>
+											<label 
+												htmlFor="create-reminder-reminder-date" 
+												className="form-label">
+
+												Reminder Date:
+											</label>
+										</div>										
 									</div>
 								</div>
 

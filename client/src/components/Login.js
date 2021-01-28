@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { toast } from 'react-toastify';
 
+import "./../App.css"
+
 const Login = ({ setAuth }) => {
 
     const [inputs, setInputs] = useState({
@@ -52,26 +54,36 @@ const Login = ({ setAuth }) => {
     return (
         <Fragment>
             <div className="login-container">
-                <h2 className="text-center my-5">Login</h2>
+                <h1 className="text-center my-5">Login</h1>
 
-                <form onSubmit={e => onSubmit(e)}>
-                    <input 
-                        type="text"
-                        name="email"
-                        placeholder="Email"
-                        className="form-control my-3"
-                        value={email}
-                        onChange ={e => onChange(e)} 
-                        autoFocus
-                    />
-                    <input 
-                        type="password"
-                        name="pwd"
-                        placeholder="Password"
-                        className="form-control my-3"
-                        value={pwd}
-                        onChange ={e => onChange(e)}
-                    />
+                <form onSubmit={e => onSubmit(e)} className="form">
+                    <div className="form-group">
+                        <input 
+                            type="text"
+                            name="email"
+                            id="log-in-email"
+                            placeholder=" "
+                            className="form-control"
+                            value={email}
+                            onChange ={e => onChange(e)} 
+                            autoFocus
+                        />
+                        <label htmlFor="log-in-email" className="form-label">Email:</label>
+                    </div>
+
+                    <div className="form-group">
+                        <input 
+                            type="password"
+                            name="pwd"
+                            id="log-in-pwd"
+                            placeholder=" "
+                            className="form-control"
+                            value={pwd}
+                            onChange ={e => onChange(e)}
+                        />
+                        <label htmlFor="log-in-pwd" className="form-label">Password:</label>
+                    </div>
+                    
                     <button className="btn btn-success btn-block">Submit</button>
                 </form>
             </div>

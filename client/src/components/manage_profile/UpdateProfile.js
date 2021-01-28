@@ -161,58 +161,92 @@ function UpdateProfile() {
 						</div>
 
                         <form onSubmit={(e) => update(e)}>
-                            <div className="modal-body">
-							
-								<input
-									type="text"
-									name="fName"
-									placeholder="First name"
-									className="form-control my-3"
-									value={fName}
-									onChange={e => setFName(e.target.value)}
-									required
-								/>
-
-								<input
-									type="text"
-									name="lName"
-									placeholder="Last name"
-									className="form-control my-3"
-									value={lName}
-									onChange={e => setLName(e.target.value)}
-									required
-								/>
-
-								<input
-									type="email"
-									name="email"
-									placeholder="Email"
-									className="form-control my-3"
-									value={email}
-									onChange={e => setEmail(e.target.value)}
-									required
-								/>
-
-								<div id="cellphone-container">
-									<Select
-										value={cPhoneCarrier && {label: cPhoneCarrier}}
-										onChange={e => setCellPhoneOption(e)}
-										options={allCellphoneCarriers}
-										className="my-3 cellphone-child"
-										placeholder="Cell phone carrier"
-										isClearable
+							<div className="modal-body">
+								<div className="form-group profile">
+									<input
+										type="text"
+										name="fName"
+										id="fName"
+										placeholder=" "
+										className="form-control"
+										value={fName}
+										onChange={e => setFName(e.target.value)}
+										required
 									/>
+									<label htmlFor="fName" className="form-label update-profile">
+										First name:
+									</label>
+								</div>
 							
-									<input 
-										type="tel"
-										name="pNum"
-										placeholder="Phone number (optional, but highly recommended)"
-										className="form-control my-3 cellphone-child"
-										value={pNum}
-										onChange={e => setPNum(e.target.value)}
-									/>                
+								<div className="form-group profile">
+									<input
+										type="text"
+										name="lName"
+										id="lName"
+										placeholder=" "
+										className="form-control"
+										value={lName}
+										onChange={e => setLName(e.target.value)}
+										required
+									/>
+									<label htmlFor="lName" className="form-label update-profile">
+										Last name:
+									</label>
 								</div>
 
+								<div className="form-group profile">
+									<input
+										type="email"
+										name="email"
+										id="email"
+										placeholder=" "
+										className="form-control"
+										value={email}
+										onChange={e => setEmail(e.target.value)}
+										required
+									/>
+									<label htmlFor="email" className="form-label update-profile">
+										Email:
+									</label>
+								</div>
+								
+								<div id="cellphone-container">
+									<div className="form-group profile">
+										<Select
+											value={cPhoneCarrier && {label: cPhoneCarrier}}
+											onChange={e => setCellPhoneOption(e)}
+											options={allCellphoneCarriers}
+											className="cellphone-child-left"
+											placeholder=" "
+											id="update-profile-cell-phone-carrier"
+											isClearable
+										/>
+										<label 
+											htmlFor="update-profile-cell-phone-carrier" 
+											className="form-label update-profile">
+
+											Cell phone carrier:
+										</label>
+									</div>
+
+									<div className="form-group profile">
+										<input 
+											type="tel"
+											name="pNum"
+											id="pNum"
+											placeholder=" "
+											className="form-control cellphone-child"
+											value={pNum}
+											onChange={e => setPNum(e.target.value)}
+										/>
+										<label 
+											htmlFor="pNum" 
+											className="form-label update-profile pNum">
+											
+											Phone number (recommended):
+										</label>
+									</div>         
+								</div>
                             </div>
 
                             <div className="modal-footer">

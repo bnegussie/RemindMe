@@ -141,15 +141,16 @@ function ChangeGeneralReminderTime() {
 								</div>
 
 								<hr />
-                            
-								<TimePicker
-									onChange={(e) => setReminderHour(e)}
-									value={reminderHour}
-									format="h a"
-									hourAriaLabel="Hour"
-									required
-								/>
-								
+
+								<div className="general-reminder-time" >
+									<TimePicker
+										onChange={(e) => setReminderHour(e)}
+										value={reminderHour}
+										format="h a"
+										hourAriaLabel="Hour"
+										required
+									/>
+								</div>
 							</div>
 
 							<div className="modal-footer">

@@ -211,104 +211,141 @@ function EditReminder({ currReminder, redirectTo }) {
 
 	return (
 		<Fragment>
-			<button
-				type="button"
-				className="btn btn-info"
-				data-toggle="modal"
-				data-target={`#id${currReminder.reminder_id}`}
-			>
-				View
-			</button>
+			<div className="edit-reminder-container">
+				<button
+					type="button"
+					className="btn btn-info"
+					data-toggle="modal"
+					data-target={`#id${currReminder.reminder_id}`}
+				>
+					View
+				</button>
 
-			<div className="modal" id={`id${currReminder.reminder_id}`}>
-				<div className="modal-dialog">
-					<div className="modal-content">
-						<div className="modal-header">
-							<h4 className="modal-title">Edit Reminder</h4>
-							<button type="button" className="close" 
-								data-dismiss="modal" 
-								onClick={() => onCancelForm()}>
-								&times;
-							</button>
-						</div>
-
-						<form onSubmit={e => editText(e)}>
-							<div className="modal-body">
-								<div className="editreminder-completed">
-									<label>Completed:</label>
-									<input type="checkbox" 
-										className="completed-checkboxes"
-										defaultValue={completed}
-										onChange={() => setCompleted( !completed )}
-										checked={completed}
-										/>
-									<br/>
-								</div>
-								
-								<input
-									type="text"
-									required
-									maxLength="100"
-									placeholder="Reminder title:"
-									className="form-control"
-									value={title}
-									onChange={(e) => setTitle(e.target.value)}
-								/>
-
-								<textarea
-									maxLength="1000"
-									placeholder="Reminder details: (optional)"
-									className="form-control reminder-details"
-									value={desc}
-									onChange={(e) => setDesc(e.target.value)}
-								/>
-
-								<div className="inputTextBoxDateFormat">
-									<DatePicker
-										selected={dueDate}
-										required
-										className="form-control"
-										onChange={(date) => setDueDate(date)}
-										minDate={new Date()}
-										placeholderText="Due Date:"
-										showTimeSelect
-										timeFormat="h:mm a"
-										timeIntervals={15}
-										dateFormat="MMMM d, yyyy h:mm aa"
-										popperModifiers={{ preventOverflow: { enabled: true, }, }}
-										isClearable
-									/>
-
-									<DatePicker
-										selected={reminderDate}
-										required
-										className="form-control"
-										onChange={(date) => setReminderDate(date)}
-										minDate={new Date()}
-										placeholderText="Reminder Date:"
-										showTimeSelect
-										timeFormat="h:mm a"
-										timeIntervals={15}
-										dateFormat="MMMM d, yyyy h:mm aa"
-										popperModifiers={{ preventOverflow: { enabled: true, }, }}
-										isClearable
-									/>
-								</div>
-							</div>
-
-							<div className="modal-footer">
-								<input type="submit" value="Save" className="btn btn-success" />
-
-								<button type="button" 
-									className="btn btn-danger" 
-									data-dismiss="modal"
-									onClick={() => onCancelForm()} >
-
-									Close
+				<div className="modal" id={`id${currReminder.reminder_id}`}>
+					<div className="modal-dialog">
+						<div className="modal-content">
+							<div className="modal-header">
+								<h4 className="modal-title">Edit Reminder</h4>
+								<button type="button" className="close" 
+									data-dismiss="modal" 
+									onClick={() => onCancelForm()}>
+									&times;
 								</button>
 							</div>
-						</form>
 
+							<form onSubmit={e => editText(e)}>
+								<div className="modal-body">
+									<div className="editreminder-completed">
+										<label>Completed:</label>
+										<input type="checkbox" 
+											className="completed-checkboxes"
+											defaultValue={completed}
+											onChange={() => setCompleted( !completed )}
+											checked={completed}
+											/>
+										<br/>
+									</div>
+
+									<div className="form-group reminders">
+										<input
+											type="text"
+											required
+											id={ currReminder.reminder_id + "edit-reminder-title" }
+											maxLength="100"
+											placeholder=" "
+											className="form-control"
+											value={title}
+											onChange={(e) => setTitle(e.target.value)}
+										/>
+										<label 
+											htmlFor={ currReminder.reminder_id + "edit-reminder-title" } 
+											className="form-label">
+											Reminder title:
+										</label>
+									</div>
+
+									<div className="form-group reminders">
+										<textarea
+											maxLength="1000"
+											id={ currReminder.reminder_id + "edit-reminder-details" }
+											placeholder=" "
+											className="form-control reminder-details"
+											value={desc}
+											onChange={(e) => setDesc(e.target.value)}
+										/>
+										<label 
+											htmlFor={ currReminder.reminder_id + "edit-reminder-details" } 
+											className="form-label reminder-details">
+
+											Reminder details: (optional):
+										</label>
+									</div>
+									
+									<div className="inputTextBoxDateFormat">
+										<div className="form-group reminders">
+											<DatePicker
+												selected={dueDate}
+												required
+												id={ currReminder.reminder_id + "edit-reminder-due-date" }
+												className="form-control"
+												onChange={(date) => setDueDate(date)}
+												minDate={new Date()}
+												placeholderText=" "
+												showTimeSelect
+												timeFormat="h:mm a"
+												timeIntervals={15}
+												dateFormat="MMMM d, yyyy h:mm aa"
+												popperModifiers={{ preventOverflow: { enabled: true, }, }}
+												isClearable
+											/>
+											<label 
+												htmlFor={ currReminder.reminder_id + "edit-reminder-due-date" }
+												className="form-label">
+
+												Due Date:
+											</label>
+										</div>
+										
+										<div className="form-group reminders">
+											<DatePicker
+												selected={reminderDate}
+												required
+												id={ currReminder.reminder_id + "edit-reminder-reminder-date" }
+												className="form-control"
+												onChange={(date) => setReminderDate(date)}
+												minDate={new Date()}
+												placeholderText=" "
+												showTimeSelect
+												timeFormat="h:mm a"
+												timeIntervals={15}
+												dateFormat="MMMM d, yyyy h:mm aa"
+												popperModifiers={{ preventOverflow: { enabled: true, }, }}
+												isClearable
+											/>
+											<label 
+												htmlFor={ currReminder.reminder_id + "edit-reminder-reminder-date" }
+												className="form-label">
+
+												Reminder Date:
+											</label>
+										</div>
+									</div>
+								</div>
+
+								<div className="modal-footer">
+									<input type="submit" value="Save" className="btn btn-success" />
+
+									<button type="button" 
+										className="btn btn-danger" 
+										data-dismiss="modal"
+										onClick={() => onCancelForm()} >
+
+										Close
+									</button>
+								</div>
+							</form>
+
+						</div>
 					</div>
 				</div>
 			</div>

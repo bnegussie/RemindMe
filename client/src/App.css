@@ -1,3 +1,10 @@
+:root {
+  --brown: #8B4513;
+  --green: #1e7e34;
+  --light-green: #00AB28;
+  --white: #fff;
+}
+
 /************************************ START: APP.JS **********************************************/
 * {
   box-sizing: border-box;
@@ -32,13 +39,13 @@
 }
 
 .footer-links a {
-  color: #fff;
+  color: var(--white);
   text-decoration: none;
   margin-bottom: 0.5rem;
 }
 
 div.footer-container > a {
-  color: #fff;
+  color: var(--white);
   text-decoration: none;
   margin-bottom: 0.5rem;
   margin-top: 0px;
@@ -61,7 +68,7 @@ div.footer-container > a:hover {
 
 #footer-email {
   text-indent: 8px;
-  color: #8B4513;
+  color: var(--brown);
 }
 
 @media screen and (max-width: 500px) {
@@ -94,7 +101,7 @@ div.footer-container > a:hover {
 }
 
 .info-message > p {
-  color: #8B4513;
+  color: var(--brown);
   text-indent: 40px;
   font-size: 20px;
 }
@@ -127,14 +134,14 @@ div.footer-container > a:hover {
 }
 
 .faq-message > p {
-  color: #8B4513;
+  color: var(--brown);
   text-indent: 40px;
   font-size: 17px;
 }
 /************************************ END: FAQ.JS ************************************************/
 /************************************ START: BUTTON.JS *******************************************/
 :root {
-  --primary: #fff;
+  --primary: var(--white);
 }
 
 .btn {
@@ -153,7 +160,7 @@ div.footer-container > a:hover {
 
 .btn--outline {
   background-color: transparent;
-  color: #fff;
+  color: var(--white);
   padding: 8px 20px;
   border: 1px solid var(--primary);
   transition: all 0.3s ease-out;
@@ -161,7 +168,7 @@ div.footer-container > a:hover {
 
 a.btn-mobile > button {
   background-color: transparent;
-  color: #fff;
+  color: var(--white);
   padding: 8px 20px;
   border: 1px solid var(--primary);
   transition: all 0.3s ease-out;
@@ -179,7 +186,7 @@ a.btn-mobile > button {
 }
 
 .btn--medium:hover, .btn--large:hover {
-  background: #fff;
+  background: var(--white);
   color: #242424;
   transition: all 0.3s ease-out;
 }
@@ -187,7 +194,7 @@ a.btn-mobile > button {
 /************************************ START: LANDINGPAGE.JS **************************************/
 .landing-container {
   background: url('./images/cafe.jpg') center center/cover no-repeat;
-  color: #fff;
+  color: var(--white);
 
   position: fixed;
   left: 0px;
@@ -210,12 +217,12 @@ a.btn-mobile > button {
 
 #call-to-action {
   text-align: left;
-  color: #8B4513;
+  color: var(--brown);
   font-size: 70px;
 }
 
 .call-to-action-msg {
-  color: #8B4513;
+  color: var(--brown);
   font-size: 32px;
 }
 
@@ -297,7 +304,7 @@ a.btn-mobile > button {
 }
 
 .navbar-logo {
-  color: #fff;
+  color: var(--white);
   justify-self: start;
   margin-left: 20px;
   cursor: pointer;
@@ -341,7 +348,7 @@ a.btn-mobile > button {
 }
 
 .nav-links {
-  color: #fff;
+  color: var(--white);
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -350,16 +357,16 @@ a.btn-mobile > button {
 }
 
 .nav-links:hover {
-  border-bottom: 4px solid #fff;
+  border-bottom: 4px solid var(--white);
   transition: all 0.2s ease-out;
-  color: #fff;
+  color: var(--white);
   text-decoration: none;
 }
 
 .nav-user-links {
   height: 80px;
   width: 100%;
-  color: #fff;
+  color: var(--white);
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -369,7 +376,7 @@ a.btn-mobile > button {
 
 ul > li:nth-child(2) > a {
   text-decoration: none;
-  color: #fff;
+  color: var(--white);
   margin-right: min(30px, 0);
 }
 
@@ -378,12 +385,12 @@ ul > li:nth-child(2) > a:hover {
 }
 
 .navbar-logo:hover {
-  color: #fff;
+  color: var(--white);
   text-decoration: none;
 }
 
 .fa-bars {
-  color: #fff;
+  color: var(--white);
 }
 
 .nav-links-mobile {
@@ -447,7 +454,7 @@ ul > li:nth-child(2) > a:hover {
   }
 
   .nav-links:hover {
-    background-color: #fff;
+    background-color: var(--white);
     color: #242424;
     border-radius: 0;
     text-decoration: none;
@@ -462,7 +469,7 @@ ul > li:nth-child(2) > a:hover {
   }
 
   .navbar-logo:hover {
-    color: #fff;
+    color: var(--white);
     text-decoration: none;
   }
 
@@ -477,7 +484,7 @@ ul > li:nth-child(2) > a:hover {
   }
 
   .fa-times {
-    color: #fff;
+    color: var(--white);
     font-size: 2rem;
   }
 
@@ -490,14 +497,14 @@ ul > li:nth-child(2) > a:hover {
     text-decoration: none;
     font-size: 1.5rem;
     background-color: transparent;
-    color: #fff;
+    color: var(--white);
     padding: 14px 20px;
-    border: 1px solid #fff;
+    border: 1px solid var(--white);
     transition: all 0.3s ease-out;
   }
 
   .nav-links-mobile:hover {
-    background: #fff;
+    background: var(--white);
     color: #242424;
     transition: 250ms;
   }
@@ -505,9 +512,6 @@ ul > li:nth-child(2) > a:hover {
 /***************************************** END: NAVBAR.JS *********************************************/
 /***************************************** START: CREATEREMINDER.JS ***********************************/
 .createreminder-container {
-  text-align: center;
-  justify-content: center;
-  align-items: center;
   padding: 10px;
 }
 
@@ -521,19 +525,23 @@ ul > li:nth-child(2) > a:hover {
 
 #createreminder-new-btn {
   font-size: 20px;
-  background: #1e7e34;
+  background: var(--green);
   
   display: grid;  
 }
 
 #createreminder-new-btn:hover {
-  background: #00AB28;
+  background: var(--light-green);
   transition: 0.3s ease-out;
 }
 
 .form-control.reminder-details {
   width: 100%;
   height: 25vh;
+}
+
+#create-reminder-due-date {
+  width: 100%;
 }
 /***************************************** END: CREATEREMINDER.JS ********************************/
 /***************************************** START: REMINDERS.JS ***********************************/
@@ -562,7 +570,7 @@ ul > li:nth-child(2) > a:hover {
   justify-content: center;
   text-align: center;
   font-weight: bold;
-  color: #8B4513;
+  color: var(--brown);
   font-size: large;
 }
 
@@ -577,7 +585,7 @@ ul > li:nth-child(2) > a:hover {
 
 .reminders-headers {
   font-size: 20px;
-  color: #8B4513;
+  color: var(--brown);
 }
 
 .no-data-available-msg {
@@ -587,8 +595,8 @@ ul > li:nth-child(2) > a:hover {
 .search-btn-on-dashboard {
   text-decoration: none;
   font-size: 30px;
-  color: #fff;
-  background: #1e7e34;
+  color: var(--white);
+  background: var(--green);
   border-radius: 4px;
 
   padding: 0px 8px 0px 8px;
@@ -596,41 +604,25 @@ ul > li:nth-child(2) > a:hover {
 }
 
 .search-btn-on-dashboard:hover {
-  color: #fff;
-  background: #00AB28;
+  color: var(--white);
+  background: var(--light-green);
   transition: 0.3s ease-out;
-}
-
-
-::-webkit-input-placeholder {
-  color: #8B4513;
-  font-weight: bold;
-}
-
-:-moz-placeholder { /* Firefox 18- */
-  color:  #8B4513;  
-  font-weight: bold;
-}
-
-::-moz-placeholder {  /* Firefox 19+ */
-  color:  #8B4513;  
-  font-weight: bold;
-}
-
-:-ms-input-placeholder {  
-  color:  #8B4513; 
-  font-weight: bold;
 }
 /***************************************** END: REMINDERS.JS *************************************/
 /***************************************** START: EDITREMINDER.JS ********************************/
+.edit-reminder-container {
+  text-align: left;
+}
+
 .editreminder-completed {
   text-align: left;
+  margin-bottom: 20px;
 }
 
 .editreminder-completed > label {
   margin-right: 10px;
   font-size: 24px;
-  color:  #8B4513;
+  color:  var(--brown);
   font-weight: bold;
 }
 
@@ -639,38 +631,136 @@ ul > li:nth-child(2) > a:hover {
   height: 18px;
 }
 /***************************************** END: EDITREMINDER.JS **********************************/
+/***************************************** START: LOGIN.JS ***************************************/
+.form-label, 
+.form-label.reminder-details,
+.form-label.update-profile,
+.form-label.update-profile.pNum {
+  font-size: 1.25em;
+  color: var(--brown);
+  display: block;
+  opacity: 1;
+  transform: translateY(-1.75em);
+  transform-origin: 0 0;
+  transition: all 0.5s;
+  text-indent: 10px;
+}
+
+.form-label.reminder-details {
+  transform: translateY(-6em);
+}
+
+.form-label.update-profile.pNum {
+  font-size: 0.95em;
+  width: 150%;
+
+  transform: translateY(-1.95em);
+}
+
+.form-group {
+  margin-bottom: -10px;
+  width: 100%;
+}
+
+.form-group.reminders {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: -15px;
+}
+
+.form-group.profile {
+  margin-top: 15px;
+}
+
+.form-group.change-pwd {
+  margin-top: 10px;
+}
+
+div.form-group.reminders > div {
+  width: 100%;
+}
+
+
+/* Moving the input field label above. */
+.form-control:focus + .form-label,
+.form-control:not(:placeholder-shown) + .form-label {
+  transform:translateY(-3.3em) scale(0.8);
+}
+
+.cellphone-child-left:focus + .form-label,
+.cellphone-child-left:not(:placeholder-shown) + .form-label {
+  transform:translateY(-3.3em) scale(0.8);
+}
+
+.form-control:focus + .form-label.reminder-details,
+.form-control:not(:placeholder-shown) + .form-label.reminder-details {
+  transform:translateY(-7.7em) scale(0.8);
+}
+
+.form-control:focus + .form-label.update-profile,
+.form-control:not(:placeholder-shown) + .form-label.update-profile {
+  transform:translateY(-3.2em) scale(0.8);
+}
+
+.form-control:focus + .form-label.update-profile.pNum,
+.form-control:not(:placeholder-shown) + .form-label.update-profile.pNum {
+  transform:translateY(-4.0em) scale(0.9);
+}
+
+div.form-group.reminders > div + .form-label {
+  transform:translateY(-3.3em) scale(0.8);
+}
+
+
+@media screen and (max-width: 960px) {
+  .form-label {
+    font-size: 1em;
+    transform: translateY(-2em);
+  }
+
+  .form-control:focus + .form-label,
+  .form-control:not(:placeholder-shown) + .form-label {
+    transform:translateY(-4em) scale(0.8);
+  }
+
+  .form-group.reminders {
+    margin-bottom: 10px;
+  }
+
+  div.form-group.reminders > div + .form-label {
+    transform:translateY(-4em) scale(0.8);
+  }
+}
+/***************************************** END: LOGIN.JS *****************************************/
 /***************************************** START: REGISTER.JS ************************************/
 #cellphone-container {
   display: flex;
 }
 
-.my-3.cellphone-child {
-  width: 50%;
-  margin-right: 10px;
+.cellphone-child-left {
+  width: 100%;
 }
 
-.form-control.my-3.cellphone-child {
-  width: 50%;
-  margin-right: 0px;
+.form-control.cellphone-child {
+  width: 100%;
 }
 
 @media screen and (max-width: 600px) {
-  .my-3.cellphone-child {
+  .cellphone-child-left {
     font-size: 16px;
   }
   
-  .form-control.my-3.cellphone-child {
-    font-size: 10px;
+  .form-control.cellphone-child {
     height: 35px;
   }
 }
 
 @media screen and (max-width: 500px) {
-  .my-3.cellphone-child {
+  .cellphone-child-left {
     font-size: 12px;
   }
   
-  .form-control.my-3.cellphone-child {
+  .form-control.cellphone-child {
     font-size: 8px;
     height: 35px;
   }
@@ -699,7 +789,7 @@ ul > li:nth-child(2) > a:hover {
   width: 100%;
   height: 100%;
   text-decoration: none;
-  color: #fff;
+  color: var(--white);
   padding: 16px;
 
   text-align: center;
@@ -733,7 +823,7 @@ ul > li:nth-child(2) > a:hover {
   }
 
   .drop-down-link:hover {
-    background-color: #fff;
+    background-color: var(--white);
     color: #242424;
     border-radius: 0;
     text-decoration: none;
@@ -748,7 +838,7 @@ ul > li:nth-child(2) > a:hover {
 
 .manage-profile-headers {
   font-size: 20px;
-  color: #8B4513;
+  color: var(--brown);
 }
 
 .manage-profile-options {
@@ -760,14 +850,24 @@ ul > li:nth-child(2) > a:hover {
 }
 
 .btn.btn-info.manage-profile {
-  width: 50%;
+  width: 85px;
 }
 /***************************************** END: MANAGEPROFILE.JS *********************************/
+/***************************************** START: CHANGEPASSWORD.JS ******************************/
+#newPwd {
+  margin-top: 30px;
+}
+/***************************************** END: CHANGEPASSWORD.JS ********************************/
 /***************************************** START: CHANGEGENERALREMINDERTIME.JS *******************/
-.info-message-grt > p{
-  color: #8B4513;
+.info-message-grt > p {
+  color: var(--brown);
   text-indent: 40px;
   font-size: 16px;
+}
+
+.general-reminder-time {
+  padding-left: 150px;
+  padding-right: 150px;
 }
 /***************************************** END: CHANGEGENERALREMINDERTIMES.JS ********************/
 /***************************************** START: SEARCH.JS **************************************/
@@ -782,15 +882,15 @@ ul > li:nth-child(2) > a:hover {
 
 .search-btn-on-search {
   font-size: 35px;
-  color: #fff;
-  background: #1e7e34;
+  color: var(--white);
+  background: var(--green);
   border-radius: 4px;
 
   padding: 0px 8px 0px 8px;
 }
 
 .search-btn-on-search:hover {
-  background: #00AB28;
+  background: var(--light-green);
   transition: 0.3s ease-out;
 }
 /***************************************** END: SEARCH.JS ****************************************/

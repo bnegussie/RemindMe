@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import Select from "react-select";
 
+import "./../App.css"
+
 const Register = ({ setAuth }) => {
     
     const [inputs, setInputs] = useState ({
@@ -126,74 +128,114 @@ const Register = ({ setAuth }) => {
     
     return (
         <Fragment>
-            <h2 className="text-center my-5">Sign Up</h2>
+            <h1 className="text-center my-5">Sign Up</h1>
 
             <form onSubmit={e => onSubmit(e)}>
-                <input
-                    type="text"
-                    name="f_name"
-                    placeholder="First name"
-                    className="form-control my-3"
-                    value={f_name}
-                    onChange={e => onChange(e)}
-                    required
-                    autoFocus
-                />
-                <input
-                    type="text"
-                    name="l_name"
-                    placeholder="Last name"
-                    className="form-control my-3"
-                    value={l_name}
-                    onChange={e => onChange(e)}
-                    required
-                />
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    className="form-control my-3"
-                    value={email}
-                    onChange={e => onChange(e)}
-                    required
-                />
+                <div className="form-group">
+                    <input
+                        type="text"
+                        name="f_name"
+                        id="f_name"
+                        placeholder=" "
+                        className="form-control"
+                        value={f_name}
+                        onChange={e => onChange(e)}
+                        required
+                        autoFocus
+                    />
+                    <label htmlFor="f_name" className="form-label">First name:</label>
+                </div>
+
+                <div className="form-group">
+                    <input
+                        type="text"
+                        name="l_name"
+                        id="l_name"
+                        placeholder=" "
+                        className="form-control"
+                        value={l_name}
+                        onChange={e => onChange(e)}
+                        required
+                    />
+                    <label htmlFor="l_name" className="form-label">Last name:</label>
+                </div>
+
+                <div className="form-group">
+                    <input
+                        type="email"
+                        name="email"
+                        id="sign-up-email"
+                        placeholder=" "
+                        className="form-control"
+                        value={email}
+                        onChange={e => onChange(e)}
+                        required
+                    />
+                    <label htmlFor="sign-up-email" className="form-label">Email:</label>
+                </div>
+            
                 <div id="cellphone-container">
-                    <Select options={allCellphoneCarriers}
+                    <div className="form-group">
+                        <Select options={allCellphoneCarriers}
                             onChange={e => setCellPhoneOption(e)}
                             value={cPhoneCarrier.label}
-                            placeholder="Cell phone carrier"
-                            className="my-3 cellphone-child"
+                            placeholder=" "
+                            id="sign-up-cell-phone-carrier"
+                            className="cellphone-child-left"
                             isClearable
-                    />
-                
-                    <input 
-                        type="tel"
-                        name="p_num"
-                        placeholder="Phone number (optional, but highly recommended)"
-                        className="form-control my-3 cellphone-child"
-                        value={p_num}
-                        onChange={e => onChange(e)}
-                    />                
+                        />
+
+                        <label htmlFor="sign-up-cell-phone-carrier" 
+                            className="form-label" 
+                            id="cell-phone-carrier-label">
+                            Cell phone carrier:
+                        </label>
+                    </div>
+
+                    <div className="form-group">
+                        <input 
+                            type="tel"
+                            name="p_num"
+                            id="sign-up-p_num"
+                            placeholder=" "
+                            className="form-control cellphone-child"
+                            value={p_num}
+                            onChange={e => onChange(e)}
+                        /> 
+                        <label htmlFor="sign-up-p_num" className="form-label" id="sign-up-p_num-label">
+                            Phone number (recommended):
+                        </label>
+                    </div>            
                 </div>
+
+                <div className="form-group">
+                    <input
+                        type="password"
+                        name="pwd"
+                        id="sign-up-pwd"
+                        placeholder=" "
+                        className="form-control"
+                        value={pwd}
+                        onChange={e => onChange(e)}
+                        required
+                    />
+                    <label htmlFor="sign-up-pwd" className="form-label">Password:</label>
+                </div>
+
+                <div className="form-group">
+                    <input
+                        type="password"
+                        name="pwd_confirm"
+                        id="sign-up-pwd_confirm"
+                        placeholder=" "
+                        className="form-control"
+                        value={pwd_confirm}
+                        onChange={e => onChange(e)}
+                        required
+                    />
+                    <label htmlFor="sign-up-pwd_confirm" className="form-label">Confirm password:</label>
+                </div>         
                 
-                <input
-                    type="password"
-                    name="pwd"
-                    placeholder="Password"
-                    className="form-control my-3"
-                    value={pwd}
-                    onChange={e => onChange(e)}
-                    required
-                />
-                <input
-                    type="password"
-                    name="pwd_confirm"
-                    placeholder="Confirm password"
-                    className="form-control my-3"
-                    value={pwd_confirm}
-                    onChange={e => onChange(e)}
-                    required
-                />
                 <button className="btn btn-success btn-block">Submit</button>
                 <hr />
             </form>
