@@ -8,7 +8,6 @@ const corsLib = require("cors");
 
 // Connecting to the DB:
 const pool = require("./db");
-const { response } = require("express");
 require("dotenv").config();
 
 // Allowing client to access data from the client side:
@@ -235,10 +234,10 @@ async function triggerGeneralEmail() {
 
 async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
                                         userPNum, userFName, numOfReminders) {
-    
+                                            
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
-        service: "gmail",
+        service: process.env.service,
         auth: {
             user: process.env.userEmail,
             pass: process.env.userSecret
@@ -415,10 +414,9 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
 
     // Step 2, part 1: sending email with defined transport object:
     let emailInfo = {
-        from: "RemindMe <brookninfo@gmail.com>",
+        from: `RemindMe <${process.env.serviceEmail}>`,
         to: `${userEmail}`,
         subject: "RemindMe: General Daily Reminders",
-        text: "RemindMe",
         html: `
         <center><h1>RemindMe</h1></center>
 
@@ -465,7 +463,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
     if (userPNumNoSpaces !== '') {
         // Step 2, part 2: sending text message with defined transport object:
         let smsInfo = {
-            from: "RemindMe <brookninfo@gmail.com>",
+            from: `RemindMe <${process.env.serviceEmail}>`,
             to: `${userPNum}${userCPCarrierEmailExtn}`,
             subject: "RemindMe: General Daily Reminders",
             text: `Hi ${userFName},
@@ -532,7 +530,6 @@ setTimeout(function() {
 
 
 async function triggerSpecifiedReminderEmailAndSMS() {
-
     const allUserReminders = await processAllUserReminders();
 
     allUserReminders.forEach(function(currUserAllActiveReminders, index) {
@@ -616,7 +613,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
     
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
-        service: "gmail",
+        service: process.env.service,
         auth: {
             user: process.env.userEmail,
             pass: process.env.userSecret
@@ -676,7 +673,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
 
     // Step 2, part 1: sending email with defined transport object:
     let emailInfo = {
-        from: "RemindMe <brookninfo@gmail.com>",
+        from: `RemindMe <${process.env.serviceEmail}>`,
         to: `${userEmail}`,
         subject: "RemindMe: Specific Reminders",
         html: `
@@ -715,7 +712,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
     if (userPNumNoSpaces !== '') {
         // Step 2, part 2: sending a text message with defined transport object:
         let smsInfo = {
-            from: "RemindMe <brookninfo@gmail.com>",
+            from: `RemindMe <${process.env.serviceEmail}>`,
             to: `${userPNum}${userCPCarrierEmailExtn}`,
             subject: "RemindMe: Specific Reminders",
             text: `Hi ${userFName},

@@ -301,6 +301,7 @@ a.btn-mobile > button {
   align-items: center;
   height: 80px;
   max-width: 1500px;
+  z-index: 999;
 }
 
 .navbar-logo {
@@ -432,11 +433,14 @@ ul > li:nth-child(2) > a:hover {
 
   .nav-menu.active {
     background: #242222;
+    
     left: 0;
     opacity: 1;
     transition: all 0.5s ease;
-    z-index: 1;
+    z-index: 999;
     margin-top: 0px;
+    margin: 0;
+    padding: 0;
   }
 
   .nav-links {
