@@ -202,7 +202,7 @@ function Search({ isAuth }) {
 				});
 			}
 	
-			window.location = "/dashboard/Search";
+			window.location = "/Dashboard/Search";
 
 		} catch (error) {
 			console.error(error.message);
@@ -274,7 +274,7 @@ function Search({ isAuth }) {
                                     </td>
                                     <td onClick={isAuth} >
 										<EditReminder currReminder={currReminder} 
-											redirectTo="/dashboard/Search" 
+											redirectTo="/Dashboard/Search" 
 										/>
                                     </td>
                                     <td onClick={isAuth} >

@@ -5,7 +5,7 @@ export const MenuItems = [
         className: 'drop-down-link'
     },
     {
-        title: 'Logout',
+        title: 'Log Out',
         path: '',
         className: 'drop-down-link'
     }    

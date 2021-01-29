@@ -84,7 +84,7 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
             <Fragment>
                 <nav className="navbar" onMouseEnter={isAuth} onMouseLeave={isAuth} >
                     <div className="navbar-container">
-                        <Link to="/dashboard" className="navbar-logo" onClick={checkIsAuth}>
+                        <Link to="/Dashboard" className="navbar-logo" onClick={checkIsAuth}>
                             RemindMe <i className="fas fa-angle-double-right" />
                         </Link>
                         <div className="menu-icon" onClick={mModeToggle}>
@@ -92,7 +92,7 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
                         </div>
                         <ul className={mobileMode ? "nav-menu active" : "nav-menu-logged-in"}>
                             <li className="nav-item">
-                                <Link to="/dashboard" className="nav-links" onClick={checkIsAuth}>Home</Link>
+                                <Link to="/Dashboard" className="nav-links" onClick={checkIsAuth}>Home</Link>
                             </li>
                             <li 
                                 className="nav-item"
@@ -132,13 +132,13 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
                             <Link to="/AboutUs" className="nav-links" onClick={closeMobileMenu}>About Us</Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/register" className="nav-links" onClick={closeMobileMenu}>Sign Up</Link>
+                            <Link to="/SignUp" className="nav-links" onClick={closeMobileMenu}>Sign Up</Link>
                         </li>
                         <li>
-                            <Link to="/login" className="nav-links-mobile" onClick={closeMobileMenu}>LOG IN</Link>
+                            <Link to="/LogIn" className="nav-links-mobile" onClick={closeMobileMenu}>LOG IN</Link>
                         </li>
                     </ul>
-                    {button && <Button to="/login" buttonStyle="btn--outline">
+                    {button && <Button to="/LogIn" buttonStyle="btn--outline">
                         LOG IN
                     </Button>
                     }

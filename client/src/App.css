@@ -614,6 +614,14 @@ ul > li:nth-child(2) > a:hover {
   text-align: left;
 }
 
+.edit-reminder-btn {
+  text-align: center;
+}
+
+.btn.btn-info {
+  width: 65px;
+}
+
 .editreminder-completed {
   text-align: left;
   margin-bottom: 20px;
@@ -839,6 +847,10 @@ div.form-group.reminders > div + .form-label {
 .manage-profile-headers {
   font-size: 20px;
   color: var(--brown);
+}
+
+#manage-profile-actions {
+  text-indent: 10px;
 }
 
 .manage-profile-options {

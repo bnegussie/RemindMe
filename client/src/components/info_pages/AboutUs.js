@@ -19,8 +19,8 @@ function AboutUs() {
                         the task is, this application will help you stay ahead of your every task.
                     </p>
                     <p>
-                        So let us worry about your upcoming tasks, so you can keep moving forward and keep
-                        making the most out of this day!
+                        So let us worry about your upcoming tasks. Simply sign up for a free account                        
+                        so you can keep moving forward and keep making the most out of this day!
                     </p>
                     <br/><br/>
                     <p id="info-subtitle">Image credit:</p>

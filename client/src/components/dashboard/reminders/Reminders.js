@@ -348,7 +348,7 @@ function Reminders({ isAuth }) {
 				<div className="dashboard-btns" onClick={isAuth} onMouseEnter={isAuth}>
 					<CreateReminder />
 
-					<Link className='search-btn-on-dashboard' to="/dashboard/Search">
+					<Link className='search-btn-on-dashboard' to="/Dashboard/Search">
 						<i className="fas fa-search"  />
 					</Link>
 				</div>

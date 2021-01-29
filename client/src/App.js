@@ -12,8 +12,8 @@ import {
 
 // Importing the components:
 import Dashboard from "./components/dashboard/Dashboard";
-import Login from "./components/Login";
-import Register from "./components/Register";
+import LogIn from "./components/LogIn";
+import SignUp from "./components/SignUp";
 import Navbar from "./components/navbar/Navbar";
 import LandingPage from "./components/LandingPage";
 import AboutUs from "./components/info_pages/AboutUs";
@@ -82,7 +82,7 @@ function App() {
               exact path="/" 
               render={props => 
                 isAuthenticated ? (
-                  <Redirect to="/dashboard"/>
+                  <Redirect to="/Dashboard"/>
                 ) : (
                   <LandingPage />
                 )  
@@ -93,7 +93,7 @@ function App() {
               exact path="/aboutus" 
               render={props => 
                 isAuthenticated ? (
-                  <Redirect to="/dashboard"/>
+                  <Redirect to="/Dashboard"/>
                 ) : (
                   <AboutUs />
                 )  
@@ -104,7 +104,7 @@ function App() {
               exact path="/howitworks" 
               render={props => 
                 isAuthenticated ? (
-                  <Redirect to="/dashboard"/>
+                  <Redirect to="/Dashboard"/>
                 ) : (
                   <HowItWorks />
                 )  
@@ -115,7 +115,7 @@ function App() {
               exact path="/faq" 
               render={props => 
                 isAuthenticated ? (
-                  <Redirect to="/dashboard"/>
+                  <Redirect to="/Dashboard"/>
                 ) : (
                   <FAQ />
                 )  
@@ -123,29 +123,29 @@ function App() {
             />
 
             <Route
-              exact path="/login"
+              exact path="/LogIn"
               render={props =>
                 isAuthenticated ? (
-                  <Redirect to="/dashboard" />
+                  <Redirect to="/Dashboard" />
                 ) : (
-                  <Login {...props} setAuth={setAuth} />
+                  <LogIn {...props} setAuth={setAuth} />
                 )
               }
             />
 
             <Route 
-              exact path="/register" 
+              exact path="/SignUp" 
               render={props => 
                 isAuthenticated ? (
-                  <Redirect to="/dashboard"/> 
+                  <Redirect to="/Dashboard"/> 
                 ) : (
-                  <Register {...props} setAuth={setAuth} />
+                  <SignUp {...props} setAuth={setAuth} />
                 )  
               }
             />
 
             <Route 
-              exact path="/dashboard/search" 
+              exact path="/Dashboard/Search" 
               render={props => 
                 isAuthenticated ? (
                   <Search {...props} isAuth={isAuth} />
@@ -156,7 +156,7 @@ function App() {
             />
 
             <Route 
-              exact path="/dashboard" 
+              exact path="/Dashboard" 
               render={props => 
                 isAuthenticated ? (
                   <Dashboard {...props} isAuth={isAuth} />

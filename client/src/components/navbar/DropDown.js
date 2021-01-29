@@ -15,7 +15,7 @@ function DropDown({setAuth, onMouseLeave, closeMobileMenu}) {
 
     let history = useHistory();
 
-    const logout = ((e) => {
+    const logOut = ((e) => {
         e.preventDefault();
         localStorage.removeItem("token");
         setAuth(false);
@@ -23,7 +23,7 @@ function DropDown({setAuth, onMouseLeave, closeMobileMenu}) {
         setDDownClicked(false);
         onMouseLeave();
         closeMobileMenu();
-        toast.success("Successful logout.", {autoClose: 3000});
+        toast.success("You have successfully logged out.", {autoClose: 3000});
     });
 
     function dDownClickHandler() {
@@ -41,7 +41,7 @@ function DropDown({setAuth, onMouseLeave, closeMobileMenu}) {
                                 <Link 
                                     className={item.className} 
                                     to={item.path}
-                                    onClick={item.path === '' ? (e) => logout(e) : (e) => dDownClickHandler()}
+                                    onClick={item.path === '' ? (e) => logOut(e) : (e) => dDownClickHandler()}
                                 >
                                     {item.title}
                                 </Link>

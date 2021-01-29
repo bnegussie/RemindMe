@@ -9,9 +9,9 @@ function HowItWorks() {
                 <div className="info-message">
                     <p>
                         This web application is utilizing the scientific discovery that through 
-                        iterative repetitions, individuals are able to move ideas from their short
-                        term memory to their long term memory, to ensure that you remember all of
-                        your tasks and always remain a few steps ahead.
+                        timely iterations, individuals are able to move ideas from their short
+                        term memory to their long term memory, to ensure that you never forget
+                        your tasks.
                     </p>
                     <p>
                         This web application consists of two reminder features. The first reminder feature is 

@@ -51,8 +51,17 @@ function ManageProfile({ isAuth, setAuth }) {
 				<table className="table">
 					<thead>
 						<tr>
-							<th width="80%" className="manage-profile-headers">Options</th>
-							<th width="20%" className="manage-profile-headers">Actions</th>
+							<th 
+								width="80%" 
+								className="manage-profile-headers">
+								Options
+							</th>
+							<th 
+								width="20%" 
+								className="manage-profile-headers" 
+								id="manage-profile-actions">
+								Actions
+							</th>
 						</tr>
 					</thead>
 					<tbody>

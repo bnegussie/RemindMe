@@ -4,7 +4,7 @@ import Select from "react-select";
 
 import "./../App.css"
 
-const Register = ({ setAuth }) => {
+const SignUp = ({ setAuth }) => {
     
     const [inputs, setInputs] = useState ({
         f_name: "",
@@ -244,4 +244,4 @@ const Register = ({ setAuth }) => {
     );
 };
 
-export default Register;
+export default SignUp;

@@ -212,14 +212,16 @@ function EditReminder({ currReminder, redirectTo }) {
 	return (
 		<Fragment>
 			<div className="edit-reminder-container">
-				<button
-					type="button"
-					className="btn btn-info"
-					data-toggle="modal"
-					data-target={`#id${currReminder.reminder_id}`}
-				>
-					View
-				</button>
+				<div className="edit-reminder-btn">
+					<button
+						type="button"
+						className="btn btn-info"
+						data-toggle="modal"
+						data-target={`#id${currReminder.reminder_id}`}
+					>
+						View
+					</button>
+				</div>
 
 				<div className="modal" id={`id${currReminder.reminder_id}`}>
 					<div className="modal-dialog">

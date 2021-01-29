@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 
 import "./../App.css"
 
-const Login = ({ setAuth }) => {
+const LogIn = ({ setAuth }) => {
 
     const [inputs, setInputs] = useState({
         email: "",
@@ -44,7 +44,7 @@ const Login = ({ setAuth }) => {
 
             localStorage.setItem("token", parseResp.token);
             setAuth(true);
-            toast.success("Successful login!", {autoClose: 3000});
+            toast.success("Successful log in!", {autoClose: 3000});
 
         } catch (error) {
             console.error(error.message);
@@ -54,7 +54,7 @@ const Login = ({ setAuth }) => {
     return (
         <Fragment>
             <div className="login-container">
-                <h1 className="text-center my-5">Login</h1>
+                <h1 className="text-center my-5">Log In</h1>
 
                 <form onSubmit={e => onSubmit(e)} className="form">
                     <div className="form-group">
@@ -91,4 +91,4 @@ const Login = ({ setAuth }) => {
     );
 };
 
-export default Login;
+export default LogIn;
