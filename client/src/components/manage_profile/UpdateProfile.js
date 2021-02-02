@@ -41,7 +41,7 @@ function UpdateProfile() {
 			putHeaders.append("Content-type", "application/json");
 			putHeaders.append("token", localStorage.token);
 
-			const response = await fetch("http://localhost:5000/profile/general", {
+			const response = await fetch("/profile/general", {
                 method: "PUT",
                 headers: putHeaders,
                 body: JSON.stringify(body)
@@ -68,7 +68,7 @@ function UpdateProfile() {
 
 	async function getProfile() {
 		try {
-			const response = await fetch("http://localhost:5000/profile/general", {
+			const response = await fetch("/profile/general", {
 				method: "GET",
 				headers: {token: localStorage.token}
 			});
@@ -112,7 +112,7 @@ function UpdateProfile() {
 
         async function getAllCellphoneCarriers() {
             try {
-                const response = await fetch("http://localhost:5000/dashboard/reminder/cellphone-carriers");
+                const response = await fetch("/dashboard/reminder/cellphone-carriers");
                 const allCarriers = await response.json();
     
                 allCarriers.forEach(function(currCarrier, index) {

@@ -22,7 +22,7 @@ function Reminders({ isAuth }) {
 
 	async function getAllActiveReminders() {
 		try {
-			const response = await fetch("http://localhost:5000/dashboard/reminder/active", {
+			const response = await fetch("/dashboard/reminder/active", {
 				method: "GET",
 				headers: {token: localStorage.token}
 			});
@@ -35,7 +35,7 @@ function Reminders({ isAuth }) {
 
 	async function getAllCompletedReminders() {
 		try {
-			const response = await fetch("http://localhost:5000/dashboard/reminder/completed", {
+			const response = await fetch("/dashboard/reminder/completed", {
 				method: "GET",
 				headers: {token: localStorage.token}
 			});
@@ -48,7 +48,7 @@ function Reminders({ isAuth }) {
 
 	async function getAllOverdueReminders() {
 		try {
-			const response = await fetch("http://localhost:5000/dashboard/reminder/overdue", {
+			const response = await fetch("/dashboard/reminder/overdue", {
 				method: "GET",
 				headers: {token: localStorage.token}
 			});
@@ -61,7 +61,7 @@ function Reminders({ isAuth }) {
 
 	async function getAllReminders() {
 		try {
-			const response = await fetch("http://localhost:5000/dashboard/reminder/all", {
+			const response = await fetch("/dashboard/reminder/all", {
 				method: "GET",
 				headers: {token: localStorage.token}
 			});
@@ -76,7 +76,7 @@ function Reminders({ isAuth }) {
 		try {
 			// eslint-disable-next-line
 			const respActiveReminders = await fetch(
-				`http://localhost:5000/dashboard/reminder/active/${reminder_id}`,
+				`/dashboard/reminder/active/${reminder_id}`,
 				{
 					method: "DELETE",
 					headers: {token: localStorage.token}
@@ -85,7 +85,7 @@ function Reminders({ isAuth }) {
 
 			// eslint-disable-next-line
 			const respCompletedReminders = await fetch(
-				`http://localhost:5000/dashboard/reminder/completed/${reminder_id}`,
+				`/dashboard/reminder/completed/${reminder_id}`,
 				{
 					method: "DELETE",
 					headers: {token: localStorage.token}
@@ -94,7 +94,7 @@ function Reminders({ isAuth }) {
 
 			// eslint-disable-next-line
 			const respOverdueReminders = await fetch(
-				`http://localhost:5000/dashboard/reminder/overdue/${reminder_id}`,
+				`/dashboard/reminder/overdue/${reminder_id}`,
 				{
 					method: "DELETE",
 					headers: {token: localStorage.token}
@@ -103,7 +103,7 @@ function Reminders({ isAuth }) {
 
 			// eslint-disable-next-line
 			const respAllReminders = await fetch(
-				`http://localhost:5000/dashboard/reminder/all/${reminder_id}`,
+				`/dashboard/reminder/all/${reminder_id}`,
 				{
 					method: "DELETE",
 					headers: {token: localStorage.token}
@@ -138,7 +138,7 @@ function Reminders({ isAuth }) {
 				// The Completed checkbox just got the check marked.
 	
 				const respActiveReminders = await fetch(
-					`http://localhost:5000/dashboard/reminder/active/${reminder_id}`, {
+					`/dashboard/reminder/active/${reminder_id}`, {
 						method: "DELETE",
 						headers: {token: localStorage.token}
 					}
@@ -146,7 +146,7 @@ function Reminders({ isAuth }) {
 	
 				// eslint-disable-next-line
 				const respOverdueReminders = await fetch(
-					`http://localhost:5000/dashboard/reminder/overdue/${reminder_id}`, {
+					`/dashboard/reminder/overdue/${reminder_id}`, {
 						method: "DELETE",
 						headers: {token: localStorage.token}
 					}
@@ -167,7 +167,7 @@ function Reminders({ isAuth }) {
 	
 				// eslint-disable-next-line
 				const respAllReminders = await fetch(
-					`http://localhost:5000/dashboard/reminder/all/${reminder_id}`,
+					`/dashboard/reminder/all/${reminder_id}`,
 					{
 						method: "PUT",
 						headers: myHeaders,
@@ -177,7 +177,7 @@ function Reminders({ isAuth }) {
 	
 				// eslint-disable-next-line
 				const respCompletedReminders = await fetch(
-					"http://localhost:5000/dashboard/reminder/completed", {
+					"/dashboard/reminder/completed", {
 						method: "POST",
 						headers: myHeaders,
 						body: JSON.stringify(bodyPlusId)
@@ -188,7 +188,7 @@ function Reminders({ isAuth }) {
 	
 				// eslint-disable-next-line
 				const respCompletedReminders = await fetch(
-					`http://localhost:5000/dashboard/reminder/completed/${reminder_id}`,
+					`/dashboard/reminder/completed/${reminder_id}`,
 					{
 						method: "DELETE",
 						headers: {token: localStorage.token}
@@ -210,7 +210,7 @@ function Reminders({ isAuth }) {
 	
 				// eslint-disable-next-line
 				const respAllReminders = await fetch(
-					`http://localhost:5000/dashboard/reminder/all/${reminder_id}`,
+					`/dashboard/reminder/all/${reminder_id}`,
 					{
 						method: "PUT",
 						headers: myHeaders,
@@ -220,7 +220,7 @@ function Reminders({ isAuth }) {
 	
 				// eslint-disable-next-line
 				const respActiveReminders = await fetch(
-					"http://localhost:5000/dashboard/reminder/active", {
+					"/dashboard/reminder/active", {
 						method: "POST",
 						headers: myHeaders,
 						body: JSON.stringify(bodyPlusId)
@@ -249,14 +249,14 @@ function Reminders({ isAuth }) {
 				 * have the proper decision, before deciding to place a reminder as overdue,
 				 * as to prevent any duplications.
 				 */
-				const respGetAllActiveReminders = await fetch("http://localhost:5000/dashboard/reminder/active", {
+				const respGetAllActiveReminders = await fetch("/dashboard/reminder/active", {
 					method: "GET",
 					headers: {token: localStorage.token}
 				});
 				const allActive = await respGetAllActiveReminders.json();
 
 				const respGetAllOverdueReminders = await fetch(
-					"http://localhost:5000/dashboard/reminder/overdue", {
+					"/dashboard/reminder/overdue", {
 						method: "GET",
 						headers: {token: localStorage.token}
 					});
@@ -310,7 +310,7 @@ function Reminders({ isAuth }) {
 
 							// eslint-disable-next-line
 							const addingToOverdueReminders = await fetch(
-								`http://localhost:5000/dashboard/reminder/overdue`,
+								`/dashboard/reminder/overdue`,
 								{
 									method: "POST",
 									headers: myHeaders,

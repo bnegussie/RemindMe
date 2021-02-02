@@ -10,11 +10,21 @@ const corsLib = require("cors");
 const pool = require("./db");
 require("dotenv").config();
 
+const path = require("path");
+
+// Utilizing environment variables:
+const PORT = process.env.PORT || 5000;
+
 // Allowing client to access data from the client side:
 app.use(expressLib.json());
 
 // Connecting the back & front end:
 app.use(corsLib());
+
+
+if (process.env.NODE_ENV === "production") {
+    app.use(expressLib.static(path.join(__dirname, "client/build")));
+}
 
 
 
@@ -741,6 +751,6 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
 
 
 // Listening to a specific port:
-app.listen(5000, () => {
-    console.log("The server is running on port 5000.");
+app.listen(PORT, () => {
+    console.log(`The server is running on port ${PORT}.`);
 })

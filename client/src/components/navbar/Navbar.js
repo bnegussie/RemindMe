@@ -45,7 +45,7 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
             if (isAuthenticated) {
                 try {
                     const response = await fetch(
-                        "http://localhost:5000/dashboard/user/username", {
+                        "/dashboard/user/username", {
                             method: "GET",
                             headers: {token: localStorage.token}
                     });

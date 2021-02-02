@@ -41,7 +41,7 @@ function CreateReminder() {
 			myHeaders.append("token", localStorage.token);
 
 			// eslint-disable-next-line
-			const respAllReminders = await fetch("http://localhost:5000/dashboard/reminder/all", {
+			const respAllReminders = await fetch("/dashboard/reminder/all", {
 				method: "POST",
 				headers: myHeaders,
 				body: JSON.stringify(body),
@@ -53,7 +53,7 @@ function CreateReminder() {
 			const bodyPlusId = {id, completed, title, desc, dueDate, reminderDate, reminderSent}
 			
 			// eslint-disable-next-line
-			const respActiveReminders = await fetch("http://localhost:5000/dashboard/reminder/active", {
+			const respActiveReminders = await fetch("/dashboard/reminder/active", {
 				method: "POST",
 				headers: myHeaders,
 				body: JSON.stringify(bodyPlusId),
