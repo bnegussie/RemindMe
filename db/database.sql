@@ -1,7 +1,5 @@
 CREATE DATABASE remind_me;
 
--- To allow us to utilize the UUID:
-create extension if not exists "uuid-ossp";
 
 CREATE TABLE users (
     user_id UUID DEFAULT uuid_generate_v4(),
