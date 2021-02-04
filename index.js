@@ -22,10 +22,9 @@ app.use(expressLib.json());
 app.use(corsLib());
 
 
-/* UNCOMMENT THE LINE BELLOW WHEN THIS CODE IS RUNNING IN PRODUCTION -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
- * so the static client side build file can be used. 
-*/
-// app.use(expressLib.static(path.join(__dirname, "client/build")));
+if (process.env.NODE_ENV === "production") {
+    app.use(expressLib.static(path.join(__dirname, "client/build")));
+}
 
 
 
@@ -749,15 +748,6 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
 }
 /************************************** END: Email and Text Message services *********************/
 
-// Catching all other requests and sending them back to the index.html file
-// so they can get redirected approperiately.
-app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'), function(err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-    });
-});
 
 
 // Listening to a specific port:
