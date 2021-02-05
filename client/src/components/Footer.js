@@ -39,7 +39,7 @@ function Footer({ isAuthenticated }) {
 						</div>
                         <div className="modal-body footer">
                             <p>Email: </p>
-                            <p id="footer-email"> brookninfo@gmail.com</p>
+                            <p id="footer-email"> contactus.remindmeee@gmail.com</p>
 						</div>
 						<div className="modal-footer">
 							<button type="button" className="btn btn-danger" data-dismiss="modal">

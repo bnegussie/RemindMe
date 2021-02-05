@@ -230,8 +230,8 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
     let transporter = nodeMailer.createTransport({
         service: process.env.service,
         auth: {
-            user: process.env.userEmail,
-            pass: process.env.userSecret
+            user: process.env.serviceAccount,
+            pass: process.env.serviceSecret
         }
     });
 
@@ -596,8 +596,8 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
     let transporter = nodeMailer.createTransport({
         service: process.env.service,
         auth: {
-            user: process.env.userEmail,
-            pass: process.env.userSecret
+            user: process.env.serviceAccount,
+            pass: process.env.serviceSecret
         }
     });
 
