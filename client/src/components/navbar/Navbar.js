@@ -35,6 +35,11 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
 
     useEffect(() => {
         showButton();
+        window.addEventListener("resize", showButton);
+        
+        return () => {
+            window.removeEventListener("resize", showButton);
+        }
     }, []);
 
     // Getting the username to display on the navbar button:
@@ -71,8 +76,6 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
             }
         }
     }, [isAuthenticated]);
-
-    window.addEventListener("resize", showButton);
 
     function checkIsAuth() {
         isAuth();

@@ -239,6 +239,13 @@ function Reminders({ isAuth }) {
 		getAllCompletedReminders();
 		getAllReminders();
 		getAllOverdueReminders();
+
+		return () => {
+			setAllActiveReminders([]);
+			setAllCompletedReminders([]);
+			setAllOverdueReminders([]);
+			setAllReminders([]);
+		}
 	}, []);
 
 	// For the Overdue navigation tab:
