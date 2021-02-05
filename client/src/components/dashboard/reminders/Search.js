@@ -220,7 +220,12 @@ function Search({ isAuth }) {
     }
 
     useEffect(() => {
-        getAllReminders();
+		getAllReminders();
+		
+		return () => {
+			setAllReminders([]);
+			setFilteredReminders([]);
+		}
     }, [])
 
     return (

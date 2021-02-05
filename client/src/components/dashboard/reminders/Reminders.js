@@ -343,7 +343,11 @@ function Reminders({ isAuth }) {
 			}
 		}
 		
-		getLatestOverdueReminders();		
+		getLatestOverdueReminders();
+
+		return () => {
+			setAllOverdueReminders([]);
+		}	
 	}, []);
 
 

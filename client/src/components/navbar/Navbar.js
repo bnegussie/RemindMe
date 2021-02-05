@@ -44,8 +44,6 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
 
     // Getting the username to display on the navbar button:
     useEffect(() => {
-        getUsername();
-
         async function getUsername() {
             if (isAuthenticated) {
                 try {
@@ -74,6 +72,12 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
             } else {
                 setUserName("");
             }
+        }
+
+        getUsername();
+
+        return () => {
+            setUserName("");
         }
     }, [isAuthenticated]);
 

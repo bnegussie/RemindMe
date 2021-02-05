@@ -12,7 +12,6 @@ function UpdateProfile() {
 	const [cPhoneCarrierEmailExtn, setCPhoneCarrierEmailExtn] = useState("");
 	const [pNum, setPNum] = useState("");
 
-	// eslint-disable-next-line
     const [allCellphoneCarriers, setAllCellphoneCarriers] = useState([]);
 
 	async function update(e) {
@@ -125,12 +124,25 @@ function UpdateProfile() {
             } catch (error) {
                 console.error(error.message);
             }
-        }
+		}
+		
+		return () => {
+			setAllCellphoneCarriers([]);
+		}
 	}, [allCellphoneCarriers]);
 	
 
 	useEffect(() => {
 		getProfile();
+
+		return () => {
+			setFName("");
+			setLName("");
+			setEmail("");
+			setCPhoneCarrier("");
+			setCPhoneCarrierEmailExtn("");
+			setPNum("");
+		}
 	}, []);
 
 	
