@@ -16,7 +16,6 @@ const SignUp = ({ setAuth }) => {
     });
     const [cPhoneCarrier, setCPhoneCarrier] = useState("");
     const [cPhoneCarrierEmailExtn, setCPhoneCarrierEmailExtn] = useState("");
-    // eslint-disable-next-line
     const [allCellphoneCarriers, setAllCellphoneCarriers] = useState([]);
 
     const { f_name, l_name, email, p_num, pwd, pwd_confirm } = inputs;
@@ -122,6 +121,10 @@ const SignUp = ({ setAuth }) => {
             } catch (error) {
                 console.error(error.message);
             }
+        }
+
+        return () => {
+            setAllCellphoneCarriers([]);
         }
     }, [allCellphoneCarriers]);
     

@@ -95,6 +95,10 @@ function ChangeGeneralReminderTime() {
 	useEffect(() => {
 		getGRT();
 		
+		return () => {
+			setGeneralReminderTime(null);
+			setReminderHour("");
+		}
 	}, []);
 	
 
