@@ -431,7 +431,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
         
         <br/>
         <center>
-            <a href='http://localhost:3000'>
+            <a href='www.RemindMeee.com'>
                 <button style="font-weight: bold; font-size: 15px;">
                     Click here to view all of your reminders
                 </button>
@@ -476,7 +476,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
             ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day!
             ${allSMSReminders}
             Click here to view all of your reminders: 
-            http://localhost:3000
+            www.RemindMeee.com
             `
         };
 
@@ -670,7 +670,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
         
         <br/>
         <center>
-            <a href='http://localhost:3000'>
+            <a href='www.RemindMeee.com'>
                 <button style="font-weight: bold; font-size: 15px;">
                     Click here to view all of your reminders
                 </button>
@@ -734,7 +734,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             ${initialGreeting} which you wanted to be reminded about. Make sure to keep moving forward and keep making the most out of this day!
             ${smsReminders}
             Click here to view all of your reminders: 
-            http://localhost:3000 `
+            www.RemindMeee.com `
         };
 
         transporter.sendMail(smsInfo, function(error, data) {
