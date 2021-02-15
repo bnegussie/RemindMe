@@ -228,11 +228,14 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
                                             
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
-        service: process.env.service,
+        host: process.env.host,
         auth: {
             user: process.env.serviceAccount,
             pass: process.env.serviceSecret
-        }
+        },
+		tls: {
+			rejectUnauthorized: process.env.usingTLS
+		}
     });
 
     let todayEmail = "", tomorrowEmail = "", inTwoDaysEmail = "", inThreeDaysEmail = "", 
@@ -442,10 +445,13 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
 
     transporter.sendMail(emailInfo, async function(error, data) {
         if (error) {
-            console.log("An error occurred while sending the general reminder email.");
-            console.error(error.message);
+            let errorTime = (new Date()).toLocaleString();
+            console.log(errorTime + ": An error occurred while sending the general reminder email.");
+            console.error("error = ", [error]);
+            console.log("");
         } else {
-            console.log("The general reminder email was successfully sent.");
+            let sentTime = (new Date()).toLocaleString();
+            console.log(sentTime + ": The general reminder email was successfully sent.");
 
             const previousGRT = new Date( generalReminderTime );
             const nowGRT = new Date();
@@ -482,10 +488,15 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
 
         transporter.sendMail(smsInfo, function(error, data) {
             if (error) {
-                console.log("An error occurred while sending the general reminder text message.");
-                console.error(error.message);
+                let errorTime = (new Date()).toLocaleString();
+                console.log(errorTime + 
+                            ": An error occurred while sending the general reminder text message.");
+                console.error("error = ", [error]);
+                console.log("");
             } else {
-                console.log("The general reminder text message was successfully sent.");
+                let sentTime = (new Date()).toLocaleString();
+                console.log(sentTime + 
+                            ": The general reminder text message was successfully sent.");
             }
         });
     }
@@ -594,10 +605,13 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
     
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
-        service: process.env.service,
+        host: process.env.host,
         auth: {
             user: process.env.serviceAccount,
             pass: process.env.serviceSecret
+        },
+        tls: {
+            rejectUnauthorized: process.env.usingTLS
         }
     });
 
@@ -681,10 +695,13 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
 
     transporter.sendMail(emailInfo, function(error, data) {
         if (error) {
-            console.log("An error occurred while sending the specified reminder email.");
-            console.error(error.message);
+            let errorTime = (new Date()).toLocaleString();
+            console.log(errorTime + ": An error occurred while sending the specified reminder email.");
+            console.error("error = ", [error]);
+            console.log("");
         } else {
-            console.log("The specified reminder email was successfully sent.");
+            let sentTime = (new Date()).toLocaleString();
+            console.log(sentTime + ": The specified reminder email was successfully sent.");
             
             reminderIdList.forEach(async function(reminderId, index) {
 
@@ -739,10 +756,14 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
 
         transporter.sendMail(smsInfo, function(error, data) {
             if (error) {
-                console.log("An error occurred while sending the specified reminder text message.");
-                console.error(error.message);
+                let errorTime = (new Date()).toLocaleString();
+                console.log(errorTime + 
+                            ": An error occurred while sending the specified reminder text message.");
+                console.error("error = ", [error]);
+                console.log("");
             } else {
-                console.log("The specified reminder text message was successfully sent.");
+                let sentTime = (new Date()).toLocaleString();
+                console.log(sentTime + ": The specified reminder text message was successfully sent.");
             }
         });
     }
