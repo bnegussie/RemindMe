@@ -76,7 +76,7 @@ const SignUp = ({ setAuth }) => {
                 return false;
             }
             
-            const response = await fetch("/auth/register", {
+            const response = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: {"Content-type": "application/json"},
                 body: JSON.stringify(body)
@@ -108,7 +108,7 @@ const SignUp = ({ setAuth }) => {
 
         async function getAllCellphoneCarriers() {
             try {
-                const response = await fetch("/dashboard/reminder/cellphone-carriers");
+                const response = await fetch("/api/dashboard/reminder/cellphone-carriers");
                 const allCarriers = await response.json();
     
                 allCarriers.forEach(function(currCarrier, index) {

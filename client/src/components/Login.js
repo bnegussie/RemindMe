@@ -28,7 +28,7 @@ const LogIn = ({ setAuth }) => {
                 return false;
             }
 
-            const response = await fetch("/auth/login", {
+            const response = await fetch("/api/auth/login", {
                 method: "POST",
                 headers: {"Content-type": "application/json"},
                 body: JSON.stringify(body)

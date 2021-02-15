@@ -51,7 +51,7 @@ function EditReminder({ currReminder, redirectTo }) {
 			// The possibility that the Completed check box state being 
 			// altered makes this a bit more complicated function. 
 
-			const respAllGetReminder = await fetch(`/dashboard/reminder/all/${id}`, {
+			const respAllGetReminder = await fetch(`/api/dashboard/reminder/all/${id}`, {
 				method: "GET",
 				headers: {token: localStorage.token}
 			});
@@ -69,7 +69,7 @@ function EditReminder({ currReminder, redirectTo }) {
 				if (completed) {
 					// eslint-disable-next-line
 					const respUpdatedCompletedReminder = await fetch(
-						`/dashboard/reminder/completed/${id}`, 
+						`/api/dashboard/reminder/completed/${id}`, 
 						{
 							method: "PUT",
 							headers: myHeaders,
@@ -79,7 +79,7 @@ function EditReminder({ currReminder, redirectTo }) {
 				} else {
 					// eslint-disable-next-line
 					const respUpdatedActiveReminder = await fetch(
-						`/dashboard/reminder/active/${id}`, {
+						`/api/dashboard/reminder/active/${id}`, {
 							method: "PUT",
 							headers: myHeaders,
 							body: JSON.stringify(body)
@@ -90,7 +90,7 @@ function EditReminder({ currReminder, redirectTo }) {
 					const getCurrentTime = ( new Date() ).getTime();
 					const dueTime = ( new Date(dueDate) ).getTime();
 
-					const respAllOverdue = await fetch("/dashboard/reminder/overdue", {
+					const respAllOverdue = await fetch("/api/dashboard/reminder/overdue", {
 						method: "GET",
 						headers: {token: localStorage.token}
 					});
@@ -109,7 +109,7 @@ function EditReminder({ currReminder, redirectTo }) {
 								// and is currently overdue, so updating the Overdue list.
 								// eslint-disable-next-line
 								const respUpdateOfOverdueReminder = await fetch(
-									`/dashboard/reminder/overdue/${id}`, 
+									`/api/dashboard/reminder/overdue/${id}`, 
 									{
 										method: "PUT",
 										headers: myHeaders,
@@ -123,7 +123,7 @@ function EditReminder({ currReminder, redirectTo }) {
 
 								// eslint-disable-next-line
 								const respDeleteOfOverdueReminder = await fetch(
-									`/dashboard/reminder/overdue/${id}`, 
+									`/api/dashboard/reminder/overdue/${id}`, 
 									{
 										method: "DELETE",
 										headers: {token: localStorage.token}
@@ -142,21 +142,21 @@ function EditReminder({ currReminder, redirectTo }) {
 				if (completed) {
 					// eslint-disable-next-line
 					const respDeletedActiveReminder = await fetch(
-						`/dashboard/reminder/active/${id}`, {
+						`/api/dashboard/reminder/active/${id}`, {
 							method: "DELETE",
 							headers: {token: localStorage.token}
 					});
 
 					// eslint-disable-next-line
 					const respDeletedOverdueReminder = await fetch(
-						`/dashboard/reminder/overdue/${id}`, {
+						`/api/dashboard/reminder/overdue/${id}`, {
 							method: "DELETE",
 							headers: {token: localStorage.token}
 					});
 
 					// eslint-disable-next-line
 					const respAddingToCompleted = await fetch(
-						"/dashboard/reminder/completed", {
+						"/api/dashboard/reminder/completed", {
 							method: "POST",
 							headers: myHeaders,
 							body: JSON.stringify(bodyPlusId)
@@ -164,14 +164,14 @@ function EditReminder({ currReminder, redirectTo }) {
 				} else {
 					// eslint-disable-next-line
 					const respDeletedCompletedReminder = await fetch(
-						`/dashboard/reminder/completed/${id}`, {
+						`/api/dashboard/reminder/completed/${id}`, {
 							method: "DELETE",
 							headers: {token: localStorage.token}
 					});
 
 					// eslint-disable-next-line
 					const respAddingToCompleted = await fetch(
-						"/dashboard/reminder/active", {
+						"/api/dashboard/reminder/active", {
 							method: "POST",
 							headers: myHeaders,
 							body: JSON.stringify(bodyPlusId)
@@ -181,7 +181,7 @@ function EditReminder({ currReminder, redirectTo }) {
 
 			// eslint-disable-next-line
 			const respUpdatedAllReminder = await fetch(
-				`/dashboard/reminder/all/${id}`, {
+				`/api/dashboard/reminder/all/${id}`, {
 					method: "PUT",
 					headers: myHeaders,
 					body: JSON.stringify(body)

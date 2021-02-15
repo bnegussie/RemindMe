@@ -35,7 +35,7 @@ function ChangePassword() {
             pwdHeaders.append("Content-type", "application/json");
             pwdHeaders.append("token", localStorage.token);
 
-            const response = await fetch("/profile/pwd", {
+            const response = await fetch("/api/profile/pwd", {
                 method: "PUT",
                 headers: pwdHeaders,
                 body: JSON.stringify(body)

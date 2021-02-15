@@ -34,11 +34,11 @@ app.use(corsLib());
 // SignUp and login routes:
 // Every time this path is hit in the URL, then it's going to go 
 // to that route file and run what is there:
-app.use("/auth", require("./routes/jwtAuth"));
+app.use("/api/auth", require("./routes/jwtAuth"));
 
-app.use("/dashboard", require("./routes/dashboard"));
+app.use("/api/dashboard", require("./routes/dashboard"));
 
-app.use("/profile", require("./routes/manageProfile"))
+app.use("/api/profile", require("./routes/manageProfile"))
 
 
 

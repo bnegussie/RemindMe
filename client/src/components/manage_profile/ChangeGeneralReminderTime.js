@@ -12,7 +12,7 @@ function ChangeGeneralReminderTime() {
 
 	async function getGRT() {
 		try {
-			const response = await fetch("/profile/general/reminder", {
+			const response = await fetch("/api/profile/general/reminder", {
 				method: "GET",
 				headers: {"token": localStorage.token}
 			});
@@ -70,7 +70,7 @@ function ChangeGeneralReminderTime() {
 			gRTHeaders.append("Content-type", "application/json");
 			gRTHeaders.append("token", localStorage.token);
 
-			const response = await fetch("/profile/general/reminder", {
+			const response = await fetch("/api/profile/general/reminder", {
 				method: "PUT",
 				headers: gRTHeaders,
 				body: JSON.stringify(body)
