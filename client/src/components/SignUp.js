@@ -108,7 +108,7 @@ const SignUp = ({ setAuth }) => {
 
         async function getAllCellphoneCarriers() {
             try {
-                const response = await fetch("/dashboard/reminder/cellphone-carriers");
+                const response = await fetch("/api/dashboard/reminder/cellphone-carriers");
                 const allCarriers = await response.json();
     
                 allCarriers.forEach(function(currCarrier, index) {

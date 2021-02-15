@@ -48,7 +48,7 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
             if (isAuthenticated) {
                 try {
                     const response = await fetch(
-                        "/dashboard/user/username", {
+                        "/api/dashboard/user/username", {
                             method: "GET",
                             headers: {token: localStorage.token}
                     });

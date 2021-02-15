@@ -36,7 +36,7 @@ app.use(corsLib());
 // to that route file and run what is there:
 app.use("/auth", require("./routes/jwtAuth"));
 
-app.use("/dashboard", require("./routes/dashboard"));
+app.use("/api/dashboard", require("./routes/dashboard"));
 
 app.use("/profile", require("./routes/manageProfile"))
 
