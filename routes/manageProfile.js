@@ -42,8 +42,8 @@ router.put("/general", authorization, async(req, res) => {
         }
 
         if (pNum !== "") {
-            const userWithPNum = await pool.query("SELECT * FROM users WHERE user_p_num = $1", 
-                [pNum]
+            const userWithPNum = await pool.query("SELECT * FROM users WHERE user_p_num = $1 AND user_id != $2", 
+                [pNum, userId]
             );
             if (userWithPNum.rows.length !== 0) {
                 // 401 = unauthenticated (user already exists):
