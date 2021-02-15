@@ -40,7 +40,7 @@ function UpdateProfile() {
 			putHeaders.append("Content-type", "application/json");
 			putHeaders.append("token", localStorage.token);
 
-			const response = await fetch("/profile/general", {
+			const response = await fetch("/api/profile/general", {
                 method: "PUT",
                 headers: putHeaders,
                 body: JSON.stringify(body)
@@ -67,7 +67,7 @@ function UpdateProfile() {
 
 	async function getProfile() {
 		try {
-			const response = await fetch("/profile/general", {
+			const response = await fetch("/api/profile/general", {
 				method: "GET",
 				headers: {token: localStorage.token}
 			});

@@ -21,7 +21,7 @@ function ManageProfile({ isAuth, setAuth }) {
 
 	async function deleteAccount() {
 		try {
-			const response = await fetch("/profile/account", {
+			const response = await fetch("/api/profile/account", {
 				method: "DELETE",
 				headers: {"token": localStorage.token}
 			});

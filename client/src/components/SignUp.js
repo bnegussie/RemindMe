@@ -76,7 +76,7 @@ const SignUp = ({ setAuth }) => {
                 return false;
             }
             
-            const response = await fetch("/auth/register", {
+            const response = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: {"Content-type": "application/json"},
                 body: JSON.stringify(body)
