@@ -38,17 +38,7 @@ app.use("/api/auth", require("./routes/jwtAuth"));
 
 app.use("/api/dashboard", require("./routes/dashboard"));
 
-app.use("/api/profile", require("./routes/manageProfile"));
-
-// Catching all other requests and sending them back to the index.html file
-// so they can get redirected approperiately.
-app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'), function(err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-    });
-});
+app.use("/api/profile", require("./routes/manageProfile"))
 
 
 
@@ -236,8 +226,8 @@ async function triggerGeneralEmail() {
 async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
                                         userPNum, userFName, numOfReminders, userId, generalReminderTime) {
                                             
-    // Step 1: create a transporter object.
-    let emailTransporter = nodeMailer.createTransport({
+    // Step 1: create a reuseable transporter object.
+    let transporter = nodeMailer.createTransport({
         host: process.env.host,
         auth: {
             user: process.env.serviceAccount,
@@ -453,7 +443,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
         `
     };
 
-    emailTransporter.sendMail(emailInfo, async function(error, data) {
+    transporter.sendMail(emailInfo, async function(error, data) {
         if (error) {
             let errorTime = (new Date()).toLocaleString();
             console.log(errorTime + ": An error occurred while sending the general reminder email.");
@@ -462,8 +452,6 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
         } else {
             let sentTime = (new Date()).toLocaleString();
             console.log(sentTime + ": The general reminder email was successfully sent.");
-
-            emailTransporter.close();
 
             const previousGRT = new Date( generalReminderTime );
             const nowGRT = new Date();
@@ -485,18 +473,6 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
     // Checking if the phone number was provided before sending out an SMS:
     const userPNumNoSpaces = userPNum.replace(/\s/g,'');
     if (userPNumNoSpaces !== '') {
-
-        let smsTransporter = nodeMailer.createTransport({
-            host: process.env.host,
-            auth: {
-                user: process.env.serviceAccount,
-                pass: process.env.serviceSecret
-            },
-            tls: {
-                rejectUnauthorized: process.env.usingTLS
-            }
-        });
-
         // Step 2, part 2: sending text message with defined transport object:
         let smsInfo = {
             from: `RemindMe <${process.env.serviceEmail}>`,
@@ -510,7 +486,7 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
             `
         };
 
-        smsTransporter.sendMail(smsInfo, function(error, data) {
+        transporter.sendMail(smsInfo, function(error, data) {
             if (error) {
                 let errorTime = (new Date()).toLocaleString();
                 console.log(errorTime + 
@@ -521,8 +497,6 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
                 let sentTime = (new Date()).toLocaleString();
                 console.log(sentTime + 
                             ": The general reminder text message was successfully sent.");
-
-                smsTransporter.close();
             }
         });
     }
@@ -629,8 +603,8 @@ async function triggerSpecifiedReminderEmailAndSMS() {
 async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn, userPNum, userFName,
                                         userId, reminderIdList) {
     
-    // Step 1: create a transporter object.
-    let emailTransporter = nodeMailer.createTransport({
+    // Step 1: create a reuseable transporter object.
+    let transporter = nodeMailer.createTransport({
         host: process.env.host,
         auth: {
             user: process.env.serviceAccount,
@@ -719,7 +693,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
         `
     };
 
-    emailTransporter.sendMail(emailInfo, function(error, data) {
+    transporter.sendMail(emailInfo, function(error, data) {
         if (error) {
             let errorTime = (new Date()).toLocaleString();
             console.log(errorTime + ": An error occurred while sending the specified reminder email.");
@@ -728,8 +702,6 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
         } else {
             let sentTime = (new Date()).toLocaleString();
             console.log(sentTime + ": The specified reminder email was successfully sent.");
-
-            emailTransporter.close();
             
             reminderIdList.forEach(async function(reminderId, index) {
 
@@ -770,18 +742,6 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
     // Checking if the phone number was provided before sending out an SMS:
     const userPNumNoSpaces = userPNum.replace(/\s/g,'');
     if (userPNumNoSpaces !== '') {
-
-        let smsTransporter = nodeMailer.createTransport({
-            host: process.env.host,
-            auth: {
-                user: process.env.serviceAccount,
-                pass: process.env.serviceSecret
-            },
-            tls: {
-                rejectUnauthorized: process.env.usingTLS
-            }
-        });
-
         // Step 2, part 2: sending a text message with defined transport object:
         let smsInfo = {
             from: `RemindMe <${process.env.serviceEmail}>`,
@@ -794,7 +754,7 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             www.RemindMeee.com `
         };
 
-        smsTransporter.sendMail(smsInfo, function(error, data) {
+        transporter.sendMail(smsInfo, function(error, data) {
             if (error) {
                 let errorTime = (new Date()).toLocaleString();
                 console.log(errorTime + 
@@ -804,14 +764,21 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             } else {
                 let sentTime = (new Date()).toLocaleString();
                 console.log(sentTime + ": The specified reminder text message was successfully sent.");
-
-                smsTransporter.close();
             }
         });
     }
 }
 /************************************** END: Email and Text Message services *********************/
 
+// Catching all other requests and sending them back to the index.html file
+// so they can get redirected approperiately.
+app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'), function(err) {
+        if (err) {
+            res.status(500).send(err);
+        }
+    });
+});
 
 // Listening to a specific port:
 app.listen(PORT, () => {
