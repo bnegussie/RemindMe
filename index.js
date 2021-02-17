@@ -38,12 +38,21 @@ app.use("/api/auth", require("./routes/jwtAuth"));
 
 app.use("/api/dashboard", require("./routes/dashboard"));
 
-app.use("/api/profile", require("./routes/manageProfile"))
+app.use("/api/profile", require("./routes/manageProfile"));
+
+// Catching all other requests and sending them back to the index.html file
+// so they can get redirected approperiately.
+app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'), function(err) {
+        if (err) {
+            res.status(500).send(err);
+        }
+    });
+});
 
 
 
 /************************************** START: Email and Text Message services *******************/
-
 async function processAllUserReminders() {
     try {
         // The way in which this data is processed is reversed so this script will end up
@@ -103,16 +112,17 @@ setTimeout(function() {
     // Cheching every hour because users can adjust their General Reminder to different hours of the day.
     // And since the users can live in different timezones, we want the system to send the email
     // at the appropriate time.
-    setInterval(triggerGeneralEmail, (1000 * 60 * 60));
+    setInterval(triggerGeneralReminder, (1000 * 60 * 60));
 
     if (initialGRHasNotBeenSent) {
         initialGRHasNotBeenSent = false;
-        triggerGeneralEmail();
+        triggerGeneralReminder();
     }
 
 }, nextAvailableGR);
 
-async function triggerGeneralEmail() {
+
+async function triggerGeneralReminder() {
     try {
         const allUserReminders = await processAllUserReminders();
 
@@ -126,11 +136,30 @@ async function triggerGeneralEmail() {
             const thisSpecificMoment = new Date(thisMoment.getFullYear(), thisMoment.getMonth(), 
                                             thisMoment.getDate(), thisMoment.getHours(), 0, 0, 0);
             const specifiedTime = new Date( allActive[0].user_general_reminder_time );
-            // Checking if our server failed to send a general reminder, maybe because it was down:
-
+            
+            // Checking if our server failed to send a general reminder, maybe because it was down.
             // Either the server failed to send a general reminder, or this was the time the user
             // has specified to get their general email reminder:
             if ( specifiedTime.getTime()  <= thisSpecificMoment.getTime() ) {
+                
+                // Quickly updating the DB to prevent any competition from threads as
+                // to prevent duplicating reminders being sent out:
+                const previousGRT = new Date( allActive[0].user_general_reminder_time );
+                const nowGRT = new Date();
+                const newGRT = new Date( nowGRT.getFullYear(), nowGRT.getMonth(), ( nowGRT.getDate() + 1 ),
+                                        previousGRT.getHours(), 0, 0, 0 );
+
+                try {
+                    // Updating the user's General Reminder Time:
+                    const updateGRT = await pool.query(
+                        "UPDATE users SET user_general_reminder_time = $1 WHERE user_id = $2;",
+                            [newGRT, allActive[0].user_id]
+                    );
+                } catch (error) {
+                    console.error(error.message);
+                }
+                
+                
                 const userId = allActive[0].user_id;
                 const generalReminderTime = allActive[0].user_general_reminder_time;
                 const userEmail = allActive[0].user_email;
@@ -142,9 +171,6 @@ async function triggerGeneralEmail() {
                 var activeLength = allActive.length;
                 var activeIndex = 0;
 
-                if (activeLength === 0) {
-                    return
-                }
 
                 const today = thisSpecificMoment;
                 var oneWeek = new Date();
@@ -213,8 +239,8 @@ async function triggerGeneralEmail() {
                     activeIndex++;
                 }
 
-                sendGeneralReminderEmail(reminders, userEmail, userCPCarrierEmailExtn, 
-                                        userPNum, userFName, numOfReminders, userId, generalReminderTime);
+                sendGeneralReminder(reminders, userEmail, userCPCarrierEmailExtn, userPNum,
+                                    userFName, numOfReminders, userId, generalReminderTime);
             }
         });
 
@@ -223,8 +249,8 @@ async function triggerGeneralEmail() {
     }
 }
 
-async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn, 
-                                        userPNum, userFName, numOfReminders, userId, generalReminderTime) {
+async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userPNum,
+                                    userFName, numOfReminders, userId, generalReminderTime) {
                                             
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
@@ -449,24 +475,26 @@ async function sendGeneralReminderEmail(req, userEmail, userCPCarrierEmailExtn,
             console.log(errorTime + ": An error occurred while sending the general reminder email.");
             console.error("error = ", [error]);
             console.log("");
-        } else {
-            let sentTime = (new Date()).toLocaleString();
-            console.log(sentTime + ": The general reminder email was successfully sent.");
 
+            // Changing the General Reminder Time back since the reminder was not sent:
             const previousGRT = new Date( generalReminderTime );
             const nowGRT = new Date();
-            const newGRT = new Date( nowGRT.getFullYear(), nowGRT.getMonth(), ( nowGRT.getDate() + 1 ),
+            const pushedBackGRT = new Date( nowGRT.getFullYear(), nowGRT.getMonth(), ( nowGRT.getDate() - 1 ),
                                 previousGRT.getHours(), 0, 0, 0 );
 
             try {
-                // Updating the user's General Reminder Time:
                 const updateGRT = await pool.query(
                     "UPDATE users SET user_general_reminder_time = $1 WHERE user_id = $2;",
-                        [newGRT, userId]
+                        [pushedBackGRT, userId]
                 );
+
             } catch (error) {
                 console.error(error.message);
             }
+
+        } else {
+            let sentTime = (new Date()).toLocaleString();
+            console.log(sentTime + ": The general reminder email was successfully sent.");
         }
     });
 
@@ -534,19 +562,18 @@ if (currentMinute < possibleMinutes[1]) {
 const remainingMS = nextAvailable - now;
 
 setTimeout(function() {
-    setInterval(triggerSpecifiedReminderEmailAndSMS, (1000 * 60 * 15));
+    setInterval(triggerSpecifiedReminder, (1000 * 60 * 15));
 
     if (initialSpecificReminderHasNotBeenSent) {
         initialSpecificReminderHasNotBeenSent = false;
-        triggerSpecifiedReminderEmailAndSMS();
+        triggerSpecifiedReminder();
     }
 }, remainingMS);
 
 
 
 
-
-async function triggerSpecifiedReminderEmailAndSMS() {
+async function triggerSpecifiedReminder() {
     const allUserReminders = await processAllUserReminders();
 
     allUserReminders.forEach(function(currUserAllActiveReminders, index) {
@@ -577,9 +604,15 @@ async function triggerSpecifiedReminderEmailAndSMS() {
                                 specifiedReminder.getMonth(), specifiedReminder.getDate(), 
                                 specifiedReminder.getHours(), specifiedReminder.getMinutes(), 0, 0);
 
-            if ( updatedSpecifiedReminder.getTime() === currentReminderTime.getTime() || 
-                (updatedSpecifiedReminder.getTime() < currentReminderTime.getTime() && !activeReminder.reminder_reminder_sent) ) {
 
+            if ( updatedSpecifiedReminder.getTime() <= currentReminderTime.getTime() && 
+                !activeReminder.reminder_reminder_sent ) {
+
+                // Quickly updating the DB that this reminder has been sent, as to prevent any 
+                // duplicate reminders being sent out.
+                updateDBReminderSent(true, userId, activeReminder.reminder_id);
+
+                
                 var dateOptions = { dateStyle: "full", timeStyle: "short" }
 
                 reminders.push( activeReminder.reminder_title );
@@ -594,14 +627,14 @@ async function triggerSpecifiedReminderEmailAndSMS() {
         });
 
         if (reminders.length > 0) {
-            sendSpecifiedReminderEmail(reminders, userEmail, userCPCarrierEmailExtn, userPNum, userFName,
+            sendSpecifiedReminder(reminders, userEmail, userCPCarrierEmailExtn, userPNum, userFName,
                                     userId, reminderIdList);
         }
     });
 }
 
-async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn, userPNum, userFName,
-                                        userId, reminderIdList) {
+async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, userPNum, userFName,
+                                    userId, reminderIdList) {
     
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
@@ -699,43 +732,16 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
             console.log(errorTime + ": An error occurred while sending the specified reminder email.");
             console.error("error = ", [error]);
             console.log("");
+
+            // Updating the DB that the reminder has failed to be sent properly:
+            reminderIdList.forEach(async function(reminderId, index) {
+
+                updateDBReminderSent(false, userId, reminderId);
+            });
+
         } else {
             let sentTime = (new Date()).toLocaleString();
             console.log(sentTime + ": The specified reminder email was successfully sent.");
-            
-            reminderIdList.forEach(async function(reminderId, index) {
-
-                try {
-                    // Updating the DB that this reminder has been sent.-------------------------------------
-                    const updateActiveReminders = await pool.query(
-                        "UPDATE active_reminders SET reminder_reminder_sent = $1 WHERE user_id = $2 AND reminder_id = $3;",
-                        [true, userId, reminderId]
-                    );
-
-                    const updateAllReminders = await pool.query(
-                        "UPDATE all_reminders SET reminder_reminder_sent = $1 WHERE user_id = $2 AND reminder_id = $3;",
-                        [true, userId, reminderId]
-                    );
-
-                    // Checking if the Overdue table has this reminder, and if so, 
-                    // update the sent state as well:
-                    const checkOverdueContains = await pool.query(
-                        "SELECT * FROM overdue_reminders WHERE user_id = $1 AND reminder_id = $2;", 
-                        [userId, reminderId]
-                    );
-
-                    if (checkOverdueContains.rows.length > 0) {
-                        const updateOverdueReminders = await pool.query(
-                            "UPDATE overdue_reminders SET reminder_reminder_sent = $1 WHERE user_id = $2 AND reminder_id = $3;",
-                            [true, userId, reminderId]
-                        );
-                    }
-                    // Finished updating the DB that this reminder has been sent.----------------------------
-                
-                } catch (error) {
-                    console.error(error.message);
-                }
-            });
         }
     });
 
@@ -768,17 +774,40 @@ async function sendSpecifiedReminderEmail(req, userEmail, userCPCarrierEmailExtn
         });
     }
 }
+
+async function updateDBReminderSent(sent, userId, reminderId) {
+    
+    try {
+        const updateActiveReminders = await pool.query(
+            "UPDATE active_reminders SET reminder_reminder_sent = $1 WHERE user_id = $2 AND reminder_id = $3;",
+            [sent, userId, reminderId]
+        );
+
+        const updateAllReminders = await pool.query(
+            "UPDATE all_reminders SET reminder_reminder_sent = $1 WHERE user_id = $2 AND reminder_id = $3;",
+            [sent, userId, reminderId]
+        );
+
+        // Checking if the Overdue table has this reminder, and if so, 
+        // update the sent state as well:
+        const checkOverdueContains = await pool.query(
+            "SELECT * FROM overdue_reminders WHERE user_id = $1 AND reminder_id = $2;", 
+            [userId, reminderId]
+        );
+
+        if (checkOverdueContains.rows.length > 0) {
+            const updateOverdueReminders = await pool.query(
+                "UPDATE overdue_reminders SET reminder_reminder_sent = $1 WHERE user_id = $2 AND reminder_id = $3;",
+                [sent, userId, reminderId]
+            );
+        }
+    
+    } catch (error) {
+        console.error(error.message);
+    }
+}
 /************************************** END: Email and Text Message services *********************/
 
-// Catching all other requests and sending them back to the index.html file
-// so they can get redirected approperiately.
-app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'), function(err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-    });
-});
 
 // Listening to a specific port:
 app.listen(PORT, () => {
