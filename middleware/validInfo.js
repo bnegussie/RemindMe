@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
         return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userEmail);
     }
   
-    if (req.path === "/register") {
+    if (req.path === "/signup") {
         const {f_name, l_name, email, p_num, pwd} = req.body;
 
         if (![f_name, l_name, email, pwd].every(Boolean)) {
