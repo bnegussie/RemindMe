@@ -50,6 +50,12 @@ const SignUp = ({ setAuth }) => {
             generalReminderTime.setSeconds(0);
             generalReminderTime.setMilliseconds(0);
 
+            /* Making sure that the first General Daily Reminder, our new user gets, will be sent
+             * out the day after they have signed up because the Ensure-GeneralReminder feature 
+             * will immediately kick off a General Reminder at the next full hour.
+             */
+            generalReminderTime.setDate( generalReminderTime.getDate() + 1 );
+
             
             const body = { f_name, l_name, email, cPhoneCarrier, cPhoneCarrierEmailExtn, 
                             p_num, pwd, generalReminderTime };
