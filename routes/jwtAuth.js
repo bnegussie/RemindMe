@@ -10,7 +10,7 @@ const authorization = require("../middleware/authorization");
 // Building the routes: ------------------->
 
 // SignUp route- adding a user into the DB:
-router.post("/register", validInfo, async(req, res) => {
+router.post("/signup", validInfo, async(req, res) => {
     try {
 
         // 1) Break down the data the user provided (name, email, phone, pwd):
