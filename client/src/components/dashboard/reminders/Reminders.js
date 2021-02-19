@@ -10,7 +10,7 @@ import "react-tabs/style/react-tabs.css";
 import EditReminder from "./EditReminder";
 import CreateReminder from "./CreateReminder";
 
-function Reminders({ isAuth }) {
+function Reminders({ isAuth, isAuthenticated }) {
 	const [allActiveReminders, setAllActiveReminders] = useState([]);
 	const [allCompletedReminders, setAllCompletedReminders] = useState([]);
 	const [allOverdueReminders, setAllOverdueReminders] = useState([]);
@@ -235,6 +235,10 @@ function Reminders({ isAuth }) {
 	}
 
 	useEffect(() => {
+        isAuth()
+    }, [isAuth]);
+
+	useEffect(() => {
 		getAllActiveReminders();
 		getAllCompletedReminders();
 		getAllReminders();
@@ -352,6 +356,9 @@ function Reminders({ isAuth }) {
 
 
 
+	if (!isAuthenticated) {
+        window.location = "/";
+    }
 
 	return (
 		<Fragment>

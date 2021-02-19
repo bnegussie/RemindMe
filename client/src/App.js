@@ -148,7 +148,7 @@ function App() {
               exact path="/Dashboard/Search" 
               render={props => 
                 isAuthenticated ? (
-                  <Search {...props} isAuth={isAuth} />
+                  <Search {...props} isAuth={isAuth} isAuthenticated={isAuthenticated} />
                 ) : (
                   <LandingPage />
                 )  
@@ -159,7 +159,7 @@ function App() {
               exact path="/Dashboard" 
               render={props => 
                 isAuthenticated ? (
-                  <Dashboard {...props} isAuth={isAuth} />
+                  <Dashboard {...props} isAuth={isAuth} isAuthenticated={isAuthenticated} />
                 ) : (
                   <LandingPage />
                 )  

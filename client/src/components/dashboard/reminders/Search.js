@@ -5,7 +5,7 @@ import EditReminder from "./EditReminder";
 
 import "./../../../App.css";
 
-function Search({ isAuth }) {
+function Search({ isAuth, isAuthenticated }) {
 
     const [allReminders, setAllReminders] = useState([]);
     const [filteredReminders, setFilteredReminders] = useState([]);
@@ -219,14 +219,24 @@ function Search({ isAuth }) {
         }
     }
 
-    useEffect(() => {
+	useEffect(() => {
+        isAuth()
+    }, [isAuth]);
+	
+	useEffect(() => {
 		getAllReminders();
 		
 		return () => {
 			setAllReminders([]);
 			setFilteredReminders([]);
 		}
-    }, [])
+	}, []);
+	
+
+	
+	if (!isAuthenticated) {
+        window.location = "/";
+    }
 
     return (
         <Fragment>
