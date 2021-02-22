@@ -21,6 +21,9 @@ app.use(expressLib.json());
 // Connecting the back & front end:
 app.use(corsLib());
 
+// Logging file:
+fs = require('fs');
+
 
 /* UNCOMMENT THE LINE BELLOW WHEN THIS CODE IS RUNNING IN PRODUCTION -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
  * so the static client side build file can be used. 
@@ -53,7 +56,9 @@ app.get('/*', function(req, res) {
 
 
 /************************************** START: Email and Text Message services *******************/
-async function processAllUserReminders() {
+async function processAllUserReminders(loggingFile) {
+    var loggingData = (new Date()).toLocaleString() + " ENTERING: processAllUserReminders(). \n";
+
     try {
         // The way in which this data is processed is reversed so this script will end up
         // looking at the upcoming reminders first, categorized by each user.
@@ -65,7 +70,11 @@ async function processAllUserReminders() {
         var rIndex = 0;
         const allUserReminders = [];
 
+        loggingData += "Pre: reminders loop. \n";
+
         while (rIndex < reminderLength) {
+            loggingData += "        Processing a user's reminders. \n";
+
             const currUserReminders = [];
             
             const currReminder = activeRemindersPlusUserData.rows.pop();
@@ -93,6 +102,17 @@ async function processAllUserReminders() {
             
             rIndex++;
         }
+        loggingData += "Post: reminders loop. \n";
+        loggingData += (new Date()).toLocaleString() + " EXITING: processAllUserReminders() \n\n";
+
+        // Changing dir into logging dir:
+        process.chdir(process.env.loggingFilePath);
+        fs.writeFile( loggingFile, loggingData, {flag:'a'}, function (error,data) {
+            if (error) {
+                return console.log(error);
+            }
+        }); 
+
         return allUserReminders;
 
     } catch (error) {
@@ -123,10 +143,18 @@ setTimeout(function() {
 
 
 async function triggerGeneralReminder() {
+    var loggingData = (new Date()).toLocaleString() + " ENTERING: triggerGeneralReminder(). \n";
+    const fullDate = new Date();
+    // Month + 1 is an odd JavaScript behavior as it starts at index 0: https://stackoverflow.com/a/14680423
+    const dateToday = fullDate.getFullYear() + "-" + (fullDate.getMonth() + 1) + "-" + fullDate.getDate();
+    const loggingFile = "RemindMe- " + dateToday + ".txt";
+
     try {
-        const allUserReminders = await processAllUserReminders();
+        const allUserReminders = await processAllUserReminders(loggingFile);
 
         allUserReminders.forEach(async function(currUserAllActiveReminders, index) {
+            loggingData += "    " + (new Date()).toLocaleString() + " Accessing a user's reminders. \n";
+
             const allActive = currUserAllActiveReminders;
             
             // Checking to see if the current hour is the time the user wants our system to send
@@ -136,6 +164,9 @@ async function triggerGeneralReminder() {
             const thisSpecificMoment = new Date(thisMoment.getFullYear(), thisMoment.getMonth(), 
                                             thisMoment.getDate(), thisMoment.getHours(), 0, 0, 0);
             const specifiedTime = new Date( allActive[0].user_general_reminder_time );
+
+            loggingData += "    specifiedTime.toLocaleString() = " + specifiedTime.toLocaleString() + " \n";
+            loggingData += "    thisSpecificMoment.toLocaleString() = " + thisSpecificMoment.toLocaleString() + " \n";
             
             // Checking if our server failed to send a general reminder, maybe because it was down.
             // Either the server failed to send a general reminder, or this was the time the user
@@ -150,13 +181,18 @@ async function triggerGeneralReminder() {
                                         previousGRT.getHours(), 0, 0, 0 );
 
                 try {
+                    loggingData += "            Pre: updating the DB with user's new GRT. \n";
+
                     // Updating the user's General Reminder Time:
                     const updateGRT = await pool.query(
                         "UPDATE users SET user_general_reminder_time = $1 WHERE user_id = $2;",
                             [newGRT, allActive[0].user_id]
                     );
+                    loggingData += "            Post: updating the DB with user's new GRT. \n";
+
                 } catch (error) {
                     console.error(error.message);
+                    loggingData += "error = " + error + " \n";
                 }
                 
                 
@@ -239,19 +275,34 @@ async function triggerGeneralReminder() {
                     activeIndex++;
                 }
 
+                loggingData += "        Pre: sendGeneralReminder() call. \n";
                 sendGeneralReminder(reminders, userEmail, userCPCarrierEmailExtn, userPNum,
-                                    userFName, numOfReminders, userId, generalReminderTime);
+                                    userFName, numOfReminders, userId, generalReminderTime, loggingFile);
+                loggingData += "        Post: sendGeneralReminder() call. \n";
             }
+            loggingData += "\n";
         });
 
     } catch (error) {
         console.error(error.message);
+        loggingData += "error = " + error + " \n";
     }
+
+    loggingData += (new Date()).toLocaleString() + " EXITING: triggerGeneralReminder() \n\n";
+
+    // Changing dir into logging dir:
+    process.chdir(process.env.loggingFilePath);
+    fs.writeFile( loggingFile, loggingData, {flag:'a'}, function (error,data) {
+        if (error) {
+          return console.log(error);
+        }
+    }); 
 }
 
 async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userPNum,
-                                    userFName, numOfReminders, userId, generalReminderTime) {
-                                            
+                                    userFName, numOfReminders, userId, generalReminderTime, loggingFile) {
+    var loggingData = (new Date()).toLocaleString() + " ENTERING: sendGeneralReminder(). \n";
+
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
         host: process.env.host,
@@ -263,6 +314,8 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
 			rejectUnauthorized: process.env.usingTLS
 		}
     });
+
+    loggingData += (new Date()).toLocaleString() + " Processing a user's reminders. \n";
 
     let todayEmail = "", tomorrowEmail = "", inTwoDaysEmail = "", inThreeDaysEmail = "", 
         inLessThanAWeekEmail = "", overdueEmail = "";
@@ -469,12 +522,15 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
         `
     };
 
+    loggingData += "Pre: sendingEmail. \n";
+
     transporter.sendMail(emailInfo, async function(error, data) {
         if (error) {
             let errorTime = (new Date()).toLocaleString();
             console.log(errorTime + ": An error occurred while sending the general reminder email.");
             console.error("error = ", [error]);
             console.log("");
+            loggingData += "error = " + error + " \n";
 
             // Changing the General Reminder Time back since the reminder was not sent:
             const previousGRT = new Date( generalReminderTime );
@@ -490,6 +546,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
 
             } catch (error) {
                 console.error(error.message);
+                loggingData += "error = " + error + " \n";
             }
 
         } else {
@@ -498,9 +555,13 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
         }
     });
 
+    loggingData += "Post: sendingEmail. \n";
+
     // Checking if the phone number was provided before sending out an SMS:
     const userPNumNoSpaces = userPNum.replace(/\s/g,'');
     if (userPNumNoSpaces !== '') {
+        loggingData += "    Pre: sendingSMS. \n";
+
         // Step 2, part 2: sending text message with defined transport object:
         let smsInfo = {
             from: `RemindMe <${process.env.serviceEmail}>`,
@@ -521,13 +582,24 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
                             ": An error occurred while sending the general reminder text message.");
                 console.error("error = ", [error]);
                 console.log("");
+                loggingData += "error = " + error + " \n";
             } else {
                 let sentTime = (new Date()).toLocaleString();
                 console.log(sentTime + 
                             ": The general reminder text message was successfully sent.");
             }
         });
+        loggingData += "    Post: sendingSMS. \n";
     }
+    loggingData += (new Date()).toLocaleString() + " EXITING: sendGeneralReminder() \n\n";
+
+    // Changing dir into logging dir:
+    process.chdir(process.env.loggingFilePath);
+    fs.writeFile( loggingFile, loggingData, {flag:'a'}, function (error,data) {
+        if (error) {
+          return console.log(error);
+        }
+    }); 
 }
 
 
@@ -574,9 +646,17 @@ setTimeout(function() {
 
 
 async function triggerSpecifiedReminder() {
-    const allUserReminders = await processAllUserReminders();
+    var loggingData = (new Date()).toLocaleString() + " ENTERING: triggerSpecifiedReminder(). \n";
+    const fullDate = new Date();
+    // Month + 1 is an odd JavaScript behavior as it starts at index 0: https://stackoverflow.com/a/14680423
+    const dateToday = fullDate.getFullYear() + "-" + (fullDate.getMonth() + 1) + "-" + fullDate.getDate();
+    const loggingFile = "RemindMe- " + dateToday + ".txt";
+
+    const allUserReminders = await processAllUserReminders(loggingFile); 
 
     allUserReminders.forEach(function(currUserAllActiveReminders, index) {
+        loggingData += "    " + (new Date()).toLocaleString() + " Accessing a user's reminders. \n";
+
         const userEmail = currUserAllActiveReminders[0].user_email;
         const userCPCarrierEmailExtn = currUserAllActiveReminders[0].user_cp_carrier_email_extn;
         const userPNum = currUserAllActiveReminders[0].user_p_num;
@@ -604,13 +684,20 @@ async function triggerSpecifiedReminder() {
                                 specifiedReminder.getMonth(), specifiedReminder.getDate(), 
                                 specifiedReminder.getHours(), specifiedReminder.getMinutes(), 0, 0);
 
+            loggingData += "        updatedSpecifiedReminder.toLocaleString() = " + updatedSpecifiedReminder.toLocaleString() + " \n";
+            loggingData += "        currentReminderTime.toLocaleString() = " + currentReminderTime.toLocaleString() + " \n";
+            loggingData += "        activeReminder.reminder_reminder_sent = " + activeReminder.reminder_reminder_sent + " \n";
 
             if ( updatedSpecifiedReminder.getTime() <= currentReminderTime.getTime() && 
                 !activeReminder.reminder_reminder_sent ) {
 
+                loggingData += "            Processing to send out reminder.  \n";
+
                 // Quickly updating the DB that this reminder has been sent, as to prevent any 
                 // duplicate reminders being sent out.
-                updateDBReminderSent(true, userId, activeReminder.reminder_id);
+                updateDBReminderSent(true, userId, activeReminder.reminder_id, loggingFile);
+
+                loggingData += "            Returned from updateDBReminderSent() call.  \n";
 
                 
                 var dateOptions = { dateStyle: "full", timeStyle: "short" }
@@ -624,17 +711,36 @@ async function triggerSpecifiedReminder() {
 
                 reminderIdList.push( activeReminder.reminder_id );
             }
+            loggingData += "\n";
         });
 
+        loggingData += "    Post: allActive loop. \n";
+
         if (reminders.length > 0) {
+            loggingData += "        Pre: sendSpecifiedReminder() call. \n";
             sendSpecifiedReminder(reminders, userEmail, userCPCarrierEmailExtn, userPNum, userFName,
-                                    userId, reminderIdList);
+                                    userId, reminderIdList, loggingFile);
+            loggingData += "        Post: sendSpecifiedReminder() call. \n";
         }
+        loggingData += "\n";
     });
+
+    loggingData += "Post: allUserReminders loop. \n";
+    loggingData += (new Date()).toLocaleString() + " EXITING: triggerSpecifiedReminder() \n\n";
+
+    // Changing dir into logging dir:
+    process.chdir(process.env.loggingFilePath);
+    fs.writeFile( loggingFile, loggingData, {flag:'a'}, function (error,data) {
+        if (error) {
+          return console.log(error);
+        }
+    }); 
 }
 
 async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, userPNum, userFName,
-                                    userId, reminderIdList) {
+                                    userId, reminderIdList, loggingFile) {
+    
+    var loggingData = (new Date()).toLocaleString() + " ENTERING: sendSpecifiedReminder(). \n";
     
     // Step 1: create a reuseable transporter object.
     let transporter = nodeMailer.createTransport({
@@ -652,6 +758,7 @@ async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, use
     var smsReminders = "\n";
     
     if (req.length > 0) {
+        loggingData += "    " + (new Date()).toLocaleString() + " Processing a user's reminders. \n";
 
         req.forEach(function(reminderData, index) {
 
@@ -726,12 +833,15 @@ async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, use
         `
     };
 
+    loggingData += "Pre: sendingEmail. \n";
+
     transporter.sendMail(emailInfo, function(error, data) {
         if (error) {
             let errorTime = (new Date()).toLocaleString();
             console.log(errorTime + ": An error occurred while sending the specified reminder email.");
             console.error("error = ", [error]);
             console.log("");
+            loggingData += "error = " + error + " \n";
 
             // Updating the DB that the reminder has failed to be sent properly:
             reminderIdList.forEach(async function(reminderId, index) {
@@ -744,10 +854,13 @@ async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, use
             console.log(sentTime + ": The specified reminder email was successfully sent.");
         }
     });
+    loggingData += "Post: sendingEmail. \n";
 
     // Checking if the phone number was provided before sending out an SMS:
     const userPNumNoSpaces = userPNum.replace(/\s/g,'');
     if (userPNumNoSpaces !== '') {
+        loggingData += "    Pre: sendingSMS. \n";
+
         // Step 2, part 2: sending a text message with defined transport object:
         let smsInfo = {
             from: `RemindMe <${process.env.serviceEmail}>`,
@@ -767,15 +880,28 @@ async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, use
                             ": An error occurred while sending the specified reminder text message.");
                 console.error("error = ", [error]);
                 console.log("");
+                loggingData += "error = " + error + " \n";
             } else {
                 let sentTime = (new Date()).toLocaleString();
                 console.log(sentTime + ": The specified reminder text message was successfully sent.");
             }
         });
+        loggingData += "    Post: sendingSMS. \n";
     }
+
+    loggingData += (new Date()).toLocaleString() + " EXITING: sendSpecifiedReminder() \n\n";
+
+    // Changing dir into logging dir:
+    process.chdir(process.env.loggingFilePath);
+    fs.writeFile( loggingFile, loggingData, {flag:'a'}, function (error,data) {
+        if (error) {
+          return console.log(error);
+        }
+    }); 
 }
 
-async function updateDBReminderSent(sent, userId, reminderId) {
+async function updateDBReminderSent(sent, userId, reminderId, loggingFile) {
+    var loggingData = (new Date()).toLocaleString() + " ENTERING: updateDBReminderSent(). \n";
     
     try {
         const updateActiveReminders = await pool.query(
@@ -804,7 +930,18 @@ async function updateDBReminderSent(sent, userId, reminderId) {
     
     } catch (error) {
         console.error(error.message);
+        loggingData += "error = " + error + " \n";
     }
+
+    loggingData += (new Date()).toLocaleString() + " EXITING: updateDBReminderSent() \n\n";
+
+    // Changing dir into logging dir:
+    process.chdir(process.env.loggingFilePath);
+    fs.writeFile( loggingFile, loggingData, {flag:'a'}, function (error,data) {
+        if (error) {
+          return console.log(error);
+        }
+    }); 
 }
 /************************************** END: Email and Text Message services *********************/
 
