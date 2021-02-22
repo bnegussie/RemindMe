@@ -220,7 +220,7 @@ function Search({ isAuth, isAuthenticated }) {
     }
 
 	useEffect(() => {
-        isAuth()
+        isAuth();
     }, [isAuth]);
 	
 	useEffect(() => {

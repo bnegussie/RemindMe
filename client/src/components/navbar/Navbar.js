@@ -34,6 +34,10 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
     const onMouseLeave = () => { setDropDown(false); };
 
     useEffect(() => {
+        isAuth();
+    }, [isAuth]);
+
+    useEffect(() => {
         showButton();
         window.addEventListener("resize", showButton);
         

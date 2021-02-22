@@ -170,7 +170,7 @@ function App() {
               exact path="/manageprofile" 
               render={props => 
                 isAuthenticated ? (
-                  <ManageProfile isAuth={isAuth} setAuth={setAuth} />
+                  <ManageProfile isAuth={isAuth} setAuth={setAuth} isAuthenticated={isAuthenticated} />
                 ) : (
                   <LandingPage />
                 )  

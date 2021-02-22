@@ -1,6 +1,5 @@
-import React from "react";
+import React, { Fragment, useEffect } from "react";
 import InlineConfirmButton from "react-inline-confirm";
-import { Fragment } from "react";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 
@@ -10,7 +9,7 @@ import ChangeGeneralReminderTime from "./ChangeGeneralReminderTime";
 
 import "./../../App.css";
 
-function ManageProfile({ isAuth, setAuth }) {
+function ManageProfile({ isAuth, setAuth, isAuthenticated }) {
 
 	// Components for the Delete Account feature:
 	const textValues = ["Delete", "Are you sure?", "Deleting..."];
@@ -42,6 +41,16 @@ function ManageProfile({ isAuth, setAuth }) {
 			console.log(error.message);
 		}
 	}
+
+	useEffect(() => {
+		isAuth();
+	}, [isAuth]);
+
+
+	
+	if (!isAuthenticated) {
+        window.location = "/";
+    }
 
 	return (
 		<Fragment>

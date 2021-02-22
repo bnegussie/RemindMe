@@ -235,7 +235,7 @@ function Reminders({ isAuth, isAuthenticated }) {
 	}
 
 	useEffect(() => {
-        isAuth()
+        isAuth();
     }, [isAuth]);
 
 	useEffect(() => {
@@ -356,6 +356,10 @@ function Reminders({ isAuth, isAuthenticated }) {
 
 
 
+	/* The system will refresh and redirect the user to the landing page if they are not
+	 * logged in. One of the times this check is needed is when a user deletes their account
+	 * and React Router will try to lead the user to the Dashboard page.
+	 */
 	if (!isAuthenticated) {
         window.location = "/";
     }
