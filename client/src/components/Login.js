@@ -19,6 +19,8 @@ const LogIn = ({ setAuth }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
+        var response = "";
+
         try {
             const body = { email, pwd };
 
@@ -28,7 +30,7 @@ const LogIn = ({ setAuth }) => {
                 return false;
             }
 
-            const response = await fetch("/api/auth/login", {
+            response = await fetch("/api/auth/login", {
                 method: "POST",
                 headers: {"Content-type": "application/json"},
                 body: JSON.stringify(body)
@@ -48,6 +50,9 @@ const LogIn = ({ setAuth }) => {
 
         } catch (error) {
             console.error(error.message);
+
+            const parseResp = await response.json();
+            toast.error(parseResp, {autoClose: 4000});
         }
     };
 
