@@ -91,16 +91,18 @@ const SignUp = ({ setAuth }) => {
             // parseResp now holds the JWT unless the server threw an error:
             const parseResp = await response.json();
 
-            if (response.status === 401 || response.status === 403) {
+            if (parseResp === "A user with this email address already exists." || 
+                parseResp === "A user with this phone number already exists.") {
+                
                 toast.error(parseResp, {autoClose: 4000});
                 return false;
+            } else {
+                localStorage.setItem("token", parseResp.token);
+                setAuth(true);
+                toast.success("Successful registration!", {
+                    autoClose: 3000
+                });
             }
-
-            localStorage.setItem("token", parseResp.token);
-            setAuth(true);
-            toast.success("Successful registration!", {
-                autoClose: 3000
-            });
 
         } catch (error) {
             console.error(error.message);
