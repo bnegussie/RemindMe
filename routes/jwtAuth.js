@@ -25,8 +25,11 @@ router.post("/signup", validInfo, async(req, res) => {
             [lowerCaseEmail]
         );
         if (userWithEmail.rows.length !== 0) {
-            // 401 = unauthenticated (user already exists):
-            return res.status(401).json("A user with this email address already exists.");
+            /* 401 = unauthenticated (user already exists):
+             * It's being returned as a 200 status because in production, unless the server returns
+             * a status of 200, the client side would not be able to recover the error message.
+             */
+            return res.status(200).json("A user with this email address already exists.");
         }
 
         if (p_num !== "") {
@@ -34,8 +37,11 @@ router.post("/signup", validInfo, async(req, res) => {
                 [p_num]
             );
             if (userWithPNum.rows.length !== 0) {
-                // 401 = unauthenticated (user already exists):
-                return res.status(401).json("A user with this phone number already exists.");
+                /* 401 = unauthenticated (user already exists):
+                 * It's being returned as a 200 status because in production, unless the server returns
+                 * a status of 200, the client side would not be able to recover the error message.
+                 */
+                return res.status(200).json("A user with this phone number already exists.");
             }
         }
 
@@ -80,8 +86,11 @@ router.post("/login", validInfo, async(req, res) => {
         );
 
         if (user.rows.length === 0) {
-            // 401 = unauthenticated (user does not exists):
-            return res.status(401).json("A user with this email does not exist.");
+            /* 401 = unauthenticated (user does not exists):
+             * It's being returned as a 200 status because in production, unless the server returns
+             * a status of 200, the client side would not be able to recover the error message.
+             */
+            return res.status(200).json("A user with this email does not exist.");
         }
 
         
@@ -89,7 +98,7 @@ router.post("/login", validInfo, async(req, res) => {
         const validPwd = await bcryptLib.compare(pwd, user.rows[0].user_pwd);
 
         if (!validPwd) {
-            return res.status(401).json("Incorrect password.")
+            return res.status(200).json("Incorrect password.");
         }
 
         // 4) Generate our JWT token:

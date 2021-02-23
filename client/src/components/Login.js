@@ -34,17 +34,19 @@ const LogIn = ({ setAuth }) => {
                 body: JSON.stringify(body)
             });
             
-            // parseResp now holds the JWT:
+            // parseResp now holds the JWT or the error message:
             const parseResp = await response.json();
 
-            if (response.status === 401 || response.status === 403) {
+            if (parseResp === "A user with this email does not exist." || 
+                parseResp === "Incorrect password.") {
+                
                 toast.error(parseResp, {autoClose: 4000});
                 return false;
+            } else {
+                localStorage.setItem("token", parseResp.token);
+                setAuth(true);
+                toast.success("Successful log in!", {autoClose: 3000});
             }
-
-            localStorage.setItem("token", parseResp.token);
-            setAuth(true);
-            toast.success("Successful log in!", {autoClose: 3000});
 
         } catch (error) {
             console.error(error.message);
