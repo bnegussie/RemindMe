@@ -12,7 +12,7 @@ import {
 
 // Importing the components:
 import Dashboard from "./components/dashboard/Dashboard";
-import LogIn from "./components/LogIn";
+import LogIn from "./components/Login";
 import SignUp from "./components/SignUp";
 import Navbar from "./components/navbar/Navbar";
 import LandingPage from "./components/LandingPage";
