@@ -29,7 +29,7 @@ function ChangeGeneralReminderTime() {
 				setReminderHour( time );
 
             } else {
-                return toast.error("Something went wrong. ", [parseResp]);
+                return toast.error("Something went wrong. Please try again later.", [parseResp]);
 			}
 			
 		} catch (error) {
@@ -84,7 +84,7 @@ function ChangeGeneralReminderTime() {
 				setTimeout(() => { window.location = "/ManageProfile"; }, 3000);
 
             } else {
-				return toast.error("Something went wrong. ", [parseResp]);
+				return toast.error("Something went wrong. Please try again later.", [parseResp]);
 			}
 			
 		} catch (error) {

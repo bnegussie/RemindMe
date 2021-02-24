@@ -43,15 +43,15 @@ function ChangePassword() {
 
             const parseResp = await response.json();
 
-            if (response.status === 401) {
+            if (parseResp === "Please check your Current Password and try again.") {
                 return toast.error(parseResp);
-            } else if (response.status === 200) {
-                toast.success("Your password has now been successfully updated!", {autoClose: 3000});
+            } else if (parseResp === "Your password has now been successfully updated!") {
                 
+                toast.success(parseResp, {autoClose: 3000});
                 setTimeout(() => { window.location = "/ManageProfile"; }, 3000);
 
             } else {
-                return toast.error("Something went wrong. ", [parseResp]);
+                return toast.error("Something went wrong. Please try again later.", [parseResp]);
             }            
             
         } catch (error) {

@@ -37,7 +37,7 @@ router.put("/general", authorization, async(req, res) => {
             const desiredUserEmail = await pool.query("SELECT * FROM users WHERE user_email = $1;", [lowerCaseEmail] );
             if (desiredUserEmail.rows.length > 0) {
                 // Someone is already using this email address:
-                return res.status(401).json("A user with this email address already exists.");
+                return res.status(200).json("A user with this email address already exists.");
             }
         }
 
@@ -47,7 +47,7 @@ router.put("/general", authorization, async(req, res) => {
             );
             if (userWithPNum.rows.length !== 0) {
                 // 401 = unauthenticated (user already exists):
-                return res.status(401).json("A user with this phone number already exists.");
+                return res.status(200).json("A user with this phone number already exists.");
             }
         }
 
@@ -56,7 +56,7 @@ router.put("/general", authorization, async(req, res) => {
             [fName, lName, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum, userId]
         );
 
-        res.status(200).json("Successfully updated the user profile.");
+        res.status(200).json("Your Profile has now been successfully update!");
         
     } catch (error) {
         console.error(error.message);
@@ -78,7 +78,7 @@ router.put("/pwd", authorization, async (req, res) => {
         const validPwd = await bcryptLib.compare(currentPwd, currentUserPwd.rows[0].user_pwd);
 
         if (!validPwd) {
-            return res.status(401).json("Please check your Current Password and try again.");
+            return res.status(200).json("Please check your Current Password and try again.");
         }
 
         // Encrypting the new password:
@@ -90,8 +90,7 @@ router.put("/pwd", authorization, async (req, res) => {
             [bcryptPwd, userId]
         );
 
-        res.status(200).json("Password has been updated.");
-
+        res.status(200).json("Your password has now been successfully updated!");
 
     } catch (error) {
         res.status(500).json(error.message);

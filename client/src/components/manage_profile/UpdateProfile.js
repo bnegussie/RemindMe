@@ -49,15 +49,18 @@ function UpdateProfile() {
             // parseResp now holds the JWT unless the server threw an error:
 			const parseResp = await response.json();
 
-            if (response.status === 401) {
-                return toast.error(parseResp, {autoClose: 4000});
-            } else if (response.status === 200) {
-                toast.success("Your Profile has now been successfully update!", {autoClose: 2000});
-                
-                setTimeout(() => { window.location = "/ManageProfile"; }, 2000);
+			if (parseResp === "A user with this email address already exists." ||
+				parseResp === "A user with this phone number already exists.") {
+				
+				return toast.error(parseResp, {autoClose: 4000});
 
-            } else {
-                return toast.error("Something went wrong. ", [parseResp]);
+			} else if (parseResp === "Your Profile has now been successfully update!") {
+				
+				toast.success(parseResp, {autoClose: 2000});
+				setTimeout(() => { window.location = "/ManageProfile"; }, 2000);
+				
+			} else {
+                return toast.error("Something went wrong. Please try again later.", [parseResp]);
 			}
 			
 		} catch (error) {

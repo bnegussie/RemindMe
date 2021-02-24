@@ -40,7 +40,7 @@ const LogIn = ({ setAuth }) => {
             if (parseResp === "A user with this email does not exist." || 
                 parseResp === "Incorrect password.") {
                 
-                toast.error(parseResp, {autoClose: 4000});
+                toast.error(parseResp, {autoClose: 4000}); 
                 return false;
             } else {
                 localStorage.setItem("token", parseResp.token);
