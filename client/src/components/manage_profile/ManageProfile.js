@@ -2,7 +2,6 @@ import React from "react";
 import InlineConfirmButton from "react-inline-confirm";
 import { Fragment } from "react";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
 
 import ChangePassword from "./ChangePassword";
 import UpdateProfile from "./UpdateProfile";
@@ -17,7 +16,6 @@ function ManageProfile({ isAuth, setAuth }) {
 	var isExecuting = false;
 	const confirmIconClass = `fa fa-${isExecuting ? "circle-o-notch fa-spin" : "fa fa-trash"}`;
 
-	let history = useHistory();
 
 	async function deleteAccount() {
 		try {
@@ -29,10 +27,10 @@ function ManageProfile({ isAuth, setAuth }) {
 			const parseResp = await response.json();
 
 			if (response.status === 200) {
-				toast.success("Successfully deleted your account.", {autoClose: 2500});
+				
 				localStorage.removeItem("token");
-				setAuth(false);
-				history.push("/");
+				toast.success("Successfully deleted your account.", {autoClose: 2500});
+				setTimeout(() => { window.location = "/"; }, 2500);
 
             } else {
                 return toast.error("Something went wrong. Please try again later.", [parseResp]);
