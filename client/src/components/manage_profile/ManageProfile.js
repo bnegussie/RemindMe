@@ -34,7 +34,7 @@ function ManageProfile({ isAuth, setAuth, isAuthenticated }) {
 				history.push("/");
 
             } else {
-                return toast.error("Something went wrong. ", [parseResp]);
+                return toast.error("Something went wrong. Please try again later.", [parseResp]);
             }  
 
 		} catch (error) {
