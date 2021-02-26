@@ -114,9 +114,21 @@ async function triggerGeneralReminder() {
             // Checking to see if the current hour is the time the user wants our system to send
             // out the general reminder, if they have any upcoming tasks for the week.
             const thisMoment = new Date();
-            // Make sure this variable is not assigned to a Date variable which is later modified.
-            const thisSpecificMoment = new Date(thisMoment.getFullYear(), thisMoment.getMonth(), 
+            var thisSpecificMoment;
+
+            /* Addressing calculation error where the trigger to call this function might be a 
+             * few seconds behind the hour so the minute would be 59 and the upcoming check below
+             * would fail without the following code:
+             */
+            if (thisMoment.getMinutes() === 59) {
+                thisSpecificMoment = new Date(thisMoment.getFullYear(), thisMoment.getMonth(), 
+                                            thisMoment.getDate(), (thisMoment.getHours() + 1), 0, 0, 0);
+            } else {
+                // Make sure this variable is not assigned to a Date variable which is later modified.
+                thisSpecificMoment = new Date(thisMoment.getFullYear(), thisMoment.getMonth(), 
                                             thisMoment.getDate(), thisMoment.getHours(), 0, 0, 0);
+            }
+            
             const specifiedTime = new Date( allActive[0].user_general_reminder_time );
 
             loggingData += "    specifiedTime.toLocaleString() = " + specifiedTime.toLocaleString() + "\n";
@@ -625,8 +637,24 @@ async function triggerSpecifiedReminder() {
         var reminders = [];
 
         const current = new Date();
+        var finalMinute;
+
+        // Addressing small calculation bug caused when this function is initially triggered:
+        if (current.getMinutes() === possibleMinutes[1] - 1) { // if :14 gets converted to :15
+            finalMinute = possibleMinutes[1];
+        } else if (current.getMinutes() === possibleMinutes[2] - 1) { // if :29 gets converted to :30
+            finalMinute = possibleMinutes[2];
+        } else if (current.getMinutes() === possibleMinutes[3] - 1) { // if :44 gets converted to :45
+            finalMinute = possibleMinutes[3];
+        } else if (current.getMinutes() === 59) { // if :59 gets converted to the next hour :00
+            finalMinute = 59 + 1;
+        } else {
+            finalMinute = current.getMinutes();
+        }
+
+
         const currentReminderTime = new Date(current.getFullYear(), current.getMonth(), current.getDate(), 
-                                current.getHours(), current.getMinutes(), 0, 0);
+                                current.getHours(), finalMinute, 0, 0);
 
         // The two variables below are used to update the state, that the reminders have been sent out.
         const userId = currUserAllActiveReminders[0].user_id;
