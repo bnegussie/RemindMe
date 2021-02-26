@@ -74,6 +74,17 @@ async function processAllUserReminders(loggingFile) {
     }
 }
 
+/* Helper function to pause the reminders if they are early, so the user gets
+ * their reminder at the exact time they requested.
+ */
+function sleep(ms) {
+    return new Promise((accept) => {
+        setTimeout(() => {
+            accept();
+        }, ms);
+    });
+}
+
 
 
 // Setting up the time trigger to send the users, their daily list of reminders.--------------------------
@@ -105,6 +116,15 @@ async function triggerGeneralReminder() {
 
     try {
         const allUserReminders = await processAllUserReminders(loggingFile);
+
+        const currentTime = new Date();
+        if (currentTime.getMinutes() === 59) {
+            loggingData += "    Pre: sleep(). \n";
+            // Waiting for five seconds because the earlies this function has ever been
+            // called is four seconds early.
+            await sleep(1000 * 5);
+            loggingData += "    Post: sleep(). \n";
+        }
 
         allUserReminders.forEach(async function(currUserAllActiveReminders, index) {
             loggingData += "    " + (new Date()).toLocaleString() + " Accessing a user's reminders. \n";
@@ -607,7 +627,22 @@ async function triggerSpecifiedReminder() {
     const dateToday = fullDate.getFullYear() + "-" + (fullDate.getMonth() + 1) + "-" + fullDate.getDate();
     const loggingFile = "RemindMe- " + dateToday + ".txt";
 
-    const allUserReminders = await processAllUserReminders(loggingFile); 
+    const allUserReminders = await processAllUserReminders(loggingFile);
+
+    const currentTime = new Date();
+    // Checking if it's a few seconds behind than desired.
+    if (currentTime.getMinutes() === possibleMinutes[1] - 1 || 
+        currentTime.getMinutes() === possibleMinutes[2] - 1 ||
+        currentTime.getMinutes() === possibleMinutes[3] - 1 ||
+        currentTime.getMinutes() === 59) {
+        
+        loggingData += "    Pre: sleep(). \n";
+        // Waiting for five seconds because the earlies this function has ever been
+        // called is four seconds early.
+        await sleep(1000 * 5);
+        loggingData += "    Post: sleep(). \n";
+    }
+
 
     allUserReminders.forEach(function(currUserAllActiveReminders, index) {
         loggingData += "    " + (new Date()).toLocaleString() + " Accessing a user's reminders. \n";
