@@ -145,8 +145,8 @@ div.footer-container > a:hover {
 }
 
 .btn {
-  padding: 8px 20px;
-  border-radius: 2px;
+  padding: .375rem .75rem;
+  border-radius: .25rem;
   outline: none;
   border: none;
   cursor: pointer;
@@ -623,7 +623,7 @@ ul > li:nth-child(2) > a:hover {
 }
 
 .btn.btn-info {
-  width: 65px;
+  padding: 8px 15px;
 }
 
 .editreminder-completed {
@@ -866,7 +866,7 @@ div.form-group.reminders > div + .form-label {
 }
 
 .btn.btn-info.manage-profile {
-  width: 85px;
+  width: 80px;
 }
 /***************************************** END: MANAGEPROFILE.JS *********************************/
 /***************************************** START: CHANGEPASSWORD.JS ******************************/
