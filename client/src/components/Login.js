@@ -20,7 +20,9 @@ const LogIn = ({ setAuth }) => {
         e.preventDefault();
 
         try {
-            const body = { email, pwd };
+            const userTimeZone = (-1)*(new Date()).getTimezoneOffset()/60;
+            
+            const body = { email, pwd, userTimeZone };
 
             // eslint-disable-next-line
             if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
@@ -43,6 +45,7 @@ const LogIn = ({ setAuth }) => {
                 toast.error(parseResp, {autoClose: 4000}); 
                 return false;
             } else {
+
                 localStorage.setItem("token", parseResp.token);
                 setAuth(true);
                 toast.success("Successful log in!", {autoClose: 3000});

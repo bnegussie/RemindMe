@@ -14,6 +14,7 @@ CREATE TABLE users (
     CONSTRAINT check_p_num CHECK (user_p_num NOT LIKE '%[^0-9]%'),
     user_pwd VARCHAR(255) NOT NULL,
     user_general_reminder_time TIMESTAMPTZ NOT NULL,
+    user_time_zone INT NOT NULL,
     PRIMARY KEY (user_id)
 );
 
