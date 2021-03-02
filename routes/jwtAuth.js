@@ -15,7 +15,7 @@ router.post("/signup", validInfo, async(req, res) => {
 
         // 1) Break down the data the user provided (name, email, phone, pwd):
         const {f_name, l_name, email, cPhoneCarrier, cPhoneCarrierEmailExtn,
-            p_num, pwd, generalReminderTime} = req.body;
+            p_num, pwd, generalReminderTime, userTimeZone} = req.body;
         
         const lowerCaseEmail = email.toLowerCase();
 
@@ -54,9 +54,9 @@ router.post("/signup", validInfo, async(req, res) => {
 
         // 4) Insert the user into our DB:
         const newUser = await pool.query(
-            "INSERT INTO users (user_f_name, user_l_name, user_email, user_cp_carrier, user_cp_carrier_email_extn, user_p_num, user_pwd, user_general_reminder_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *", 
+            "INSERT INTO users (user_f_name, user_l_name, user_email, user_cp_carrier, user_cp_carrier_email_extn, user_p_num, user_pwd, user_general_reminder_time, user_time_zone) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *", 
             [f_name, l_name, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, 
-                p_num, bcryptPwd, generalReminderTime]
+                p_num, bcryptPwd, generalReminderTime, userTimeZone]
         );
 
         
@@ -77,7 +77,7 @@ router.post("/login", validInfo, async(req, res) => {
     try {
 
         // 1) Break down the data the user provided (name, email, phone, pwd):
-        const {email, pwd} = req.body;
+        const {email, pwd, userTimeZone} = req.body;
         const lowerCaseEmail = email.toLowerCase();
         
         // 2) Check if user exists:
@@ -100,6 +100,11 @@ router.post("/login", validInfo, async(req, res) => {
         if (!validPwd) {
             return res.status(200).json("Incorrect password.");
         }
+
+        // Updating the user's time zone:
+        const updateTimeZone = await pool.query("UPDATE users SET user_time_zone = $1 WHERE user_email = $2",
+            [userTimeZone, email]
+        );
 
         // 4) Generate our JWT token:
         const token = jwtGenerator(user.rows[0].user_id);

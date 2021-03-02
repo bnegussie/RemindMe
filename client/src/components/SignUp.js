@@ -56,9 +56,21 @@ const SignUp = ({ setAuth }) => {
              */
             generalReminderTime.setDate( generalReminderTime.getDate() + 1 );
 
+
+            /* Capturing and saving the user's time zone because when their Specific Reminder
+             * it sent out, if this information is not available, the user's Due Date and
+             * Reminder Date will contain the database time zone.
+             * 
+             * Need to multiply by -1 because getTimezoneOffset() is calculating GMT's offset from
+             * the user's time zone and not the user's time zone from GMT.
+             * https://stackoverflow.com/a/1809974
+             */
+            const userTimeZone = (-1)*(new Date()).getTimezoneOffset()/60;
+
+
             
             const body = { f_name, l_name, email, cPhoneCarrier, cPhoneCarrierEmailExtn, 
-                            p_num, pwd, generalReminderTime };
+                            p_num, pwd, generalReminderTime, userTimeZone };
 
             // Quick input validation:
             // eslint-disable-next-line

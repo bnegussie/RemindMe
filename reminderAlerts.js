@@ -651,6 +651,7 @@ async function triggerSpecifiedReminder() {
         const userCPCarrierEmailExtn = currUserAllActiveReminders[0].user_cp_carrier_email_extn;
         const userPNum = currUserAllActiveReminders[0].user_p_num;
         const userFName = currUserAllActiveReminders[0].user_f_name;
+        const userTimeZone = currUserAllActiveReminders[0].user_time_zone;
 
         
         const allActive = currUserAllActiveReminders;
@@ -690,14 +691,10 @@ async function triggerSpecifiedReminder() {
                 loggingData += "            Returned from updateDBReminderSent() call.  \n";
 
                 
-                var dateOptions = { dateStyle: "full", timeStyle: "short" }
-
                 reminders.push( activeReminder.reminder_title );
                 reminders.push( activeReminder.reminder_desc );
-                reminders.push( 
-                    (new Date(activeReminder.reminder_due_date)).toLocaleString("en-US", dateOptions) );
-                reminders.push( 
-                    (new Date(activeReminder.reminder_reminder_date)).toLocaleString("en-US", dateOptions) );
+                reminders.push( properTime(activeReminder.reminder_due_date, userTimeZone, loggingFile) );
+                reminders.push( properTime(activeReminder.reminder_reminder_date, userTimeZone, loggingFile) );
 
                 reminderIdList.push( activeReminder.reminder_id );
             }
@@ -934,5 +931,42 @@ async function updateDBReminderSent(sent, userId, reminderId, loggingFile) {
           return console.log(error);
         }
     }); 
+}
+
+// Returns a string with the user's proper time zone:
+function properTime(time, userTimeZone, loggingFile) {
+    var loggingData = (new Date()).toLocaleString() + " ENTERING: properTime(). \n";
+
+    const minInHr = 60;
+
+    var timeInDBTimeZoneInMill = (new Date(time)).getTime();
+    var dbTimeZoneRemoved;
+
+    const dbUTCOffset = process.env.dbTimeZone * minInHr;
+    var userUTCOffset = userTimeZone * minInHr;
+
+    // Meaning if the UTC is a negative value:
+    if (dbUTCOffset < 0) {
+        dbTimeZoneRemoved = timeInDBTimeZoneInMill + (-1)*(1000 * 60 * dbUTCOffset);
+    } else {
+        dbTimeZoneRemoved = timeInDBTimeZoneInMill + (1000 * 60 * dbUTCOffset);
+    }
+
+    const utcTimeInMill = dbTimeZoneRemoved;
+    var userTime = utcTimeInMill +  (1000 * 60 * userUTCOffset);
+
+    var dateOptions = { dateStyle: "full", timeStyle: "short" }
+
+    loggingData += (new Date()).toLocaleString() + " EXITING: properTime() \n\n";
+
+    // Changing dir into logging dir:
+    process.chdir(process.env.loggingFilePath);
+    fs.writeFile( loggingFile, loggingData, {flag:'a'}, function (error, data) {
+        if (error) {
+          return console.log(error);
+        }
+    });
+
+    return (new Date(userTime)).toLocaleString("en-US", dateOptions);
 }
 /************************************** END: Email and Text Message services *********************/
