@@ -240,6 +240,7 @@ function Search({ isAuth }) {
                             className="form-control search"
                             value={titleSearched}
                             onChange={e => activeInput(e)}
+							autoFocus
                         />
 
                         <div className="search-btn-on-search" onClick={searchForReminders}>

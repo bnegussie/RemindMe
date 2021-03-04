@@ -196,40 +196,46 @@ const SignUp = ({ setAuth }) => {
                     />
                     <label htmlFor="sign-up-email" className="form-label">Email:</label>
                 </div>
-            
-                <div id="cellphone-container">
-                    <div className="form-group">
-                        <Select options={allCellphoneCarriers}
-                            onChange={e => setCellPhoneOption(e)}
-                            value={cPhoneCarrier.label}
-                            placeholder=" "
-                            id="sign-up-cell-phone-carrier"
-                            className="cellphone-child-left"
-                            isClearable
-                        />
 
-                        <label htmlFor="sign-up-cell-phone-carrier" 
-                            className="form-label" 
-                            id="cell-phone-carrier-label">
-                            Cell phone carrier:
-                        </label>
+                <fieldset className="cell-phone-fieldset">
+                    <legend className="cell-phone-legend">
+                        Optional, but recommended:
+                    </legend>
+
+                    <div id="cellphone-container">
+                        <div className="form-group">
+                            <Select options={allCellphoneCarriers}
+                                onChange={e => setCellPhoneOption(e)}
+                                value={cPhoneCarrier.label}
+                                placeholder=" "
+                                id="sign-up-cell-phone-carrier"
+                                className="cellphone-child-left"
+                                isClearable
+                            />
+
+                            <label htmlFor="sign-up-cell-phone-carrier" 
+                                className="form-label" 
+                                id="cell-phone-carrier-label">
+                                Cell phone carrier:
+                            </label>
+                        </div>
+
+                        <div className="form-group">
+                            <input 
+                                type="tel"
+                                name="p_num"
+                                id="sign-up-p_num"
+                                placeholder=" "
+                                className="form-control cellphone-child"
+                                value={p_num}
+                                onChange={e => onChange(e)}
+                            /> 
+                            <label htmlFor="sign-up-p_num" className="form-label" id="sign-up-p_num-label">
+                                Phone number:
+                            </label>
+                        </div> 
                     </div>
-
-                    <div className="form-group">
-                        <input 
-                            type="tel"
-                            name="p_num"
-                            id="sign-up-p_num"
-                            placeholder=" "
-                            className="form-control cellphone-child"
-                            value={p_num}
-                            onChange={e => onChange(e)}
-                        /> 
-                        <label htmlFor="sign-up-p_num" className="form-label" id="sign-up-p_num-label">
-                            Phone number (recommended):
-                        </label>
-                    </div>            
-                </div>
+                </fieldset>
 
                 <div className="form-group">
                     <input

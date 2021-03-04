@@ -134,7 +134,7 @@ function ChangeGeneralReminderTime() {
 							
 								<div className="info-message-grt">
 									<p>
-										Everyday at this time, you will receive your Daily General 
+										Everyday at this time, you will receive your General Daily
 										Reminder (if you have any tasks for the upcoming week).
 									</p>
 									<p>

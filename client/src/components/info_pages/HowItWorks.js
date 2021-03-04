@@ -38,10 +38,12 @@ function HowItWorks() {
                         from your wireless provider.
                     </p>
                     <p>
-                        If you are traveling abroad and text messages are not free, with your wireless
-                        provider, please go to your Manage Profile page and remove your cell phone number.
-                        Once you have returned from your trip, feel free to add your cell phone number
-                        back so you can receive the full benefit of this reminder application.
+                        If you are traveling abroad and you do not want to receive text message reminders, 
+                        because your wireless data plan does not include international roaming, simply go 
+                        to your Manage Profile page and remove your cell phone carrier and phone number
+                        then press Save. Once you have returned from your trip, feel free to add your 
+                        cell phone information back into your account so you can receive the full benefit 
+                        of this reminder application.
                     </p>
                 </div>
             </div>

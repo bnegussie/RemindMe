@@ -225,7 +225,11 @@ function UpdateProfile() {
 									</label>
 								</div>
 								
-								<div id="cellphone-container">
+								<fieldset className="cell-phone-fieldset">
+									<legend className="cell-phone-legend">
+										Optional, but recommended:
+									</legend>
+
 									<div className="form-group profile">
 										<Select
 											value={cPhoneCarrier && {label: cPhoneCarrier}}
@@ -258,10 +262,10 @@ function UpdateProfile() {
 											htmlFor="pNum" 
 											className="form-label update-profile pNum">
 											
-											Phone number (recommended):
+											Phone number:
 										</label>
-									</div>         
-								</div>
+									</div>
+								</fieldset>
                             </div>
 
                             <div className="modal-footer">
