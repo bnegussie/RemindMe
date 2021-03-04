@@ -777,6 +777,31 @@ div.form-group.reminders > div + .form-label {
     height: 35px;
   }
 }
+
+.cell-phone-fieldset {
+  margin-bottom: 30px;
+  padding: 0.35em 0.75em 0.75em 0.625em;
+  border: 3px groove;
+  border-radius: .25rem;
+
+  display: block;
+}
+
+.cell-phone-legend {
+  width: auto;
+  padding: 0 10px 0 10px; 
+
+  transform:translateY(-1em);
+}
+
+.name-label {
+  display: block;
+}
+
+legend { 
+  background-color: var(--white);
+  border-radius: .25rem;
+}
 /***************************************** END: REGISTER.JS **************************************/
 /***************************************** START: DROPDOWN.JS and MENUITEMS.JS *******************/
 .drop-down-menu {
