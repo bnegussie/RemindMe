@@ -463,7 +463,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
     let emailInfo = {
         from: `RemindMe <${process.env.serviceEmail}>`,
         to: `${userEmail}`,
-        subject: "RemindMe: General Daily Reminders",
+        subject: "RemindMe: General Daily Reminder",
         html: `
         <center><h1>RemindMe</h1></center>
 
@@ -541,7 +541,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
         let smsInfo = {
             from: `RemindMe <${process.env.serviceEmail}>`,
             to: `${userPNum}${userCPCarrierEmailExtn}`,
-            subject: "RemindMe: General Daily Reminders",
+            subject: "RemindMe: General Daily Reminder",
             text: `Hi ${userFName},
             ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day!
             ${allSMSReminders}
@@ -797,7 +797,7 @@ async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, use
     let emailInfo = {
         from: `RemindMe <${process.env.serviceEmail}>`,
         to: `${userEmail}`,
-        subject: "RemindMe: Specific Reminders",
+        subject: "RemindMe: Specific Reminder",
         html: `
         <center><h1>RemindMe</h1></center>
 
@@ -853,7 +853,7 @@ async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, use
         let smsInfo = {
             from: `RemindMe <${process.env.serviceEmail}>`,
             to: `${userPNum}${userCPCarrierEmailExtn}`,
-            subject: "RemindMe: Specific Reminders",
+            subject: "RemindMe: Specific Reminder",
             text: `Hi ${userFName},
             ${initialGreeting} which you wanted to be reminded about. Make sure to keep moving forward and keep making the most out of this day!
             ${smsReminders}
