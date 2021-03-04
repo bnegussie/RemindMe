@@ -198,7 +198,9 @@ const SignUp = ({ setAuth }) => {
                 </div>
 
                 <fieldset className="cell-phone-fieldset">
-                    <legend className="cell-phone-legend">Optional, but recommended:</legend>
+                    <legend className="cell-phone-legend">
+                        Optional, but recommended:
+                    </legend>
 
                     <div id="cellphone-container">
                         <div className="form-group">
