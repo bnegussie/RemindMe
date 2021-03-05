@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
 
@@ -207,6 +207,15 @@ function EditReminder({ currReminder, redirectTo }) {
 		}
 	}
 
+	// Prevents the keyboard popup when used on mobile devices.
+	useEffect(() => {
+		// Can't use Id to get the elements here because the ids are dynamically generated 
+		// because this Edit class is looking at multiple tasks and an id has to be unique.
+		var elements = document.getElementsByClassName('form-control date-picker');
+		for (var i = 0; i < elements.length; i++) {
+			elements[i].setAttribute('readonly', 'readonly');
+		}
+	}, []);
 
 
 	return (
@@ -289,7 +298,7 @@ function EditReminder({ currReminder, redirectTo }) {
 												selected={dueDate}
 												required
 												id={ currReminder.reminder_id + "edit-reminder-due-date" }
-												className="form-control"
+												className="form-control date-picker"
 												onChange={(date) => setDueDate(date)}
 												minDate={new Date()}
 												placeholderText=" "
@@ -313,7 +322,7 @@ function EditReminder({ currReminder, redirectTo }) {
 												selected={reminderDate}
 												required
 												id={ currReminder.reminder_id + "edit-reminder-reminder-date" }
-												className="form-control"
+												className="form-control date-picker"
 												onChange={(date) => setReminderDate(date)}
 												minDate={new Date()}
 												placeholderText=" "

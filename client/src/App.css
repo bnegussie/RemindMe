@@ -544,8 +544,10 @@ ul > li:nth-child(2) > a:hover {
   height: 25vh;
 }
 
-#create-reminder-due-date {
-  width: 100%;
+#create-reminder-due-date,
+#create-reminder-reminder-date,
+.form-control.date-picker {
+  background-color: var(--white) !important;
 }
 /***************************************** END: CREATEREMINDER.JS ********************************/
 /***************************************** START: REMINDERS.JS ***********************************/
