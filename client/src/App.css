@@ -541,7 +541,7 @@ ul > li:nth-child(2) > a:hover {
 
 .form-control.reminder-details {
   width: 100%;
-  height: 25vh;
+  height: 150px;
 }
 
 #create-reminder-due-date,
@@ -661,7 +661,7 @@ ul > li:nth-child(2) > a:hover {
 }
 
 .form-label.reminder-details {
-  transform: translateY(-6em);
+  transform: translateY(-7.3em);
 }
 
 .form-label.update-profile.pNum {
@@ -679,7 +679,7 @@ ul > li:nth-child(2) > a:hover {
 .form-group.reminders {
   width: 100%;
   margin-top: 10px;
-  margin-bottom: -15px;
+  margin-bottom: -10px;
 }
 
 .form-group.profile {
@@ -708,7 +708,7 @@ div.form-group.reminders > div {
 
 .form-control:focus + .form-label.reminder-details,
 .form-control:not(:placeholder-shown) + .form-label.reminder-details {
-  transform:translateY(-7.7em) scale(0.8);
+  transform:translateY(-8.9em) scale(0.8);
 }
 
 .form-control:focus + .form-label.update-profile,
@@ -723,6 +723,11 @@ div.form-group.reminders > div {
 
 div.form-group.reminders > div + .form-label {
   transform:translateY(-3.3em) scale(0.8);
+}
+
+#create-reminder-details {
+  width: 100%;
+  height: 150px;
 }
 
 
