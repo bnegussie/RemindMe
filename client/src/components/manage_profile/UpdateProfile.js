@@ -187,6 +187,7 @@ function UpdateProfile() {
 										value={fName}
 										onChange={e => setFName(e.target.value)}
 										required
+										autoCapitalize="on"
 									/>
 									<label htmlFor="fName" className="form-label update-profile">
 										First name:
@@ -203,6 +204,7 @@ function UpdateProfile() {
 										value={lName}
 										onChange={e => setLName(e.target.value)}
 										required
+										autoCapitalize="on"
 									/>
 									<label htmlFor="lName" className="form-label update-profile">
 										Last name:

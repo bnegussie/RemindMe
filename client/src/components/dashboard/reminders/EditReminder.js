@@ -267,6 +267,7 @@ function EditReminder({ currReminder, redirectTo }) {
 											className="form-control"
 											value={title}
 											onChange={(e) => setTitle(e.target.value)}
+											autoCapitalize="on"
 										/>
 										<label 
 											htmlFor={ currReminder.reminder_id + "edit-reminder-title" } 

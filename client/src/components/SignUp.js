@@ -165,6 +165,7 @@ const SignUp = ({ setAuth }) => {
                         onChange={e => onChange(e)}
                         required
                         autoFocus
+                        autoCapitalize="on"
                     />
                     <label htmlFor="f_name" className="form-label">First name:</label>
                 </div>
@@ -179,6 +180,7 @@ const SignUp = ({ setAuth }) => {
                         value={l_name}
                         onChange={e => onChange(e)}
                         required
+                        autoCapitalize="on"
                     />
                     <label htmlFor="l_name" className="form-label">Last name:</label>
                 </div>

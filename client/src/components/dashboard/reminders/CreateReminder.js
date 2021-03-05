@@ -121,6 +121,7 @@ function CreateReminder() {
 											value={title}
 											onChange={(e) => setTitle(e.target.value)}
 											autoFocus
+											autoCapitalize="on"
 										/>
 										<label htmlFor="create-reminder-title" className="form-label">
 											Reminder title:
