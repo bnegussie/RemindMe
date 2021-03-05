@@ -767,6 +767,10 @@ div.form-group.reminders > div + .form-label {
   .form-control.cellphone-child {
     height: 35px;
   }
+
+  #cellphone-container {
+    display: block;
+  }
 }
 
 @media screen and (max-width: 500px) {
