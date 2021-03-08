@@ -664,13 +664,6 @@ ul > li:nth-child(2) > a:hover {
   transform: translateY(-7.3em);
 }
 
-.form-label.update-profile.pNum {
-  font-size: 0.95em;
-  width: 150%;
-
-  transform: translateY(-1.95em);
-}
-
 .form-group {
   margin-bottom: -10px;
   width: 100%;
@@ -718,7 +711,7 @@ div.form-group.reminders > div {
 
 .form-control:focus + .form-label.update-profile.pNum,
 .form-control:not(:placeholder-shown) + .form-label.update-profile.pNum {
-  transform:translateY(-4.0em) scale(0.9);
+  transform:translateY(-3.3em) scale(0.8);
 }
 
 div.form-group.reminders > div + .form-label {
@@ -739,7 +732,7 @@ div.form-group.reminders > div + .form-label {
 
   .form-control:focus + .form-label,
   .form-control:not(:placeholder-shown) + .form-label {
-    transform:translateY(-4em) scale(0.8);
+    transform:translateY(-3.7em) scale(0.8);
   }
 
   .form-group.reminders {
@@ -748,6 +741,16 @@ div.form-group.reminders > div + .form-label {
 
   div.form-group.reminders > div + .form-label {
     transform:translateY(-4em) scale(0.8);
+  }
+
+  .cellphone-child-left:focus + .form-label.signup.cell-phone-carrier,
+  .cellphone-child-left:not(:placeholder-shown) + .form-label.signup.cell-phone-carrier {
+    transform:translateY(-3.9em);
+  }
+
+  .form-control:focus + .form-label.signup.pNum,
+  .form-control:not(:placeholder-shown) + .form-label.signup.pNum {
+    transform:translateY(-3.9em);
   }
 }
 /***************************************** END: LOGIN.JS *****************************************/
@@ -765,27 +768,12 @@ div.form-group.reminders > div + .form-label {
 }
 
 @media screen and (max-width: 600px) {
-  .cellphone-child-left {
-    font-size: 16px;
-  }
-  
-  .form-control.cellphone-child {
-    height: 35px;
-  }
-
   #cellphone-container {
     display: block;
   }
-}
 
-@media screen and (max-width: 500px) {
-  .cellphone-child-left {
-    font-size: 12px;
-  }
-  
-  .form-control.cellphone-child {
-    font-size: 8px;
-    height: 35px;
+  .form-group.signup.cell-phone-carrier {
+    margin-bottom: 0px;
   }
 }
 
@@ -812,6 +800,12 @@ div.form-group.reminders > div + .form-label {
 legend { 
   background-color: var(--white);
   border-radius: .25rem;
+}
+
+@media screen and (max-width: 500px) {
+  .cell-phone-legend {
+    font-size: 20px;
+  }
 }
 /***************************************** END: SIGNUP.JS **************************************/
 /***************************************** START: DROPDOWN.JS and MENUITEMS.JS *******************/
