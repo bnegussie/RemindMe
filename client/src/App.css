@@ -190,48 +190,6 @@ a.btn-mobile > button {
   color: #242424;
   transition: all 0.3s ease-out;
 }
-
-@media screen and (max-width: 700px) {
-  .btn.btn-info.edit-reminder,
-  .btn.btn-danger.delete-reminder {
-    font-size: 0.9rem;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .btn.btn-info.edit-reminder,
-  .btn.btn-danger.delete-reminder {
-    font-size: 0.85rem;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .btn.btn-info.edit-reminder,
-  .btn.btn-danger.delete-reminder {
-    font-size: 0.8rem;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .btn.btn-info.edit-reminder,
-  .btn.btn-danger.delete-reminder {
-    font-size: 0.75rem;
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .btn.btn-info.edit-reminder,
-  .btn.btn-danger.delete-reminder {
-    font-size: 0.7rem;
-  }
-}
-
-@media screen and (max-width: 300px) {
-  .btn.btn-info.edit-reminder,
-  .btn.btn-danger.delete-reminder {
-    font-size: 0.65rem;
-  }
-}
 /************************************ END: BUTTON.JS *********************************************/
 /************************************ START: LANDINGPAGE.JS **************************************/
 .landing-container {
@@ -1031,3 +989,118 @@ legend {
   transition: 0.3s ease-out;
 }
 /***************************************** END: SEARCH.JS ****************************************/
+
+/* MOBILE MODE FOR ALL FILES: */
+@media screen and (max-width: 700px) {
+  /* STARTING: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.9rem;
+  }
+  /* ENDING: BUTTON.JS  */
+
+  /* STARTING: SEARCH.JS  */
+  .form-control.search {
+    font-size: 22px;
+  }
+
+  .search-btn-on-search {
+    font-size: 30px;
+  }
+  /* ENDING: SEARCH.JS  */
+}
+
+@media screen and (max-width: 600px) {
+  /* STARTING: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.85rem;
+  }
+  /* ENDING: BUTTON.JS  */
+
+  /* STARTING: SEARCH.JS  */
+  .form-control.search {
+    font-size: 20px;
+  }
+
+  .search-btn-on-search {
+    font-size: 28px;
+  }
+  /* ENDING: SEARCH.JS  */
+}
+
+@media screen and (max-width: 500px) {
+  /* STARTING: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.8rem;
+  }
+  /* ENDING: BUTTON.JS  */
+
+  /* STARTING: SEARCH.JS  */
+  .form-control.search {
+    font-size: 18px;
+  }
+
+  .search-btn-on-search {
+    font-size: 26px;
+  }
+  /* ENDING: SEARCH.JS  */
+}
+
+@media screen and (max-width: 400px) {
+  /* STARTING: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.75rem;
+  }
+  /* ENDING: BUTTON.JS  */
+
+  /* STARTING: SEARCH.JS  */
+  .form-control.search {
+    font-size: 16px;
+  }
+
+  .search-btn-on-search {
+    font-size: 24px;
+  }
+  /* ENDING: SEARCH.JS  */
+}
+
+@media screen and (max-width: 350px) {
+  /* STARTING: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.7rem;
+  }
+  /* ENDING: BUTTON.JS  */
+
+  /* STARTING: SEARCH.JS  */
+  .form-control.search {
+    font-size: 14px;
+  }
+
+  .search-btn-on-search {
+    font-size: 22px;
+  }
+  /* ENDING: SEARCH.JS  */
+}
+
+@media screen and (max-width: 300px) {
+  /* STARTING: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.65rem;
+  }
+  /* ENDING: BUTTON.JS  */
+
+  /* STARTING: SEARCH.JS  */
+  .form-control.search {
+    font-size: 12px;
+  }
+
+  .search-btn-on-search {
+    font-size: 20px;
+  }
+  /* ENDING: SEARCH.JS  */
+}
