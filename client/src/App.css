@@ -605,7 +605,7 @@ ul > li:nth-child(2) > a:hover {
 
 .search-btn-on-dashboard {
   text-decoration: none;
-  font-size: 30px;
+  font-size: 29px;
   color: var(--white);
   background: var(--green);
   border-radius: 4px;
@@ -992,14 +992,26 @@ legend {
 
 /* MOBILE MODE FOR ALL FILES: */
 @media screen and (max-width: 700px) {
-  /* STARTING: BUTTON.JS  */
+  /* START: BUTTON.JS  */
   .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
     font-size: 0.9rem;
   }
-  /* ENDING: BUTTON.JS  */
+  /* END: BUTTON.JS  */
 
-  /* STARTING: SEARCH.JS  */
+  /* START: CREATEREMINDER.JS */
+  #createreminder-new-btn {
+    font-size: 18px;
+  }
+  /* END: CREATEREMINDER.JS */
+
+  /* START: REMINDERS.JS */
+  .search-btn-on-dashboard {
+    font-size: 27px;
+  }
+  /* END: REMINDERS.JS */
+
+  /* START: SEARCH.JS  */
   .form-control.search {
     font-size: 22px;
   }
@@ -1007,18 +1019,30 @@ legend {
   .search-btn-on-search {
     font-size: 30px;
   }
-  /* ENDING: SEARCH.JS  */
+  /* END: SEARCH.JS  */
 }
 
 @media screen and (max-width: 600px) {
-  /* STARTING: BUTTON.JS  */
+  /* START: BUTTON.JS  */
   .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
     font-size: 0.85rem;
   }
-  /* ENDING: BUTTON.JS  */
+  /* END: BUTTON.JS  */
 
-  /* STARTING: SEARCH.JS  */
+  /* START: CREATEREMINDER.JS */
+  #createreminder-new-btn {
+    font-size: 16px;
+  }
+  /* END: CREATEREMINDER.JS */
+
+  /* START: REMINDERS.JS */
+  .search-btn-on-dashboard {
+    font-size: 25px;
+  }
+  /* END: REMINDERS.JS */
+
+  /* START: SEARCH.JS  */
   .form-control.search {
     font-size: 20px;
   }
@@ -1026,18 +1050,30 @@ legend {
   .search-btn-on-search {
     font-size: 28px;
   }
-  /* ENDING: SEARCH.JS  */
+  /* END: SEARCH.JS  */
 }
 
 @media screen and (max-width: 500px) {
-  /* STARTING: BUTTON.JS  */
+  /* START: BUTTON.JS  */
   .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
     font-size: 0.8rem;
   }
-  /* ENDING: BUTTON.JS  */
+  /* END: BUTTON.JS  */
 
-  /* STARTING: SEARCH.JS  */
+  /* START: CREATEREMINDER.JS */
+  #createreminder-new-btn {
+    font-size: 14px;
+  }
+  /* END: CREATEREMINDER.JS */
+
+  /* START: REMINDERS.JS */
+  .search-btn-on-dashboard {
+    font-size: 23px;
+  }
+  /* END: REMINDERS.JS */
+
+  /* START: SEARCH.JS  */
   .form-control.search {
     font-size: 18px;
   }
@@ -1045,18 +1081,30 @@ legend {
   .search-btn-on-search {
     font-size: 26px;
   }
-  /* ENDING: SEARCH.JS  */
+  /* END: SEARCH.JS  */
 }
 
 @media screen and (max-width: 400px) {
-  /* STARTING: BUTTON.JS  */
+  /* START: BUTTON.JS  */
   .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
     font-size: 0.75rem;
   }
-  /* ENDING: BUTTON.JS  */
+  /* END: BUTTON.JS  */
 
-  /* STARTING: SEARCH.JS  */
+  /* START: CREATEREMINDER.JS */
+  #createreminder-new-btn {
+    font-size: 12px;
+  }
+  /* END: CREATEREMINDER.JS */
+
+  /* START: REMINDERS.JS */
+  .search-btn-on-dashboard {
+    font-size: 21px;
+  }
+  /* END: REMINDERS.JS */
+
+  /* START: SEARCH.JS  */
   .form-control.search {
     font-size: 16px;
   }
@@ -1064,18 +1112,18 @@ legend {
   .search-btn-on-search {
     font-size: 24px;
   }
-  /* ENDING: SEARCH.JS  */
+  /* END: SEARCH.JS  */
 }
 
 @media screen and (max-width: 350px) {
-  /* STARTING: BUTTON.JS  */
+  /* START: BUTTON.JS  */
   .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
     font-size: 0.7rem;
   }
-  /* ENDING: BUTTON.JS  */
+  /* END: BUTTON.JS  */
 
-  /* STARTING: SEARCH.JS  */
+  /* START: SEARCH.JS  */
   .form-control.search {
     font-size: 14px;
   }
@@ -1083,18 +1131,30 @@ legend {
   .search-btn-on-search {
     font-size: 22px;
   }
-  /* ENDING: SEARCH.JS  */
+  /* END: SEARCH.JS  */
 }
 
 @media screen and (max-width: 300px) {
-  /* STARTING: BUTTON.JS  */
+  /* START: BUTTON.JS  */
   .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
     font-size: 0.65rem;
   }
-  /* ENDING: BUTTON.JS  */
+  /* END: BUTTON.JS  */
 
-  /* STARTING: SEARCH.JS  */
+  /* START: CREATEREMINDER.JS */
+  #createreminder-new-btn {
+    font-size: 10px;
+  }
+  /* END: CREATEREMINDER.JS */
+
+  /* START: REMINDERS.JS */
+  .search-btn-on-dashboard {
+    font-size: 19px;
+  }
+  /* END: REMINDERS.JS */
+
+  /* START: SEARCH.JS  */
   .form-control.search {
     font-size: 12px;
   }
@@ -1102,5 +1162,5 @@ legend {
   .search-btn-on-search {
     font-size: 20px;
   }
-  /* ENDING: SEARCH.JS  */
+  /* END: SEARCH.JS  */
 }
