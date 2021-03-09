@@ -191,43 +191,45 @@ a.btn-mobile > button {
   transition: all 0.3s ease-out;
 }
 
-@media screen and (max-width: 770px) {
+@media screen and (max-width: 700px) {
   .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
   }
 }
 
 @media screen and (max-width: 600px) {
+  .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
-    margin-left: 10px;
+    font-size: 0.85rem;
   }
 }
 
 @media screen and (max-width: 500px) {
   .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
-    font-size: 0.5rem;
-  }
-}
-
-@media screen and (max-width: 450px) {
-  .btn.btn-info.edit-reminder,
-  .btn.btn-danger.delete-reminder {
-    font-size: 0.25rem;
+    font-size: 0.8rem;
   }
 }
 
 @media screen and (max-width: 400px) {
+  .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
-    margin-left: 15px;
+    font-size: 0.75rem;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.7rem;
   }
 }
 
 @media screen and (max-width: 300px) {
   .btn.btn-info.edit-reminder,
   .btn.btn-danger.delete-reminder {
-    font-size: 0.10rem;
+    font-size: 0.65rem;
   }
 }
 /************************************ END: BUTTON.JS *********************************************/
