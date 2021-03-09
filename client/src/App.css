@@ -190,6 +190,46 @@ a.btn-mobile > button {
   color: #242424;
   transition: all 0.3s ease-out;
 }
+
+@media screen and (max-width: 770px) {
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.75rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .btn.btn-danger.delete-reminder {
+    margin-left: 10px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.25rem;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .btn.btn-danger.delete-reminder {
+    margin-left: 15px;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.10rem;
+  }
+}
 /************************************ END: BUTTON.JS *********************************************/
 /************************************ START: LANDINGPAGE.JS **************************************/
 .landing-container {
@@ -582,6 +622,7 @@ ul > li:nth-child(2) > a:hover {
 
 .reminder-titles {
   font-size: 24px;
+  overflow-wrap: break-word;
 }
 
 #overdue-title {
@@ -593,6 +634,10 @@ ul > li:nth-child(2) > a:hover {
   font-size: 20px;
   color: var(--brown);
 }
+
+.table { 
+  table-layout: fixed; 
+} 
 
 .no-data-available-msg {
   font-size: 18px;
@@ -613,6 +658,38 @@ ul > li:nth-child(2) > a:hover {
   color: var(--white);
   background: var(--light-green);
   transition: 0.3s ease-out;
+}
+
+@media screen and (max-width: 500px) {
+  .reminder-tabs {
+    font-size: medium;
+  }
+
+  .reminder-titles {
+    font-size: 16px;
+  }
+
+  .reminders-headers {
+    font-size: 14px;
+  }
+
+  .no-data-available-msg {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .reminder-tabs {
+    font-size: small;
+  }
+
+  .reminder-titles {
+    font-size: 10px;
+  }
+
+  .reminders-headers {
+    font-size: 8px;
+  }
 }
 /***************************************** END: REMINDERS.JS *************************************/
 /***************************************** START: EDITREMINDER.JS ********************************/
@@ -751,6 +828,18 @@ div.form-group.reminders > div + .form-label {
   .form-control:focus + .form-label.signup.pNum,
   .form-control:not(:placeholder-shown) + .form-label.signup.pNum {
     transform:translateY(-3.9em);
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .form-label.reminder-details {
+    font-size: 1em;
+    transform: translateY(-9.1em);
+  }
+
+  .form-control:focus + .form-label.reminder-details,
+  .form-control:not(:placeholder-shown) + .form-label.reminder-details {
+    transform:translateY(-11em) scale(0.8);
   }
 }
 /***************************************** END: LOGIN.JS *****************************************/

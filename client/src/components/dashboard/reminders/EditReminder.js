@@ -224,7 +224,7 @@ function EditReminder({ currReminder, redirectTo }) {
 				<div className="edit-reminder-btn">
 					<button
 						type="button"
-						className="btn btn-info"
+						className="btn btn-info edit-reminder"
 						data-toggle="modal"
 						data-target={`#id${currReminder.reminder_id}`}
 					>
