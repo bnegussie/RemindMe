@@ -442,8 +442,8 @@ function Reminders({ isAuth }) {
 							<thead>
 								<tr id="reminders-table-row">
 									<th width="10%" className="reminders-headers">Completed</th>
-									<th width="60%" className="reminders-headers">Title</th>
-									<th width="10%" className="reminders-headers">View</th>
+									<th width="50%" className="reminders-headers">Title</th>
+									<th width="20%" className="reminders-headers">View</th>
 									<th width="20%" className="reminders-headers">Delete</th>
 								</tr>
 							</thead>
@@ -498,8 +498,8 @@ function Reminders({ isAuth }) {
 							<thead>
 								<tr id="reminders-table-row">
 									<th width="10%" className="reminders-headers">Completed</th>
-									<th width="60%" className="reminders-headers">Title</th>
-									<th width="10%" className="reminders-headers">View</th>
+									<th width="50%" className="reminders-headers">Title</th>
+									<th width="20%" className="reminders-headers">View</th>
 									<th width="20%" className="reminders-headers">Delete</th>
 								</tr>
 							</thead>
@@ -555,8 +555,8 @@ function Reminders({ isAuth }) {
 							<thead>
 								<tr id="reminders-table-row">
 									<th width="10%" className="reminders-headers">Completed</th>
-									<th width="60%" className="reminders-headers">Title</th>
-									<th width="10%" className="reminders-headers">View</th>
+									<th width="50%" className="reminders-headers">Title</th>
+									<th width="20%" className="reminders-headers">View</th>
 									<th width="20%" className="reminders-headers">Delete</th>
 								</tr>
 							</thead>
