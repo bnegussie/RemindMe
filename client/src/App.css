@@ -926,6 +926,12 @@ legend {
 .btn.btn-danger.manage-profile {
   font-size: 1rem;
 }
+
+.modal.update-profile,
+.modal.change-pwd,
+.modal.change-general-reminder-time {
+  text-align: left;
+}
 /***************************************** END: MANAGEPROFILE.JS *********************************/
 /***************************************** START: CHANGEPASSWORD.JS ******************************/
 #newPwd {
@@ -1200,6 +1206,10 @@ legend {
     font-size: 10px;
   }
 
+  .reminder-tabs {
+    font-size: small;
+  }
+
   .reminders-headers {
     font-size: 12px;
   }
@@ -1227,12 +1237,6 @@ legend {
     font-size: 0.7rem;
   }
   /* END: BUTTON.JS  */
-
-  /* START: REMINDERS.JS */
-  .reminder-tabs {
-    font-size: small;
-  }
-  /* END: REMINDERS.JS */
 
   /* START: SEARCH.JS  */
   .form-control.search {

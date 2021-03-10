@@ -161,7 +161,7 @@ function UpdateProfile() {
 				View
 			</button>
 
-			<div className="modal" id="update-profile-modal">
+			<div className="modal update-profile" id="update-profile-modal">
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">

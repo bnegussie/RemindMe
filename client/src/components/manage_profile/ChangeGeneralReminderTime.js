@@ -113,7 +113,11 @@ function ChangeGeneralReminderTime() {
 				View
 			</button>
 
-			<div id="change-general-reminder-time-modal" className="modal fade" role="dialog">
+			<div 
+				id="change-general-reminder-time-modal" 
+				className="modal change-general-reminder-time" 
+				role="dialog">
+				
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">

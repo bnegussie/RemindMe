@@ -71,7 +71,7 @@ function ChangePassword() {
 				Change
 			</button>
 
-			<div id="change-pwd-modal" className="modal fade" role="dialog">
+			<div id="change-pwd-modal" className="modal change-pwd" role="dialog">
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">
