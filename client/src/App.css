@@ -946,8 +946,7 @@ legend {
 }
 
 .general-reminder-time {
-  padding-left: 150px;
-  padding-right: 150px;
+  transform: translate(32%, 0%);
 }
 /***************************************** END: CHANGEGENERALREMINDERTIMES.JS ********************/
 /***************************************** START: SEARCH.JS **************************************/
@@ -1180,6 +1179,12 @@ legend {
   }
   /* END: BUTTON.JS  */
 
+  /* START: CHANGEGENERALREMINDERTIME.JS */
+  .general-reminder-time {
+    transform: translate(28%, 0%);
+  }
+  /* END: CHANGEGENERALREMINDERTIME.JS */
+
   /* START: CREATEREMINDER.JS */
   #createreminder-new-btn {
     font-size: 12px;
@@ -1238,6 +1243,12 @@ legend {
   }
   /* END: BUTTON.JS  */
 
+  /* START: CHANGEGENERALREMINDERTIME.JS */
+  .general-reminder-time {
+    transform: translate(24%, 0%);
+  }
+  /* END: CHANGEGENERALREMINDERTIME.JS */
+
   /* START: SEARCH.JS  */
   .form-control.search {
     font-size: 14px;
@@ -1256,6 +1267,12 @@ legend {
     font-size: 0.65rem;
   }
   /* END: BUTTON.JS  */
+
+  /* START: CHANGEGENERALREMINDERTIME.JS */
+  .general-reminder-time {
+    transform: translate(20%, 0%);
+  }
+  /* END: CHANGEGENERALREMINDERTIME.JS */
 
   /* START: CREATEREMINDER.JS */
   #createreminder-new-btn {
