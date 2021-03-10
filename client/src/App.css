@@ -307,7 +307,7 @@ a.btn-mobile > button {
 .navbar-logo {
   color: var(--white);
   justify-self: start;
-  margin-left: 20px;
+  margin-left: 5px;
   cursor: pointer;
   text-decoration: none;
   font-size: 2.4rem;
@@ -371,7 +371,7 @@ a.btn-mobile > button {
   display: flex;
   align-items: center;
   text-decoration: none;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
   height: 100%;
 }
 
@@ -469,7 +469,7 @@ ul > li:nth-child(2) > a:hover {
     position: absolute;
     top: 0;
     left: 0;
-    transform: translate(25%, 50%);
+    transform: translate(5%, 50%);
   }
 
   .navbar-logo:hover {
