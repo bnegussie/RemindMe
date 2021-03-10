@@ -930,10 +930,12 @@ legend {
 .manage-profile-headers {
   font-size: 20px;
   color: var(--brown);
+  overflow-wrap: break-word;
 }
 
-#manage-profile-actions {
-  text-indent: 10px;
+#manage-profile-actions,
+.manage-profile-btns {
+  text-align: center;
 }
 
 .manage-profile-options {
@@ -944,8 +946,17 @@ legend {
   color: red;
 }
 
-.btn.btn-info.manage-profile {
+.btn.btn-info.manage-profile.change {
+  font-size: 1rem;
+}
+
+.btn.btn-info.manage-profile.view {
+  font-size: 1rem;
   width: 80px;
+}
+
+.btn.btn-danger.manage-profile {
+  font-size: 1rem;
 }
 /***************************************** END: MANAGEPROFILE.JS *********************************/
 /***************************************** START: CHANGEPASSWORD.JS ******************************/
@@ -1005,6 +1016,26 @@ legend {
   }
   /* END: CREATEREMINDER.JS */
 
+  /* START: MANAGEPROFILE.JS */
+  .btn.btn-danger.manage-profile,
+  .btn.btn-info.manage-profile.change {
+    font-size: 0.9rem;
+  }
+
+  .btn.btn-info.manage-profile.view {
+    font-size: 0.9rem;
+    width: 77px;
+  }
+
+  .manage-profile-headers {
+    font-size: 18px;
+  }
+
+  .manage-profile-options {
+    font-size: 22px;
+  }
+  /* END: MANAGEPROFILE.JS */
+
   /* START: REMINDERS.JS */
   .search-btn-on-dashboard {
     font-size: 27px;
@@ -1035,6 +1066,26 @@ legend {
     font-size: 16px;
   }
   /* END: CREATEREMINDER.JS */
+
+  /* START: MANAGEPROFILE.JS */
+  .btn.btn-danger.manage-profile,
+  .btn.btn-info.manage-profile.change {
+    font-size: 0.8rem;
+  }
+
+  .btn.btn-info.manage-profile.view {
+    font-size: 0.8rem;
+    width: 74px;
+  }
+
+  .manage-profile-headers {
+    font-size: 16px;
+  }
+
+  .manage-profile-options {
+    font-size: 20px;
+  }
+  /* END: MANAGEPROFILE.JS */
 
   /* START: REMINDERS.JS */
   .search-btn-on-dashboard {
@@ -1067,6 +1118,26 @@ legend {
   }
   /* END: CREATEREMINDER.JS */
 
+  /* START: MANAGEPROFILE.JS */
+  .btn.btn-danger.manage-profile,
+  .btn.btn-info.manage-profile.change {
+    font-size: 0.7rem;
+  }
+
+  .btn.btn-info.manage-profile.view {
+    font-size: 0.7rem;
+    width: 68px;
+  }
+
+  .manage-profile-headers {
+    font-size: 14px;
+  }
+
+  .manage-profile-options {
+    font-size: 18px;
+  }
+  /* END: MANAGEPROFILE.JS */
+
   /* START: REMINDERS.JS */
   .search-btn-on-dashboard {
     font-size: 23px;
@@ -1097,6 +1168,16 @@ legend {
     font-size: 12px;
   }
   /* END: CREATEREMINDER.JS */
+
+  /* START: MANAGEPROFILE.JS */
+  .manage-profile-headers {
+    font-size: 12px;
+  }
+
+  .manage-profile-options {
+    font-size: 16px;
+  }
+  /* END: MANAGEPROFILE.JS */
 
   /* START: REMINDERS.JS */
   .search-btn-on-dashboard {

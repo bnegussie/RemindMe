@@ -154,7 +154,7 @@ function UpdateProfile() {
 		<Fragment>
 			<button
 				type="button"
-				className="btn btn-info manage-profile"
+				className="btn btn-info manage-profile view"
 				data-toggle="modal"
 				data-target="#update-profile-modal"
 			>

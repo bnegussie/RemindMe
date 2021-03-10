@@ -50,12 +50,12 @@ function ManageProfile({ isAuth, setAuth }) {
 					<thead>
 						<tr>
 							<th 
-								width="80%" 
+								width="70%" 
 								className="manage-profile-headers">
 								Options
 							</th>
 							<th 
-								width="20%" 
+								width="30%" 
 								className="manage-profile-headers" 
 								id="manage-profile-actions">
 								Actions
@@ -65,19 +65,19 @@ function ManageProfile({ isAuth, setAuth }) {
 					<tbody>
 						<tr>
 							<td className="manage-profile-options">My Profile</td>
-                            <td onClick={isAuth} >
+                            <td className="manage-profile-btns" onClick={isAuth} >
                                 <UpdateProfile />
                             </td>
 						</tr>
 						<tr>
 							<td className="manage-profile-options">My Password</td>
-							<td onClick={isAuth} >
+							<td className="manage-profile-btns" onClick={isAuth} >
 								<ChangePassword />
 							</td>
 						</tr>
 						<tr>
 							<td className="manage-profile-options">My General Reminder Time</td>
-							<td onClick={isAuth} >
+							<td className="manage-profile-btns" onClick={isAuth} >
 								<ChangeGeneralReminderTime />
 							</td>
 						</tr>
@@ -86,9 +86,9 @@ function ManageProfile({ isAuth, setAuth }) {
                                 id="manage-profile-options-delete">
                                 My Account
                             </td>
-							<td onClick={isAuth} >
+							<td className="manage-profile-btns" onClick={isAuth} >
 								<InlineConfirmButton
-									className="btn btn-danger"
+									className="btn btn-danger manage-profile"
 									textValues={textValues}
 									showTimer
 									isExecuting={isExecuting}

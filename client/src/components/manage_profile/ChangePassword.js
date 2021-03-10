@@ -64,7 +64,7 @@ function ChangePassword() {
 		<Fragment>
 			<button
 				type="button"
-				className="btn btn-info manage-profile"
+				className="btn btn-info manage-profile change"
 				data-toggle="modal"
 				data-target="#change-pwd-modal"
 			>
