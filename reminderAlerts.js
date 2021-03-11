@@ -459,8 +459,13 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
     }
 
     var initialGreeting = "Here is your upcoming task for the week."
+    var extraSpaceForSMS = "";
     if (numOfReminders > 1) {
         initialGreeting = "Here are your upcoming tasks for the week."
+    } else {
+        // When a user has only one upcoming reminder, the SMS sent out has an
+        // odd header, but adding some buffer spaces resolves the issue.
+        extraSpaceForSMS += "           ";
     }
 
     // Step 2, part 1: sending email with defined transport object:
@@ -547,7 +552,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             to: `${userPNum}${userCPCarrierEmailExtn}`,
             subject: "RemindMe: General Daily Reminder",
             text: `Hi ${userFName},
-            ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day!
+            ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day! ${extraSpaceForSMS}
             ${allSMSReminders}
             Click here to view all of your reminders: 
             www.RemindMeee.com
