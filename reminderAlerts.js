@@ -117,13 +117,17 @@ async function triggerGeneralReminder() {
     try {
         const allUserReminders = await processAllUserReminders(loggingFile);
 
-        const currentTime = new Date();
-        if (currentTime.getMinutes() === 59) {
+        let currentTime = new Date();
+        // It's a loop because the timer keeps getting triggered a few seconds earlier
+        // as time goes on (like a second faster every few weeks).
+        while (currentTime.getMinutes() === 59) {
             loggingData += "    Pre: sleep(). \n";
             // Waiting for five seconds because the earlies this function has ever been
             // called is four seconds early.
             await sleep(1000 * 5);
             loggingData += "    Post: sleep(). \n";
+
+            currentTime = new Date();
         }
 
         allUserReminders.forEach(async function(currUserAllActiveReminders, index) {
@@ -629,9 +633,11 @@ async function triggerSpecifiedReminder() {
 
     const allUserReminders = await processAllUserReminders(loggingFile);
 
-    const currentTime = new Date();
+    let currentTime = new Date();
     // Checking if it's a few seconds behind than desired.
-    if (currentTime.getMinutes() === possibleMinutes[1] - 1 || 
+    // It's a loop because the timer keeps getting triggered a few seconds earlier
+    // as time goes on (like a second faster every few weeks).
+    while (currentTime.getMinutes() === possibleMinutes[1] - 1 || 
         currentTime.getMinutes() === possibleMinutes[2] - 1 ||
         currentTime.getMinutes() === possibleMinutes[3] - 1 ||
         currentTime.getMinutes() === 59) {
@@ -641,6 +647,8 @@ async function triggerSpecifiedReminder() {
         // called is four seconds early.
         await sleep(1000 * 5);
         loggingData += "    Post: sleep(). \n";
+
+        currentTime = new Date();
     }
 
 
