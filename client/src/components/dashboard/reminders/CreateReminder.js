@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
 
@@ -76,6 +76,13 @@ function CreateReminder() {
 		}
 	}
 
+	// Prevents the keyboard popup when used on mobile devices.
+	useEffect(() => {
+		document.getElementById('create-reminder-due-date').setAttribute('readonly', 'readonly');
+		document.getElementById('create-reminder-reminder-date').setAttribute('readonly', 'readonly');
+	}, []);
+
+
 	return (
 		<Fragment>
 			<div className="createreminder-container">
@@ -114,6 +121,7 @@ function CreateReminder() {
 											value={title}
 											onChange={(e) => setTitle(e.target.value)}
 											autoFocus
+											autoCapitalize="on"
 										/>
 										<label htmlFor="create-reminder-title" className="form-label">
 											Reminder title:

@@ -307,7 +307,7 @@ a.btn-mobile > button {
 .navbar-logo {
   color: var(--white);
   justify-self: start;
-  margin-left: 20px;
+  margin-left: 5px;
   cursor: pointer;
   text-decoration: none;
   font-size: 2.4rem;
@@ -371,7 +371,7 @@ a.btn-mobile > button {
   display: flex;
   align-items: center;
   text-decoration: none;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
   height: 100%;
 }
 
@@ -469,7 +469,7 @@ ul > li:nth-child(2) > a:hover {
     position: absolute;
     top: 0;
     left: 0;
-    transform: translate(25%, 50%);
+    transform: translate(5%, 50%);
   }
 
   .navbar-logo:hover {
@@ -541,11 +541,13 @@ ul > li:nth-child(2) > a:hover {
 
 .form-control.reminder-details {
   width: 100%;
-  height: 25vh;
+  height: 150px;
 }
 
-#create-reminder-due-date {
-  width: 100%;
+#create-reminder-due-date,
+#create-reminder-reminder-date,
+.form-control.date-picker {
+  background-color: var(--white) !important;
 }
 /***************************************** END: CREATEREMINDER.JS ********************************/
 /***************************************** START: REMINDERS.JS ***********************************/
@@ -580,6 +582,7 @@ ul > li:nth-child(2) > a:hover {
 
 .reminder-titles {
   font-size: 24px;
+  overflow-wrap: break-word;
 }
 
 #overdue-title {
@@ -592,13 +595,17 @@ ul > li:nth-child(2) > a:hover {
   color: var(--brown);
 }
 
+.table { 
+  table-layout: fixed; 
+} 
+
 .no-data-available-msg {
   font-size: 18px;
 }
 
 .search-btn-on-dashboard {
   text-decoration: none;
-  font-size: 30px;
+  font-size: 29px;
   color: var(--white);
   background: var(--green);
   border-radius: 4px;
@@ -659,14 +666,7 @@ ul > li:nth-child(2) > a:hover {
 }
 
 .form-label.reminder-details {
-  transform: translateY(-6em);
-}
-
-.form-label.update-profile.pNum {
-  font-size: 0.95em;
-  width: 150%;
-
-  transform: translateY(-1.95em);
+  transform: translateY(-7.3em);
 }
 
 .form-group {
@@ -677,7 +677,7 @@ ul > li:nth-child(2) > a:hover {
 .form-group.reminders {
   width: 100%;
   margin-top: 10px;
-  margin-bottom: -15px;
+  margin-bottom: -10px;
 }
 
 .form-group.profile {
@@ -706,7 +706,7 @@ div.form-group.reminders > div {
 
 .form-control:focus + .form-label.reminder-details,
 .form-control:not(:placeholder-shown) + .form-label.reminder-details {
-  transform:translateY(-7.7em) scale(0.8);
+  transform:translateY(-8.9em) scale(0.8);
 }
 
 .form-control:focus + .form-label.update-profile,
@@ -716,11 +716,16 @@ div.form-group.reminders > div {
 
 .form-control:focus + .form-label.update-profile.pNum,
 .form-control:not(:placeholder-shown) + .form-label.update-profile.pNum {
-  transform:translateY(-4.0em) scale(0.9);
+  transform:translateY(-3.3em) scale(0.8);
 }
 
 div.form-group.reminders > div + .form-label {
   transform:translateY(-3.3em) scale(0.8);
+}
+
+#create-reminder-details {
+  width: 100%;
+  height: 150px;
 }
 
 
@@ -732,7 +737,7 @@ div.form-group.reminders > div + .form-label {
 
   .form-control:focus + .form-label,
   .form-control:not(:placeholder-shown) + .form-label {
-    transform:translateY(-4em) scale(0.8);
+    transform:translateY(-3.7em) scale(0.8);
   }
 
   .form-group.reminders {
@@ -741,6 +746,28 @@ div.form-group.reminders > div + .form-label {
 
   div.form-group.reminders > div + .form-label {
     transform:translateY(-4em) scale(0.8);
+  }
+
+  .cellphone-child-left:focus + .form-label.signup.cell-phone-carrier,
+  .cellphone-child-left:not(:placeholder-shown) + .form-label.signup.cell-phone-carrier {
+    transform:translateY(-3.9em);
+  }
+
+  .form-control:focus + .form-label.signup.pNum,
+  .form-control:not(:placeholder-shown) + .form-label.signup.pNum {
+    transform:translateY(-3.9em);
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .form-label.reminder-details {
+    font-size: 1em;
+    transform: translateY(-9.1em);
+  }
+
+  .form-control:focus + .form-label.reminder-details,
+  .form-control:not(:placeholder-shown) + .form-label.reminder-details {
+    transform:translateY(-11em) scale(0.8);
   }
 }
 /***************************************** END: LOGIN.JS *****************************************/
@@ -758,23 +785,12 @@ div.form-group.reminders > div + .form-label {
 }
 
 @media screen and (max-width: 600px) {
-  .cellphone-child-left {
-    font-size: 16px;
+  #cellphone-container {
+    display: block;
   }
-  
-  .form-control.cellphone-child {
-    height: 35px;
-  }
-}
 
-@media screen and (max-width: 500px) {
-  .cellphone-child-left {
-    font-size: 12px;
-  }
-  
-  .form-control.cellphone-child {
-    font-size: 8px;
-    height: 35px;
+  .form-group.signup.cell-phone-carrier {
+    margin-bottom: 0px;
   }
 }
 
@@ -801,6 +817,12 @@ div.form-group.reminders > div + .form-label {
 legend { 
   background-color: var(--white);
   border-radius: .25rem;
+}
+
+@media screen and (max-width: 500px) {
+  .cell-phone-legend {
+    font-size: 20px;
+  }
 }
 /***************************************** END: SIGNUP.JS **************************************/
 /***************************************** START: DROPDOWN.JS and MENUITEMS.JS *******************/
@@ -878,20 +900,37 @@ legend {
   color: var(--brown);
 }
 
-#manage-profile-actions {
-  text-indent: 10px;
+#manage-profile-actions,
+.manage-profile-btns {
+  text-align: center;
 }
 
 .manage-profile-options {
   font-size: 24px;
+  overflow-wrap: break-word;
 }
 
 #manage-profile-options-delete {
   color: red;
 }
 
-.btn.btn-info.manage-profile {
+.btn.btn-info.manage-profile.change {
+  font-size: 1rem;
+}
+
+.btn.btn-info.manage-profile.view {
+  font-size: 1rem;
   width: 80px;
+}
+
+.btn.btn-danger.manage-profile {
+  font-size: 1rem;
+}
+
+.modal.update-profile,
+.modal.change-pwd,
+.modal.change-general-reminder-time {
+  text-align: left;
 }
 /***************************************** END: MANAGEPROFILE.JS *********************************/
 /***************************************** START: CHANGEPASSWORD.JS ******************************/
@@ -907,8 +946,7 @@ legend {
 }
 
 .general-reminder-time {
-  padding-left: 150px;
-  padding-right: 150px;
+  transform: translate(32%, 0%);
 }
 /***************************************** END: CHANGEGENERALREMINDERTIMES.JS ********************/
 /***************************************** START: SEARCH.JS **************************************/
@@ -935,3 +973,326 @@ legend {
   transition: 0.3s ease-out;
 }
 /***************************************** END: SEARCH.JS ****************************************/
+
+/* MOBILE MODE FOR ALL FILES: */
+@media screen and (max-width: 700px) {
+  /* START: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.9rem;
+  }
+  /* END: BUTTON.JS  */
+
+  /* START: CREATEREMINDER.JS */
+  #createreminder-new-btn {
+    font-size: 18px;
+  }
+  /* END: CREATEREMINDER.JS */
+
+  /* START: MANAGEPROFILE.JS */
+  .btn.btn-danger.manage-profile,
+  .btn.btn-info.manage-profile.change {
+    font-size: 0.9rem;
+  }
+
+  .btn.btn-info.manage-profile.view {
+    font-size: 0.9rem;
+    width: 77px;
+  }
+
+  .manage-profile-headers {
+    font-size: 18px;
+  }
+
+  .manage-profile-options {
+    font-size: 22px;
+  }
+  /* END: MANAGEPROFILE.JS */
+
+  /* START: REMINDERS.JS */
+  #overdue-title,
+  .reminder-titles {
+    font-size: 22px;
+  }
+
+  .no-data-available-msg {
+    font-size: 16px;
+  }
+
+  .reminders-headers {
+    font-size: 18px;
+  }
+
+  .search-btn-on-dashboard {
+    font-size: 27px;
+  }
+  /* END: REMINDERS.JS */
+
+  /* START: SEARCH.JS  */
+  .form-control.search {
+    font-size: 22px;
+  }
+
+  .search-btn-on-search {
+    font-size: 30px;
+  }
+  /* END: SEARCH.JS  */
+}
+
+@media screen and (max-width: 600px) {
+  /* START: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.85rem;
+  }
+  /* END: BUTTON.JS  */
+
+  /* START: CREATEREMINDER.JS */
+  #createreminder-new-btn {
+    font-size: 16px;
+  }
+  /* END: CREATEREMINDER.JS */
+
+  /* START: MANAGEPROFILE.JS */
+  .btn.btn-danger.manage-profile,
+  .btn.btn-info.manage-profile.change {
+    font-size: 0.8rem;
+  }
+
+  .btn.btn-info.manage-profile.view {
+    font-size: 0.8rem;
+    width: 74px;
+  }
+
+  .manage-profile-headers {
+    font-size: 16px;
+  }
+
+  .manage-profile-options {
+    font-size: 20px;
+  }
+  /* END: MANAGEPROFILE.JS */
+
+  /* START: REMINDERS.JS */
+  #overdue-title,
+  .reminder-titles {
+    font-size: 20px;
+  }
+
+  .no-data-available-msg {
+    font-size: 14px;
+  }
+
+  .reminders-headers {
+    font-size: 16px;
+  }
+
+  .search-btn-on-dashboard {
+    font-size: 25px;
+  }
+  /* END: REMINDERS.JS */
+
+  /* START: SEARCH.JS  */
+  .form-control.search {
+    font-size: 20px;
+  }
+
+  .search-btn-on-search {
+    font-size: 28px;
+  }
+  /* END: SEARCH.JS  */
+}
+
+@media screen and (max-width: 500px) {
+  /* START: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.8rem;
+  }
+  /* END: BUTTON.JS  */
+
+  /* START: CREATEREMINDER.JS */
+  #createreminder-new-btn {
+    font-size: 14px;
+  }
+  /* END: CREATEREMINDER.JS */
+
+  /* START: MANAGEPROFILE.JS */
+  .btn.btn-danger.manage-profile,
+  .btn.btn-info.manage-profile.change {
+    font-size: 0.7rem;
+  }
+
+  .btn.btn-info.manage-profile.view {
+    font-size: 0.7rem;
+    width: 68px;
+  }
+
+  .manage-profile-headers {
+    font-size: 14px;
+  }
+
+  .manage-profile-options {
+    font-size: 18px;
+  }
+  /* END: MANAGEPROFILE.JS */
+
+  /* START: REMINDERS.JS */
+  #overdue-title,
+  .reminder-titles {
+    font-size: 18px;
+  }
+
+  .no-data-available-msg {
+    font-size: 12px;
+  }
+
+  .reminder-tabs {
+    font-size: medium;
+  }
+
+  .reminders-headers {
+    font-size: 14px;
+  }
+
+  .search-btn-on-dashboard {
+    font-size: 23px;
+  }
+  /* END: REMINDERS.JS */
+
+  /* START: SEARCH.JS  */
+  .form-control.search {
+    font-size: 18px;
+  }
+
+  .search-btn-on-search {
+    font-size: 26px;
+  }
+  /* END: SEARCH.JS  */
+}
+
+@media screen and (max-width: 400px) {
+  /* START: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.75rem;
+  }
+  /* END: BUTTON.JS  */
+
+  /* START: CHANGEGENERALREMINDERTIME.JS */
+  .general-reminder-time {
+    transform: translate(28%, 0%);
+  }
+  /* END: CHANGEGENERALREMINDERTIME.JS */
+
+  /* START: CREATEREMINDER.JS */
+  #createreminder-new-btn {
+    font-size: 12px;
+  }
+  /* END: CREATEREMINDER.JS */
+
+  /* START: MANAGEPROFILE.JS */
+  .manage-profile-headers {
+    font-size: 12px;
+  }
+
+  .manage-profile-options {
+    font-size: 16px;
+  }
+  /* END: MANAGEPROFILE.JS */
+
+  /* START: REMINDERS.JS */
+  #overdue-title,
+  .reminder-titles {
+    font-size: 16px;
+  }
+
+  .no-data-available-msg {
+    font-size: 10px;
+  }
+
+  .reminder-tabs {
+    font-size: small;
+  }
+
+  .reminders-headers {
+    font-size: 12px;
+  }
+
+  .search-btn-on-dashboard {
+    font-size: 21px;
+  }
+  /* END: REMINDERS.JS */
+
+  /* START: SEARCH.JS  */
+  .form-control.search {
+    font-size: 16px;
+  }
+
+  .search-btn-on-search {
+    font-size: 24px;
+  }
+  /* END: SEARCH.JS  */
+}
+
+@media screen and (max-width: 350px) {
+  /* START: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.7rem;
+  }
+  /* END: BUTTON.JS  */
+
+  /* START: CHANGEGENERALREMINDERTIME.JS */
+  .general-reminder-time {
+    transform: translate(24%, 0%);
+  }
+  /* END: CHANGEGENERALREMINDERTIME.JS */
+
+  /* START: SEARCH.JS  */
+  .form-control.search {
+    font-size: 14px;
+  }
+
+  .search-btn-on-search {
+    font-size: 22px;
+  }
+  /* END: SEARCH.JS  */
+}
+
+@media screen and (max-width: 300px) {
+  /* START: BUTTON.JS  */
+  .btn.btn-info.edit-reminder,
+  .btn.btn-danger.delete-reminder {
+    font-size: 0.65rem;
+  }
+  /* END: BUTTON.JS  */
+
+  /* START: CHANGEGENERALREMINDERTIME.JS */
+  .general-reminder-time {
+    transform: translate(20%, 0%);
+  }
+  /* END: CHANGEGENERALREMINDERTIME.JS */
+
+  /* START: CREATEREMINDER.JS */
+  #createreminder-new-btn {
+    font-size: 10px;
+  }
+  /* END: CREATEREMINDER.JS */
+
+  /* START: REMINDERS.JS */
+  .search-btn-on-dashboard {
+    font-size: 19px;
+  }
+  /* END: REMINDERS.JS */
+
+  /* START: SEARCH.JS  */
+  .form-control.search {
+    font-size: 12px;
+  }
+
+  .search-btn-on-search {
+    font-size: 20px;
+  }
+  /* END: SEARCH.JS  */
+}

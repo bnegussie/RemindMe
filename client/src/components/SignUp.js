@@ -165,6 +165,7 @@ const SignUp = ({ setAuth }) => {
                         onChange={e => onChange(e)}
                         required
                         autoFocus
+                        autoCapitalize="on"
                     />
                     <label htmlFor="f_name" className="form-label">First name:</label>
                 </div>
@@ -179,6 +180,7 @@ const SignUp = ({ setAuth }) => {
                         value={l_name}
                         onChange={e => onChange(e)}
                         required
+                        autoCapitalize="on"
                     />
                     <label htmlFor="l_name" className="form-label">Last name:</label>
                 </div>
@@ -203,7 +205,7 @@ const SignUp = ({ setAuth }) => {
                     </legend>
 
                     <div id="cellphone-container">
-                        <div className="form-group">
+                        <div className="form-group signup cell-phone-carrier">
                             <Select options={allCellphoneCarriers}
                                 onChange={e => setCellPhoneOption(e)}
                                 value={cPhoneCarrier.label}
@@ -214,7 +216,7 @@ const SignUp = ({ setAuth }) => {
                             />
 
                             <label htmlFor="sign-up-cell-phone-carrier" 
-                                className="form-label" 
+                                className="form-label signup cell-phone-carrier" 
                                 id="cell-phone-carrier-label">
                                 Cell phone carrier:
                             </label>
@@ -230,7 +232,11 @@ const SignUp = ({ setAuth }) => {
                                 value={p_num}
                                 onChange={e => onChange(e)}
                             /> 
-                            <label htmlFor="sign-up-p_num" className="form-label" id="sign-up-p_num-label">
+                            <label 
+                                htmlFor="sign-up-p_num" 
+                                className="form-label signup pNum" 
+                                id="sign-up-p_num-label">
+
                                 Phone number:
                             </label>
                         </div> 

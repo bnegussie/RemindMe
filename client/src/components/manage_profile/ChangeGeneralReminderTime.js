@@ -106,14 +106,18 @@ function ChangeGeneralReminderTime() {
 		<Fragment>
 			<button
 				type="button"
-				className="btn btn-info manage-profile"
+				className="btn btn-info manage-profile view"
 				data-toggle="modal"
 				data-target="#change-general-reminder-time-modal"
 			>
 				View
 			</button>
 
-			<div id="change-general-reminder-time-modal" className="modal fade" role="dialog">
+			<div 
+				id="change-general-reminder-time-modal" 
+				className="modal change-general-reminder-time" 
+				role="dialog">
+				
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">

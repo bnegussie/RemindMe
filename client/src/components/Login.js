@@ -64,7 +64,7 @@ const LogIn = ({ setAuth }) => {
                 <form onSubmit={e => onSubmit(e)} className="form">
                     <div className="form-group">
                         <input 
-                            type="text"
+                            type="email"
                             name="email"
                             id="log-in-email"
                             placeholder=" "

@@ -64,14 +64,14 @@ function ChangePassword() {
 		<Fragment>
 			<button
 				type="button"
-				className="btn btn-info manage-profile"
+				className="btn btn-info manage-profile change"
 				data-toggle="modal"
 				data-target="#change-pwd-modal"
 			>
 				Change
 			</button>
 
-			<div id="change-pwd-modal" className="modal fade" role="dialog">
+			<div id="change-pwd-modal" className="modal change-pwd" role="dialog">
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">

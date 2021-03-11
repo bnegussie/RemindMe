@@ -154,14 +154,14 @@ function UpdateProfile() {
 		<Fragment>
 			<button
 				type="button"
-				className="btn btn-info manage-profile"
+				className="btn btn-info manage-profile view"
 				data-toggle="modal"
 				data-target="#update-profile-modal"
 			>
 				View
 			</button>
 
-			<div className="modal" id="update-profile-modal">
+			<div className="modal update-profile" id="update-profile-modal">
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">
@@ -187,6 +187,7 @@ function UpdateProfile() {
 										value={fName}
 										onChange={e => setFName(e.target.value)}
 										required
+										autoCapitalize="on"
 									/>
 									<label htmlFor="fName" className="form-label update-profile">
 										First name:
@@ -203,6 +204,7 @@ function UpdateProfile() {
 										value={lName}
 										onChange={e => setLName(e.target.value)}
 										required
+										autoCapitalize="on"
 									/>
 									<label htmlFor="lName" className="form-label update-profile">
 										Last name:
