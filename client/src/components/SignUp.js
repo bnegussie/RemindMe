@@ -38,6 +38,41 @@ const SignUp = ({ setAuth }) => {
         e.preventDefault();
 
         try {
+            // Quick input validation:
+            // Making sure the input fields are not empty or filled with empty spaces.
+            if (f_name === "" || (f_name).replace(/\s/g, "") === "" || 
+                l_name === "" || (l_name).replace(/\s/g, "") === "" ||
+                pwd === "" || (pwd).replace(/\s/g, "") === "" ||
+                pwd_confirm === "" || (pwd_confirm).replace(/\s/g, "") === "") {
+
+                return toast.error("Please fill out all required input fields. (Empty spaces are not valid.)", 
+                                    {autoClose: 4000});
+
+                // eslint-disable-next-line
+            } else if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+                return toast.error("Please provide a valid email.", {autoClose: 3000});
+                
+            } else if (pwd !== pwd_confirm) {
+                return toast.error("Passwords must match.", {autoClose: 3000});
+                
+            } else if (pwd.length < 6) {
+                return toast.error("Your password must be at least six characters long.", 
+                                    {autoClose: 4000});
+
+            } else if ( (p_num && !p_num.match(/^\d{10}$/)) || (p_num === "" && cPhoneCarrier !== "") ) {
+
+                return toast.error("Please provide a valid phone number: 2065551234", {autoClose: 4000});
+                
+            } else if (p_num !== "" && cPhoneCarrier === "") {
+                toast.error("Please specify your Cell Phone Carrier.", {autoClose: 7500});
+                toast.info("This information allows us to send users free reminder text messages.", 
+                            {autoClose: 7500});
+                return false;
+            }
+            // Finished input validation.
+
+
+
             /* As the user has upcoming reminders, within the following seven days, that user
              * will get daily reminders sent out at 6:00 am (default);
              *
@@ -72,27 +107,7 @@ const SignUp = ({ setAuth }) => {
             const body = { f_name, l_name, email, cPhoneCarrier, cPhoneCarrierEmailExtn, 
                             p_num, pwd, generalReminderTime, userTimeZone };
 
-            // Quick input validation:
-            // eslint-disable-next-line
-            if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-                toast.error("Please provide a valid email.", {autoClose: 3000});
-                return false;
-            } else if (pwd !== pwd_confirm) {
-                toast.error("Passwords must match.", {autoClose: 3000});
-                return false;
-            } else if (pwd.length < 6) {
-                return toast.error("Your password must be at least six characters long.", 
-                            {autoClose: 4000});
-            } else if ( (p_num && !p_num.match(/^\d{10}$/)) || (p_num === "" && cPhoneCarrier !== "") ) {
 
-                toast.error("Please provide a valid phone number: 2065551234", {autoClose: 4000});
-                return false;
-            } else if (p_num !== "" && cPhoneCarrier === "") {
-                toast.error("Please specify your Cell Phone Carrier.", {autoClose: 7500});
-                toast.info("This information allows us to send users free reminder text messages.", 
-                            {autoClose: 7500});
-                return false;
-            }
             
             const response = await fetch("/api/auth/signup", {
                 method: "POST",

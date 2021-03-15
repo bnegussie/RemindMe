@@ -20,15 +20,22 @@ const LogIn = ({ setAuth }) => {
         e.preventDefault();
 
         try {
+            // Quick input validation.
+            // eslint-disable-next-line
+            if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+                
+                return toast.error("Please provide a valid email.", {autoClose: 3000});
+                
+            } else if (pwd === "" || (pwd).replace(/\s/g, "") === "") {
+                return toast.error("Please provide your password.", {autoClose: 3000});
+            }
+            // Finsihed input validation.
+
+
             const userTimeZone = (-1)*(new Date()).getTimezoneOffset()/60;
             
             const body = { email, pwd, userTimeZone };
 
-            // eslint-disable-next-line
-            if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-                toast.error("Please provide a valid email.", {autoClose: 3000});
-                return false;
-            }
 
             const response = await fetch("/api/auth/login", {
                 method: "POST",
@@ -72,6 +79,7 @@ const LogIn = ({ setAuth }) => {
                             value={email}
                             onChange ={e => onChange(e)} 
                             autoFocus
+                            required
                         />
                         <label htmlFor="log-in-email" className="form-label">Email:</label>
                     </div>
@@ -85,6 +93,7 @@ const LogIn = ({ setAuth }) => {
                             className="form-control"
                             value={pwd}
                             onChange ={e => onChange(e)}
+                            required
                         />
                         <label htmlFor="log-in-pwd" className="form-label">Password:</label>
                     </div>

@@ -19,14 +19,18 @@ function EditReminder({ currReminder, redirectTo }) {
 		const givenDueDate = dueDate.getTime();
 		const givenReminderDate = reminderDate.getTime();
 
-		if (givenDueDate <= now && !completed) {
-			toast.error("Please provide a Due Date that is in the future.");
-			return false;
+		// Quick input validation:
+		if (title === "" || (title).replace(/\s/g, "") === "") {
+			return toast.error("Please provide a reminder title. (Empty spaces are not valid.)", 
+                            	{autoClose: 4000});
+								
+		} else if (givenDueDate <= now && !completed) {
+			return toast.error("Please provide a Due Date that is in the future.");
+
 		} else if (givenReminderDate <= now && !completed) {
-			toast.error("Please provide a Reminder Date that is in the future.");
-			return false;
+			return toast.error("Please provide a Reminder Date that is in the future.");
 		}
-		// Finished validating input.------------------------------------------------
+		// Finished validating input.
 
 		
 		var reminderSent = currReminder.reminder_reminder_sent;
