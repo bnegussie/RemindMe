@@ -472,13 +472,11 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
 
     // Addressing odd UI issue where the SMS header doesn't display correctly,
     // on some devices, if the text message overall length is short.
-    var extraSpaceForSMS = "";
     if (numOfDifferentDays < 2 && numOfReminders < 3) {
-        allSMSReminders += "\n";
-        if (numOfReminders == 2) {
-            allSMSReminders += "\n";
+        allSMSReminders += "            - \n";
+        if (numOfReminders == 1) {
+            allSMSReminders += "            - \n";
         }
-        extraSpaceForSMS += "           ";
     }
 
     // Step 2, part 1: sending email with defined transport object:
@@ -565,7 +563,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             to: `${userPNum}${userCPCarrierEmailExtn}`,
             subject: "RemindMe: General Daily Reminder",
             text: `Hi ${userFName},
-            ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day! ${extraSpaceForSMS}
+            ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day!
             ${allSMSReminders}
             Click here to view all of your reminders: 
             www.RemindMeee.com
