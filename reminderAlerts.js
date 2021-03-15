@@ -299,6 +299,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
         inLessThanAWeekEmail = "", overdueEmail = "";
 
     let allSMSReminders = "\n";
+    let numOfDifferentDays = 0;
 
     if (req[0] !== "") {
         let todayTasks = req[0].split("<br/>").reverse();
@@ -325,6 +326,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             todayTasksIndex++;
         }
         allSMSReminders += "\n";
+        numOfDifferentDays++;
     }
     if (req[1] !== "") {
         let tmrTasks = req[1].split("<br/>").reverse();
@@ -351,6 +353,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             tmrTasksIndex++;
         }
         allSMSReminders += "\n";
+        numOfDifferentDays++;
     }
     if (req[2] !== "") {
         let tasksInTwoDays = req[2].split("<br/>").reverse();
@@ -377,6 +380,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             tasksInTwoDaysIndex++;
         }
         allSMSReminders += "\n";
+        numOfDifferentDays++;
     }
     if (req[3] !== "") {
         let tasksInThreeDays = req[3].split("<br/>").reverse();
@@ -403,6 +407,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             tasksInThreeDaysIndex++;
         }
         allSMSReminders += "\n";
+        numOfDifferentDays++;
     }
     if (req[4] !== "") {
         let tasksInLessThanAWeek = req[4].split("<br/>").reverse();
@@ -429,6 +434,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             tasksInLessThanAWeekIndex++;
         }
         allSMSReminders += "\n";
+        numOfDifferentDays++;
     }
     
     if (req[5] !== "") {
@@ -456,11 +462,21 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             overdueTasksIndex++;
         }
         allSMSReminders += "\n";
+        numOfDifferentDays++;
     }
 
     var initialGreeting = "Here is your upcoming task for the week."
     if (numOfReminders > 1) {
         initialGreeting = "Here are your upcoming tasks for the week."
+    }
+
+    // Addressing odd UI issue where the SMS header doesn't display correctly,
+    // on some devices, if the text message overall length is short.
+    if (numOfDifferentDays < 2 && numOfReminders < 3) {
+        allSMSReminders += "            - \n";
+        if (numOfReminders == 1) {
+            allSMSReminders += "            - \n";
+        }
     }
 
     // Step 2, part 1: sending email with defined transport object:
