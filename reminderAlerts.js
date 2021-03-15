@@ -963,10 +963,11 @@ function properTime(time, userTimeZone, loggingFile) {
 
     const minInHr = 60;
 
+    const dbTimeZone = (-1) * ( (new Date()).getTimezoneOffset() / minInHr );
     var timeInDBTimeZoneInMill = (new Date(time)).getTime();
     var dbTimeZoneRemoved;
 
-    const dbUTCOffset = process.env.dbTimeZone * minInHr;
+    const dbUTCOffset = dbTimeZone * minInHr;
     var userUTCOffset = userTimeZone * minInHr;
 
     // Meaning if the UTC is a negative value:
