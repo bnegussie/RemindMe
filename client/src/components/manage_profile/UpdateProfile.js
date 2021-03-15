@@ -18,23 +18,32 @@ function UpdateProfile() {
         e.preventDefault();
 
 		try {
-			const body = { fName, lName, email, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum };
-
 			// Quick input validation:
-            // eslint-disable-next-line
-            if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-                toast.error("Please provide a valid email.", {autoClose: 3000});
-                return false;
+			if (fName === "" || (fName).replace(/\s/g, "") === "" || 
+				lName === "" || (lName).replace(/\s/g, "") === "") {
+
+				return toast.error("Please fill out all required input fields. (Empty spaces are not valid.)", 
+									{autoClose: 4000});
+
+				// eslint-disable-next-line
+			} else if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+                
+				return toast.error("Please provide a valid email.", {autoClose: 3000});
+
             } else if ( (pNum && !pNum.match(/^\d{10}$/)) || (pNum === "" && cPhoneCarrier !== "") ) {
 
-                toast.error("Please provide a valid phone number: 2065551234", {autoClose: 4000});
-                return false;
+                return toast.error("Please provide a valid phone number: 2065551234", {autoClose: 4000});
+                
             } else if (pNum !== "" && cPhoneCarrier === "") {
                 toast.error("Please specify your Cell Phone Carrier.", {autoClose: 7500});
                 toast.info("This information allows us to send users free reminder text messages.", 
                             {autoClose: 7500});
                 return false;
 			}
+			// Finished input validation.
+
+
+			const body = { fName, lName, email, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum };
 			
 			const putHeaders = new Headers();
 			putHeaders.append("Content-type", "application/json");

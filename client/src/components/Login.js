@@ -23,11 +23,11 @@ const LogIn = ({ setAuth }) => {
             // Quick input validation.
             // eslint-disable-next-line
             if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-                toast.error("Please provide a valid email.", {autoClose: 3000});
-                return false;
+                
+                return toast.error("Please provide a valid email.", {autoClose: 3000});
+                
             } else if (pwd === "" || (pwd).replace(/\s/g, "") === "") {
-                toast.error("Please provide your password.", {autoClose: 3000});
-                return false;
+                return toast.error("Please provide your password.", {autoClose: 3000});
             }
             // Finsihed input validation.
 

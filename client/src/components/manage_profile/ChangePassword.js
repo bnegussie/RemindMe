@@ -19,17 +19,26 @@ function ChangePassword() {
         e.preventDefault();
 
         try {
-            const body = { currentPwd, newPwd };
+            // Quick input validation:
+            // Making sure the input fields are not empty or filled with empty spaces.
+            if (currentPwd === "" || (currentPwd).replace(/\s/g, "") === "" ||
+                newPwd === "" || (newPwd).replace(/\s/g, "") === "" ||
+                confirmNewPwd === "" || (confirmNewPwd).replace(/\s/g, "") === "") {
 
-            // Quick validation:
-            if (newPwd !== confirmNewPwd) {
+                return toast.error("Please fill out all required input fields. (Empty spaces are not valid.)", 
+                                    {autoClose: 4000});
+            } else if (newPwd !== confirmNewPwd) {
                 return toast.error("The new password must match the confirmation password.", 
-                            {autoClose: 4000});
+                                    {autoClose: 4000});
 
             } else if (newPwd.length < 6) {
                 return toast.error("Your new password must be at least six characters long.", 
-                            {autoClose: 4000});
+                                    {autoClose: 4000});
             }
+            // Finished input validation.
+
+
+            const body = { currentPwd, newPwd };
 
             const pwdHeaders = new Headers();
             pwdHeaders.append("Content-type", "application/json");
