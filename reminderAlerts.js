@@ -485,34 +485,52 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
         to: `${userEmail}`,
         subject: "RemindMe: General Daily Reminder",
         html: `
-        <center><h1>RemindMe</h1></center>
+        <div style="color: #000 !important;">
+            <center>
+                <h1 style="color: #000;">RemindMe</h1>
+            </center>
 
-        <h3>Hi ${userFName},</h3>
-        <h3 style="text-indent: 50px;"> 
-        ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day!
-        </h3>
+            <h3 style="color: #000;">Hi ${userFName},</h3>
+            <h3 style="color: #000; text-indent: 50px;"> 
+            ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day!
+            </h3>
+            <br/>
+            
+            ${todayEmail}
+
+            ${tomorrowEmail}
+            
+            ${inTwoDaysEmail}
+            
+            ${inThreeDaysEmail}
+            
+            ${inLessThanAWeekEmail}
+
+            ${overdueEmail}
+        </div>
+        
         <br/>
-        
-        ${todayEmail}
+        <div>
+            <!--[if mso]>
+            <center>
+                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://RemindMeee.com" style="height:40px;v-text-anchor:middle;width:300px;" arcsize="25%" strokecolor="#000" fillcolor="#8B4513">
+                    <w:anchorlock/>
+                    <center style="color:#fff; font-family:sans-serif; font-size:15px; font-weight:bold;">
+                        Click here to view all of your reminders
+                    </center>
+                </v:roundrect>
+            </center>
+            <![endif]-->
 
-        ${tomorrowEmail}
-        
-        ${inTwoDaysEmail}
-        
-        ${inThreeDaysEmail}
-        
-        ${inLessThanAWeekEmail}
+            <center>
+                <a 
+                    href="https://RemindMeee.com" 
+                    style="background-color:#8B4513; border:1px solid #000; border-radius:10px; color:#fff; display:inline-block; font-family:sans-serif; font-size:15px; font-weight:bold; line-height:40px; text-align:center; text-decoration:none; width:300px; -webkit-text-size-adjust:none; mso-hide:all;">
 
-        ${overdueEmail}
-        
-        <br/>
-        <center>
-            <a href='www.RemindMeee.com'>
-                <button style="font-weight: bold; font-size: 15px;">
                     Click here to view all of your reminders
-                </button>
-            </a>
-        </center>
+                </a>
+            </center>
+        </div>
         `
     };
 
@@ -823,24 +841,43 @@ async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, use
         to: `${userEmail}`,
         subject: "RemindMe: Specific Reminder",
         html: `
-        <center><h1>RemindMe</h1></center>
+        <div style="color: #000 !important;">
+            <center>
+                <h1 style="color: #000;">RemindMe</h1>
+            </center>
 
-        <h3>Hi ${userFName},</h3>
-        <h3 style="text-indent: 40px;"> 
-        ${initialGreeting} which you wanted to be reminded about. 
-        Make sure to keep moving forward and keep making the most out of this day!
-        </h3><br/>
-        
-        ${emailReminders}
+            <h3 style="color: #000;">Hi ${userFName},</h3>
+            <h3 style="color: #000; text-indent: 40px;"> 
+            ${initialGreeting} which you wanted to be reminded about. 
+            Make sure to keep moving forward and keep making the most out of this day!
+            </h3>
+            <br/>
+            
+            ${emailReminders}
+        </div>
         
         <br/>
-        <center>
-            <a href='www.RemindMeee.com'>
-                <button style="font-weight: bold; font-size: 15px;">
+        <div>
+            <!--[if mso]>
+            <center>
+                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://RemindMeee.com" style="height:40px;v-text-anchor:middle;width:300px;" arcsize="25%" strokecolor="#000" fillcolor="#8B4513">
+                    <w:anchorlock/>
+                    <center style="color:#fff; font-family:sans-serif; font-size:15px; font-weight:bold;">
+                        Click here to view all of your reminders
+                    </center>
+                </v:roundrect>
+            </center>
+            <![endif]-->
+
+            <center>
+                <a 
+                    href="https://RemindMeee.com" 
+                    style="background-color:#8B4513; border:1px solid #000; border-radius:10px; color:#fff; display:inline-block; font-family:sans-serif; font-size:15px; font-weight:bold; line-height:40px; text-align:center; text-decoration:none; width:300px; -webkit-text-size-adjust:none; mso-hide:all;">
+
                     Click here to view all of your reminders
-                </button>
-            </a>
-        </center>
+                </a>
+            </center>
+        </div>
         `
     };
 
