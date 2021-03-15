@@ -39,7 +39,12 @@ const SignUp = ({ setAuth }) => {
 
         try {
             // Quick input validation:
-            if (f_name === "" || l_name === "" || email === "" || pwd === "" || pwd_confirm === "") {
+            // Making sure the input fields are not empty or filled with empty spaces.
+            if (f_name === "" || (f_name).replace(/\s/g, "") === "" || 
+                l_name === "" || (l_name).replace(/\s/g, "") === "" ||
+                email === "" || (email).replace(/\s/g, "") === "" || 
+                pwd === "" || (pwd).replace(/\s/g, "") === "" ||
+                pwd_confirm === "" || (pwd_confirm).replace(/\s/g, "") === "") {
 
                 toast.error("Please fill out all required input fields.", {autoClose: 3000});
                 return false;

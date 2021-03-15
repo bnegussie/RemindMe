@@ -25,7 +25,7 @@ const LogIn = ({ setAuth }) => {
             if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
                 toast.error("Please provide a valid email.", {autoClose: 3000});
                 return false;
-            } else if (pwd === "") {
+            } else if (pwd === "" || (pwd).replace(/\s/g, "") === "") {
                 toast.error("Please provide your password.", {autoClose: 3000});
                 return false;
             }
