@@ -298,8 +298,10 @@ function Search({ isAuth }) {
                                         {currReminder.reminder_title}
                                     </td>
                                     <td onClick={isAuth} >
-										<EditReminder currReminder={currReminder} 
+										<EditReminder 
+											currReminder={currReminder} 
 											redirectTo="/Dashboard/Search" 
+											activeRemindersEmpty={activeRemindersEmpty}
 										/>
                                     </td>
                                     <td onClick={isAuth} >

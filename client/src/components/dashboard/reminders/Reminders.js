@@ -417,7 +417,10 @@ function Reminders({ isAuth }) {
 											{currReminder.reminder_title}
 										</td>
 										<td onClick={isAuth} >
-											<EditReminder currReminder={currReminder} />
+											<EditReminder 
+												currReminder={currReminder} 
+												activeRemindersEmpty={ allActiveReminders.length === 0 } 
+											/>
 										</td>
 										<td onClick={isAuth} >
 											<InlineConfirmButton
@@ -473,7 +476,10 @@ function Reminders({ isAuth }) {
 											{currReminder.reminder_title}
 										</td>
 										<td onClick={isAuth} >
-											<EditReminder currReminder={currReminder} />
+											<EditReminder 
+												currReminder={currReminder} 
+												activeRemindersEmpty={ allActiveReminders.length === 0 } 
+											/>
 										</td>
 										<td onClick={isAuth} >
 											<InlineConfirmButton
@@ -530,7 +536,10 @@ function Reminders({ isAuth }) {
 											{currReminder.reminder_title}
 										</td>
 										<td onClick={isAuth} >
-											<EditReminder currReminder={currReminder} />
+											<EditReminder 
+												currReminder={currReminder} 
+												activeRemindersEmpty={ allActiveReminders.length === 0 } 
+											/>
 										</td>
 										<td onClick={isAuth} >
 											<InlineConfirmButton
@@ -585,7 +594,10 @@ function Reminders({ isAuth }) {
 										</td>
 										<td id="overdue-title">{currReminder.reminder_title}</td>
 										<td onClick={isAuth} >
-											<EditReminder currReminder={currReminder} />
+											<EditReminder 
+												currReminder={currReminder} 
+												activeRemindersEmpty={ allActiveReminders.length === 0 } 
+											/>
 										</td>
 										<td onClick={isAuth} >
 											<InlineConfirmButton

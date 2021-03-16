@@ -2,9 +2,11 @@ import React, { Fragment, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
 
+import { PushGeneralReminderTimeAhead } from "./PushGeneralReminderTimeAhead";
+
 import "./../../../App.css"
 
-function EditReminder({ currReminder, redirectTo }) {
+function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 	const [completed, setCompleted] = useState( currReminder.reminder_completed );
 	const [title, setTitle] = useState(currReminder.reminder_title);
 	const [desc, setDesc] = useState(currReminder.reminder_desc);
@@ -15,16 +17,22 @@ function EditReminder({ currReminder, redirectTo }) {
 	const editText = async (e) => {
 		e.preventDefault();
 
+		// Quick input validation:
+		if (title === "" || (title).replace(/\s/g, "") === "") {
+			return toast.error("Please provide a Reminder Title. (Empty spaces are not valid.)", 
+                            	{autoClose: 4000});
+								
+		} else if (!dueDate) {
+			return toast.error("Please provide a Due Date.", {autoClose: 3000});
+		} else if (!reminderDate) {
+			return toast.error("Please provide a Reminder Date.", {autoClose: 3000});
+		}
+
 		const now = new Date().getTime();
 		const givenDueDate = dueDate.getTime();
 		const givenReminderDate = reminderDate.getTime();
-
-		// Quick input validation:
-		if (title === "" || (title).replace(/\s/g, "") === "") {
-			return toast.error("Please provide a reminder title. (Empty spaces are not valid.)", 
-                            	{autoClose: 4000});
-								
-		} else if (givenDueDate <= now && !completed) {
+		
+		if (givenDueDate <= now && !completed) {
 			return toast.error("Please provide a Due Date that is in the future.");
 
 		} else if (givenReminderDate <= now && !completed) {
@@ -166,6 +174,10 @@ function EditReminder({ currReminder, redirectTo }) {
 							body: JSON.stringify(bodyPlusId)
 					});
 				} else {
+					if (activeRemindersEmpty) {
+						await PushGeneralReminderTimeAhead(myHeaders);
+					}
+
 					// eslint-disable-next-line
 					const respDeletedCompletedReminder = await fetch(
 						`/api/dashboard/reminder/completed/${id}`, {
