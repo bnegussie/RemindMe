@@ -21,16 +21,22 @@ function CreateReminder({ activeRemindersEmpty }) {
 
 		e.preventDefault();
 
-		const now = new Date().getTime();
-		const givenDueDate = new Date(dueDate).getTime();
-		const givenReminderDate = new Date(reminderDate).getTime();
-
 		// Quick input validation:
 		if (title === "" || (title).replace(/\s/g, "") === "") {
 			return toast.error("Please provide a reminder title. (Empty spaces are not valid.)", 
                             	{autoClose: 4000});
 
-		} else if (givenDueDate <= now) {
+		} else if (!dueDate) {
+			return toast.error("Please provide a Due Date.", {autoClose: 3000});
+		} else if (!reminderDate) {
+			return toast.error("Please provide a Reminder Date.", {autoClose: 3000});
+		}
+		
+		const now = new Date().getTime();
+		const givenDueDate = new Date(dueDate).getTime();
+		const givenReminderDate = new Date(reminderDate).getTime();
+		
+		if (givenDueDate <= now) {
 			return toast.error("Please provide a Due Date that is in the future.");
 
 		} else if (givenReminderDate <= now) {
