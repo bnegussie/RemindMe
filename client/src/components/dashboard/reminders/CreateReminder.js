@@ -2,12 +2,14 @@ import React, { Fragment, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
 
+import { PushGeneralReminderTimeAhead } from "./PushGeneralReminderTimeAhead";
+
 import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./../../../App.css";
 
-function CreateReminder() {
+function CreateReminder({ activeRemindersEmpty }) {
 	const [title, setTitle] = useState("");
 	const [desc, setDesc] = useState("");
 
@@ -19,34 +21,43 @@ function CreateReminder() {
 
 		e.preventDefault();
 
-		const now = new Date().getTime();
-		const givenDueDate = new Date(dueDate).getTime();
-		const givenReminderDate = new Date(reminderDate).getTime();
-
 		// Quick input validation:
 		if (title === "" || (title).replace(/\s/g, "") === "") {
 			return toast.error("Please provide a reminder title. (Empty spaces are not valid.)", 
                             	{autoClose: 4000});
 
-		} else if (givenDueDate <= now) {
+		} else if (!dueDate) {
+			return toast.error("Please provide a Due Date.", {autoClose: 3000});
+		} else if (!reminderDate) {
+			return toast.error("Please provide a Reminder Date.", {autoClose: 3000});
+		}
+		
+		const now = new Date().getTime();
+		const givenDueDate = new Date(dueDate).getTime();
+		const givenReminderDate = new Date(reminderDate).getTime();
+		
+		if (givenDueDate <= now) {
 			return toast.error("Please provide a Due Date that is in the future.");
 
 		} else if (givenReminderDate <= now) {
 			return toast.error("Please provide a Reminder Date that is in the future.");
 		}
 		// Finished input validation.
-		
+
+		// Reuseable header:
+		const myHeaders = new Headers();
+		myHeaders.append("Content-type", "application/json");
+		myHeaders.append("token", localStorage.token);
+
+		if (activeRemindersEmpty) {
+			await PushGeneralReminderTimeAhead(myHeaders);
+		}
 
 		const completed = false;
 		const reminderSent = false;
 		const body = {completed, title, desc, dueDate, reminderDate, reminderSent};
 
 		try {
-			const myHeaders = new Headers();
-			myHeaders.append("Content-type", "application/json");
-			myHeaders.append("token", localStorage.token);
-
-			// eslint-disable-next-line
 			const respAllReminders = await fetch("/api/dashboard/reminder/all", {
 				method: "POST",
 				headers: myHeaders,

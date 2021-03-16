@@ -1,14 +1,16 @@
 import React, { Fragment, useState, useEffect } from "react";
 import InlineConfirmButton from "react-inline-confirm";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+
+// Components:
+import CreateReminder from "./CreateReminder";
+import EditReminder from "./EditReminder";
+import { PushGeneralReminderTimeAhead } from "./PushGeneralReminderTimeAhead";
 
 import "./../../../App.css";
 import "react-tabs/style/react-tabs.css";
 
-// Components:
-import EditReminder from "./EditReminder";
-import CreateReminder from "./CreateReminder";
 
 function Reminders({ isAuth }) {
 	const [allActiveReminders, setAllActiveReminders] = useState([]);
@@ -135,7 +137,7 @@ function Reminders({ isAuth }) {
 
 		try {
 			if (reminder_completed) {
-				// The Completed checkbox just got the check marked.
+				// The Completed checkbox just got checked.
 	
 				const respActiveReminders = await fetch(
 					`/api/dashboard/reminder/active/${reminder_id}`, {
@@ -185,6 +187,10 @@ function Reminders({ isAuth }) {
 	
 			} else {
 				// The Completed checkbox has now been unchecked.
+
+				if (allActiveReminders.length === 0) {
+					await PushGeneralReminderTimeAhead(myHeaders);
+				}
 	
 				// eslint-disable-next-line
 				const respCompletedReminders = await fetch(
@@ -357,7 +363,7 @@ function Reminders({ isAuth }) {
 		<Fragment>
 			<div className="main-dashboard-btns">
 				<div className="dashboard-btns" onClick={isAuth} onMouseEnter={isAuth}>
-					<CreateReminder />
+					<CreateReminder activeRemindersEmpty={ allActiveReminders.length === 0 } />
 
 					<Link className='search-btn-on-dashboard' to="/Dashboard/Search">
 						<i className="fas fa-search"  />
@@ -411,7 +417,10 @@ function Reminders({ isAuth }) {
 											{currReminder.reminder_title}
 										</td>
 										<td onClick={isAuth} >
-											<EditReminder currReminder={currReminder} />
+											<EditReminder 
+												currReminder={currReminder} 
+												activeRemindersEmpty={ allActiveReminders.length === 0 } 
+											/>
 										</td>
 										<td onClick={isAuth} >
 											<InlineConfirmButton
@@ -467,7 +476,10 @@ function Reminders({ isAuth }) {
 											{currReminder.reminder_title}
 										</td>
 										<td onClick={isAuth} >
-											<EditReminder currReminder={currReminder} />
+											<EditReminder 
+												currReminder={currReminder} 
+												activeRemindersEmpty={ allActiveReminders.length === 0 } 
+											/>
 										</td>
 										<td onClick={isAuth} >
 											<InlineConfirmButton
@@ -524,7 +536,10 @@ function Reminders({ isAuth }) {
 											{currReminder.reminder_title}
 										</td>
 										<td onClick={isAuth} >
-											<EditReminder currReminder={currReminder} />
+											<EditReminder 
+												currReminder={currReminder} 
+												activeRemindersEmpty={ allActiveReminders.length === 0 } 
+											/>
 										</td>
 										<td onClick={isAuth} >
 											<InlineConfirmButton
@@ -579,7 +594,10 @@ function Reminders({ isAuth }) {
 										</td>
 										<td id="overdue-title">{currReminder.reminder_title}</td>
 										<td onClick={isAuth} >
-											<EditReminder currReminder={currReminder} />
+											<EditReminder 
+												currReminder={currReminder} 
+												activeRemindersEmpty={ allActiveReminders.length === 0 } 
+											/>
 										</td>
 										<td onClick={isAuth} >
 											<InlineConfirmButton
