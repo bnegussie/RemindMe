@@ -135,7 +135,7 @@ function Reminders({ isAuth }) {
 
 		try {
 			if (reminder_completed) {
-				// The Completed checkbox just got the check marked.
+				// The Completed checkbox just got checked.
 	
 				const respActiveReminders = await fetch(
 					`/api/dashboard/reminder/active/${reminder_id}`, {
