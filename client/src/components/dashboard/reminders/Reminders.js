@@ -357,7 +357,7 @@ function Reminders({ isAuth }) {
 		<Fragment>
 			<div className="main-dashboard-btns">
 				<div className="dashboard-btns" onClick={isAuth} onMouseEnter={isAuth}>
-					<CreateReminder />
+					<CreateReminder activeRemindersEmpty={ allActiveReminders.length === 0 } />
 
 					<Link className='search-btn-on-dashboard' to="/Dashboard/Search">
 						<i className="fas fa-search"  />

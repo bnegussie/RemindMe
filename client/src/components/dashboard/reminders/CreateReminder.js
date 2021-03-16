@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./../../../App.css";
 
-function CreateReminder() {
+function CreateReminder({ activeRemindersEmpty }) {
 	const [title, setTitle] = useState("");
 	const [desc, setDesc] = useState("");
 
@@ -35,6 +35,47 @@ function CreateReminder() {
 			return toast.error("Please provide a Reminder Date that is in the future.");
 		}
 		// Finished input validation.
+
+		// Reuseable header:
+		const myHeaders = new Headers();
+		myHeaders.append("Content-type", "application/json");
+		myHeaders.append("token", localStorage.token);
+
+
+		if (activeRemindersEmpty) {
+			/* Updating the General Reminder Time to the following day, at the specified time.
+			 * This edge case comes up when a user doesn't use the reminder app (doesn't have 
+			 * any Active Reminders) for one or more days and the next time the user creates 
+			 * a reminder or marks an old reminder task as uncompleted, then soon after, the 
+			 * user will get a General Daily Reminder at the next full hour and this not happen.
+			 */
+			try {
+				const grtGetResponse = await fetch("/api/profile/general/reminder", {
+					method: "GET",
+					headers: {"token": localStorage.token}
+				});
+				const parseResp = await grtGetResponse.json();
+				const finalTime = new Date(parseResp.user_general_reminder_time);
+
+				const tempTime = new Date();
+				const newGRT = new Date( tempTime.getFullYear(), tempTime.getMonth(),
+														( tempTime.getDate() + 1), 
+														finalTime.getHours(), 0, 0, 0 );
+				
+				let body = { newGRT };
+	
+				// eslint-disable-next-line
+				const grtUpdateResponse = await fetch("/api/profile/general/reminder", {
+					method: "PUT",
+					headers: myHeaders,
+					body: JSON.stringify(body)
+				});
+
+			} catch (error) {
+				console.error(error.message);
+			}
+			// Finished updating the General Reminder Time.
+		}
 		
 
 		const completed = false;
@@ -42,11 +83,6 @@ function CreateReminder() {
 		const body = {completed, title, desc, dueDate, reminderDate, reminderSent};
 
 		try {
-			const myHeaders = new Headers();
-			myHeaders.append("Content-type", "application/json");
-			myHeaders.append("token", localStorage.token);
-
-			// eslint-disable-next-line
 			const respAllReminders = await fetch("/api/dashboard/reminder/all", {
 				method: "POST",
 				headers: myHeaders,
