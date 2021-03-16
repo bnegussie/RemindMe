@@ -1,14 +1,16 @@
 import React, { Fragment, useState, useEffect } from "react";
 import InlineConfirmButton from "react-inline-confirm";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+
+// Components:
+import CreateReminder from "./CreateReminder";
+import EditReminder from "./EditReminder";
+import { PushGeneralReminderTimeAhead } from "./PushGeneralReminderTimeAhead";
 
 import "./../../../App.css";
 import "react-tabs/style/react-tabs.css";
 
-// Components:
-import EditReminder from "./EditReminder";
-import CreateReminder from "./CreateReminder";
 
 function Reminders({ isAuth }) {
 	const [allActiveReminders, setAllActiveReminders] = useState([]);
@@ -185,6 +187,10 @@ function Reminders({ isAuth }) {
 	
 			} else {
 				// The Completed checkbox has now been unchecked.
+
+				if (allActiveReminders.length === 0) {
+					await PushGeneralReminderTimeAhead(myHeaders);
+				}
 	
 				// eslint-disable-next-line
 				const respCompletedReminders = await fetch(

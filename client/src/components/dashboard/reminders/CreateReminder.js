@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
+
 import { PushGeneralReminderTimeAhead } from "./PushGeneralReminderTimeAhead";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -42,11 +43,9 @@ function CreateReminder({ activeRemindersEmpty }) {
 		myHeaders.append("Content-type", "application/json");
 		myHeaders.append("token", localStorage.token);
 
-
 		if (activeRemindersEmpty) {
 			await PushGeneralReminderTimeAhead(myHeaders);
 		}
-		
 
 		const completed = false;
 		const reminderSent = false;

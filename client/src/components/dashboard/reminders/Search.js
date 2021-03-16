@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import InlineConfirmButton from "react-inline-confirm";
 
 import EditReminder from "./EditReminder";
+import { PushGeneralReminderTimeAhead } from "./PushGeneralReminderTimeAhead";
 
 import "./../../../App.css";
 
@@ -10,6 +11,7 @@ function Search({ isAuth }) {
     const [allReminders, setAllReminders] = useState([]);
     const [filteredReminders, setFilteredReminders] = useState([]);
     const [titleSearched, setTitleSearched] = useState("");
+	const [activeRemindersEmpty, setActiveRemindersEmpty] = useState(true);
 
     const textValues = ["Delete", "Are you sure?", "Deleting..."];
 	var isExecuting = false;
@@ -22,6 +24,18 @@ function Search({ isAuth }) {
 				headers: {token: localStorage.token}
 			});
 			const parseResp = await response.json();
+
+			// Determining if there is at least one active reminder:
+			const reminderLength = parseResp.length;
+			let i = 0;
+			while (i < reminderLength) {
+				if (!parseResp[i].reminder_completed) {
+					setActiveRemindersEmpty(false);
+					break
+				}
+				i++;
+			}
+			// Finished checking to see if there is at least one active reminder.
             
             setAllReminders(parseResp);
             setFilteredReminders(parseResp);
@@ -110,7 +124,7 @@ function Search({ isAuth }) {
 
 		try {
 			if (reminder_completed) {
-				// The Completed checkbox just got the check marked.
+				// The Completed checkbox just got checked.
 	
 				const respActiveReminders = await fetch(
 					`/api/dashboard/reminder/active/${reminder_id}`, {
@@ -160,6 +174,10 @@ function Search({ isAuth }) {
 	
 			} else {
 				// The Completed checkbox has now been unchecked.
+
+				if (activeRemindersEmpty) {
+					await PushGeneralReminderTimeAhead(myHeaders);
+				}
 	
 				// eslint-disable-next-line
 				const respCompletedReminders = await fetch(
@@ -226,7 +244,8 @@ function Search({ isAuth }) {
 			setAllReminders([]);
 			setFilteredReminders([]);
 		}
-    }, [])
+    }, []);
+
 
     return (
         <Fragment>
