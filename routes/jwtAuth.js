@@ -62,7 +62,7 @@ router.post("/signup", validInfo, async(req, res) => {
         
         // 5) Generate our JWT token:
         const token = jwtGenerator(newUser.rows[0].user_id);
-        res.json( {token} );
+        res.json( {token, message: "Successful registration!"} );
 
     } catch (error) {
         console.error(error.message);
@@ -109,7 +109,7 @@ router.post("/login", validInfo, async(req, res) => {
         // 4) Generate our JWT token:
         const token = jwtGenerator(user.rows[0].user_id);
         // This token will be checked whenever a user tries to make a privilaged action:
-        res.json( {token} );
+        res.json( {token, message: "Successful log in!"} );
 
     } catch (error) {
         console.error(error.message);

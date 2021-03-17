@@ -49,13 +49,14 @@ const LogIn = ({ setAuth }) => {
             if (parseResp === "A user with this email does not exist." || 
                 parseResp === "Incorrect password.") {
                 
-                toast.error(parseResp, {autoClose: 4000}); 
-                return false;
-            } else {
+                return toast.error(parseResp, {autoClose: 4000}); 
 
+            } else if (parseResp.message && parseResp.message === "Successful log in!") {
                 localStorage.setItem("token", parseResp.token);
                 setAuth(true);
-                toast.success("Successful log in!", {autoClose: 3000});
+                toast.success(parseResp.message, {autoClose: 3000});
+            } else {
+                return toast.error("Something went wrong.", {autoClose: 3000});
             }
 
         } catch (error) {
