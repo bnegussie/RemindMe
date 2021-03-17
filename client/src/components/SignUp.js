@@ -121,14 +121,14 @@ const SignUp = ({ setAuth }) => {
             if (parseResp === "A user with this email address already exists." || 
                 parseResp === "A user with this phone number already exists.") {
                 
-                toast.error(parseResp, {autoClose: 4000});
-                return false;
-            } else {
+                return toast.error(parseResp, {autoClose: 4000});
+
+            } else if (parseResp.message && parseResp.message === "Successful registration!") {
                 localStorage.setItem("token", parseResp.token);
                 setAuth(true);
-                toast.success("Successful registration!", {
-                    autoClose: 3000
-                });
+                toast.success(parseResp.message, {autoClose: 3000});
+            } else {
+                return toast.error("Something went wrong.", {autoClose: 3000});
             }
 
         } catch (error) {
