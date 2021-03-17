@@ -31,7 +31,24 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 		const now = new Date().getTime();
 		const givenDueDate = dueDate.getTime();
 		const givenReminderDate = reminderDate.getTime();
-		
+
+		const originalDueDate = (new Date( currReminder.reminder_due_date )).getTime();
+		const originalReminderDate = (new Date( currReminder.reminder_reminder_date )).getTime();
+
+		if (completed) {
+			// A completed reminder should not have the dates modified or else the reminder
+			// will need to be set as uncompleted.
+
+			if (originalDueDate !== givenDueDate) {
+				return toast.error(
+					"Please mark the reminder as uncompleted if you wish to update the Due Date.");
+
+			} else if (originalReminderDate !== givenReminderDate) {
+				return toast.error(
+					"Please mark the reminder as uncompleted if you wish to update the Reminder Date.");
+			}
+		}
+
 		if (givenDueDate <= now && !completed) {
 			return toast.error("Please provide a Due Date that is in the future.");
 
@@ -42,9 +59,7 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 
 		
 		var reminderSent = currReminder.reminder_reminder_sent;
-
-		const originalReminderDate = new Date( currReminder.reminder_reminder_date );
-		if (originalReminderDate.getTime() !== reminderDate.getTime()) {
+		if (originalReminderDate !== givenReminderDate && !completed) {
 			reminderSent = false;
 		}
 
