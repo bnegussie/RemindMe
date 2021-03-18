@@ -2,6 +2,9 @@ const router = require("express").Router();
 const pool = require("../db");
 const authorization = require("../middleware/authorization");
 
+require("dotenv").config();
+const nodeMailer = require('nodeMailer');
+
 
 
 /************************************** STARTS: all_reminders DB ******************************/
@@ -462,6 +465,127 @@ router.get("/search", authorization, async (req, res) => {
     }
 });
 /************************************** END: SEARCH BAR ACCESSING all_reminders DB ***************/
+/************************************** START: WELCOME MESSAGE ***********************************/
+// This API is called once a user signs up for an account.
+router.post("/welcome", authorization, async (req, res) => {
+    try {
+        const { f_name, email, cPhoneCarrierEmailExtn, p_num } = req.body;
+
+        // Making sure to capitalize the user's first name:
+        const givenFirstName = f_name;
+        var firstNameFinalForm;
+        if (givenFirstName.length > 1) {
+            firstNameFinalForm = givenFirstName.charAt(0).toUpperCase() + givenFirstName.slice(1);
+        } else {
+            firstNameFinalForm = givenFirstName.charAt(0).toUpperCase();
+        }
+
+        // Step 1: create a reuseable transporter object.
+        let transporter = nodeMailer.createTransport({
+            host: process.env.host,
+            auth: {
+                user: process.env.serviceAccount,
+                pass: process.env.serviceSecret
+            },
+            tls: {
+                rejectUnauthorized: process.env.usingTLS
+            }
+        });
+
+        // Step 2, part 1: sending email with defined transport object:
+        let emailInfo = {
+            from: `RemindMe <${process.env.serviceEmail}>`,
+            to: `${email}`,
+            subject: "RemindMe: Welcome",
+            html: `
+            <div style="color: #000 !important;">
+                <center>
+                    <h1 style="color: #000;">RemindMe</h1>
+                </center>
+
+                <h3 style="color: #000;">Hi ${firstNameFinalForm},</h3>
+                <h3 style="color: #000; text-indent: 50px;"> 
+                Thank you for signing up for an account. Now start reaping the rewards 
+                of this application by creating your first reminder task.
+                </h3>
+            </div>
+            
+            <br/>
+            <div>
+                <!--[if mso]>
+                <center>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://RemindMeee.com" style="height:40px;v-text-anchor:middle;width:300px;" arcsize="25%" strokecolor="#000" fillcolor="#8B4513">
+                        <w:anchorlock/>
+                        <center style="color:#fff; font-family:sans-serif; font-size:15px; font-weight:bold;">
+                            Click here to create your first reminder
+                        </center>
+                    </v:roundrect>
+                </center>
+                <![endif]-->
+
+                <center>
+                    <a 
+                        href="https://RemindMeee.com" 
+                        style="background-color:#8B4513; border:1px solid #000; border-radius:10px; color:#fff; display:inline-block; font-family:sans-serif; font-size:15px; font-weight:bold; line-height:40px; text-align:center; text-decoration:none; width:300px; -webkit-text-size-adjust:none; mso-hide:all;">
+
+                        Click here to create your first reminder
+                    </a>
+                </center>
+            </div>
+            `
+        };
+
+        transporter.sendMail(emailInfo, function(error, data) {
+            if (error) {
+                let errorTime = (new Date()).toLocaleString();
+                console.log(errorTime + ": An error occurred while sending the welcome email.");
+    
+            } else {
+                let sentTime = (new Date()).toLocaleString();
+                console.log(sentTime + ": The welcome email was successfully sent.");
+            }
+        });
+
+        // Checking if the phone number was provided before sending out an SMS:
+        const userPNumNoSpaces = p_num.replace(/\s/g,'');
+        if (userPNumNoSpaces !== '') {
+
+            // Step 2, part 2: sending text message with defined transport object:
+            let smsInfo = {
+                from: `RemindMe <${process.env.serviceEmail}>`,
+                to: `${p_num}${cPhoneCarrierEmailExtn}`,
+                subject: "RemindMe: Welcome",
+                text: `Hi ${firstNameFinalForm},
+                Thank you for signing up for an account. Now start reaping the rewards of this application by creating your first reminder task.
+
+                -
+                -
+                -
+                -
+
+                Click the link below to create your first reminder:
+                www.RemindMeee.com
+                `
+            };
+
+            transporter.sendMail(smsInfo, function(error, data) {
+                if (error) {
+                    let errorTime = (new Date()).toLocaleString();
+                    console.log(errorTime + ": An error occurred while sending the welcome text message.");
+                } else {
+                    let sentTime = (new Date()).toLocaleString();
+                    console.log(sentTime + ": The welcome text message was successfully sent.");
+                }
+            });
+        }
+
+        res.status(200).json("Successfully sent welcome message.");
+
+    } catch (error) {
+        console.error(error.message);
+    }
+})
+/************************************** END: WELCOME MESSAGE *************************************/
 
 
 

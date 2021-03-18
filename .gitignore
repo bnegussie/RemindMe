@@ -1,11 +1,7 @@
 .env
-node_modules/
+.eslintcache
+node_modules
 package-lock.json
 package.json
-
-client/.eslintcache
-client\package-lock.json
-client\package.json
-
-iisnode/
+iisnode
 web.config
