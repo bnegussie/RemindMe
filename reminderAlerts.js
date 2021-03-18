@@ -583,7 +583,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             text: `Hi ${userFName},
             ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day!
             ${allSMSReminders}
-            Click here to view all of your reminders: 
+            Click the link below to view all of your reminders: 
             www.RemindMeee.com
             `
         };
@@ -918,7 +918,7 @@ async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, use
             text: `Hi ${userFName},
             ${initialGreeting} which you wanted to be reminded about. Make sure to keep moving forward and keep making the most out of this day!
             ${smsReminders}
-            Click here to view all of your reminders: 
+            Click the link below to view all of your reminders: 
             www.RemindMeee.com `
         };
 
