@@ -45,6 +45,20 @@ router.post("/signup", validInfo, async(req, res) => {
             }
         }
 
+        // Making sure to capitalize the user's first and last name:
+        const givenFirstName = f_name;
+        const givenLastName = l_name;
+
+        var firstNameFinalForm = givenFirstName.charAt(0).toUpperCase();
+        var lastNameFinalForm = givenLastName.charAt(0).toUpperCase();
+
+        if (givenFirstName.length > 1) {
+            firstNameFinalForm += givenFirstName.slice(1);
+        }
+        if (givenLastName.length > 1) {
+            lastNameFinalForm += givenLastName.slice(1);
+        }
+
         
         // 3) Bcrypt the user's pwd:
         const saltRound = 10;
@@ -55,7 +69,7 @@ router.post("/signup", validInfo, async(req, res) => {
         // 4) Insert the user into our DB:
         const newUser = await pool.query(
             "INSERT INTO users (user_f_name, user_l_name, user_email, user_cp_carrier, user_cp_carrier_email_extn, user_p_num, user_pwd, user_general_reminder_time, user_time_zone) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *", 
-            [f_name, l_name, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, 
+            [firstNameFinalForm, lastNameFinalForm, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, 
                 p_num, bcryptPwd, generalReminderTime, userTimeZone]
         );
 
