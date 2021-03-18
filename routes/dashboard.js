@@ -473,11 +473,9 @@ router.post("/welcome", authorization, async (req, res) => {
 
         // Making sure to capitalize the user's first name:
         const givenFirstName = f_name;
-        var firstNameFinalForm;
+        var firstNameFinalForm = givenFirstName.charAt(0).toUpperCase();
         if (givenFirstName.length > 1) {
-            firstNameFinalForm = givenFirstName.charAt(0).toUpperCase() + givenFirstName.slice(1);
-        } else {
-            firstNameFinalForm = givenFirstName.charAt(0).toUpperCase();
+            firstNameFinalForm += givenFirstName.slice(1);
         }
 
         // Step 1: create a reuseable transporter object.
