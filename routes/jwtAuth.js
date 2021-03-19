@@ -45,19 +45,9 @@ router.post("/signup", validInfo, async(req, res) => {
             }
         }
 
-        // Making sure to capitalize the user's first and last name:
-        const givenFirstName = f_name;
-        const givenLastName = l_name;
-
-        var firstNameFinalForm = givenFirstName.charAt(0).toUpperCase();
-        var lastNameFinalForm = givenLastName.charAt(0).toUpperCase();
-
-        if (givenFirstName.length > 1) {
-            firstNameFinalForm += givenFirstName.slice(1);
-        }
-        if (givenLastName.length > 1) {
-            lastNameFinalForm += givenLastName.slice(1);
-        }
+        // Making sure that the user's first and last name is capitalized:
+        const firstNameFinalForm = CapitalizeName( f_name );
+        const lastNameFinalForm = CapitalizeName( l_name );
 
         
         // 3) Bcrypt the user's pwd:
@@ -141,6 +131,19 @@ router.get("/is-verified", authorization, async(req, res) => {
         res.status(500).json("Server error");
     }
 });
+
+// Helper function:
+function CapitalizeName(givenName) {
+    var nameFinalForm = "";
+    if (givenName) {
+        nameFinalForm += givenName.charAt(0).toUpperCase();
+        if (givenName.length > 1) {
+            nameFinalForm += givenName.slice(1);
+        }
+    }
+    
+    return nameFinalForm;
+}
 
 
 // Connecting the server to the router:----->
