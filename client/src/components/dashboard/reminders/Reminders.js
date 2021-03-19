@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 // Components:
 import CreateReminder from "./CreateReminder";
 import EditReminder from "./EditReminder";
+import { ClearDateSecAndMill } from "./ClearDate";
 import { ReminderCompletedState } from "./ReminderCompletedState";
 
 import "./../../../App.css";
@@ -207,8 +208,8 @@ function Reminders({ isAuth }) {
 
 					if ( !alreadyOnOverdueList ) {
 
-						const getCurrentTime = ( new Date() ).getTime();
-						const activeReminderTime = ( new Date(activeReminder.reminder_due_date) ).getTime();
+						const getCurrentTime = ClearDateSecAndMill();
+						const activeReminderTime = ClearDateSecAndMill( activeReminder.reminder_due_date );
 					
 						if (activeReminderTime < getCurrentTime) {
 							// If a reminder's due date has passed, then that reminder gets added to the

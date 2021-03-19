@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
 
+import { ClearDateSecAndMill } from "./ClearDate";
 import { PushGeneralReminderTimeAhead } from "./PushGeneralReminderTimeAhead";
 
 import "./../../../App.css"
@@ -28,12 +29,13 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 			return toast.error("Please provide a Reminder Date.", {autoClose: 3000});
 		}
 
-		const now = new Date().getTime();
-		const givenDueDate = dueDate.getTime();
-		const givenReminderDate = reminderDate.getTime();
+		// Sanitizing the Dates:
+		const now = ClearDateSecAndMill();
+		const givenDueDate = ClearDateSecAndMill( dueDate );
+		const givenReminderDate = ClearDateSecAndMill( reminderDate );
 
-		const originalDueDate = (new Date( currReminder.reminder_due_date )).getTime();
-		const originalReminderDate = (new Date( currReminder.reminder_reminder_date )).getTime();
+		const originalDueDate = ClearDateSecAndMill( currReminder.reminder_due_date );
+		const originalReminderDate = ClearDateSecAndMill( currReminder.reminder_reminder_date );
 
 		if (completed) {
 			// A completed reminder should not have the dates modified or else the reminder
@@ -54,6 +56,8 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 
 		} else if (givenReminderDate <= now && !completed) {
 			return toast.error("Please provide a Reminder Date that is in the future.");
+		} else if (givenReminderDate > givenDueDate) {
+			return toast.error("The Reminder Date cannot be set past the Due Date.");
 		}
 		// Finished validating input.
 
@@ -73,6 +77,7 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 				reminderDate: reminderDate,
 				reminderSent: reminderSent
 			};
+			// The Dates stored in the DB are not sanitized.
 			const bodyPlusId = {id, completed, title, desc, dueDate, reminderDate, reminderSent};
 
 			// The possibility that the Completed check box state being 
@@ -114,8 +119,8 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 
 
 					// Checking if this reminder is overdue:
-					const getCurrentTime = ( new Date() ).getTime();
-					const dueTime = ( new Date(dueDate) ).getTime();
+					const getCurrentTime = ClearDateSecAndMill();
+					const dueTime = ClearDateSecAndMill( dueDate );
 
 					const respAllOverdue = await fetch("/api/dashboard/reminder/overdue", {
 						method: "GET",

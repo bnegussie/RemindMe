@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
 
+import { ClearDateSecAndMill } from "./ClearDate";
 import { PushGeneralReminderTimeAhead } from "./PushGeneralReminderTimeAhead";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -32,15 +33,18 @@ function CreateReminder({ activeRemindersEmpty }) {
 			return toast.error("Please provide a Reminder Date.", {autoClose: 3000});
 		}
 		
-		const now = new Date().getTime();
-		const givenDueDate = new Date(dueDate).getTime();
-		const givenReminderDate = new Date(reminderDate).getTime();
+		// Sanitizing the Dates:
+		const now = ClearDateSecAndMill();
+		const givenDueDate = ClearDateSecAndMill( dueDate );
+		const givenReminderDate = ClearDateSecAndMill( reminderDate );
 		
 		if (givenDueDate <= now) {
 			return toast.error("Please provide a Due Date that is in the future.");
 
 		} else if (givenReminderDate <= now) {
 			return toast.error("Please provide a Reminder Date that is in the future.");
+		} else if (givenReminderDate > givenDueDate) {
+			return toast.error("The Reminder Date cannot be set past the Due Date.");
 		}
 		// Finished input validation.
 
@@ -55,6 +59,7 @@ function CreateReminder({ activeRemindersEmpty }) {
 
 		const completed = false;
 		const reminderSent = false;
+		// The Dates stored in the DB are not sanitized.
 		const body = {completed, title, desc, dueDate, reminderDate, reminderSent};
 
 		try {
@@ -67,6 +72,7 @@ function CreateReminder({ activeRemindersEmpty }) {
 			const parseResp = await respAllReminders.json();
 			const id = parseResp.reminder_id;
 
+			// The Dates stored in the DB are not sanitized.
 			const bodyPlusId = {id, completed, title, desc, dueDate, reminderDate, reminderSent}
 			
 			// eslint-disable-next-line
