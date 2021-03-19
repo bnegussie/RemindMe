@@ -74,24 +74,16 @@ async function processAllUserReminders(loggingFile) {
     }
 }
 
-/* Helper function to pause the reminders if they are early, so the user gets
- * their reminder at the exact time they requested.
- */
-function sleep(ms) {
-    return new Promise((accept) => {
-        setTimeout(() => {
-            accept();
-        }, ms);
-    });
-}
 
 
 
 // Setting up the time trigger to send the users, their daily list of reminders.--------------------------
 var initialGRHasNotBeenSent = true;
-var timeNow = new Date();
-var nextAvailableGR = new Date(timeNow.getFullYear(), timeNow.getMonth(), 
-                                timeNow.getDate(), (timeNow.getHours() + 1), 0, 0, 0) - timeNow;
+var nextHourTime = new Date( ClearDateMinAndSecAndMill() );
+nextHourTime.setHours( nextHourTime.getHours() + 1 );
+
+var nextAvailableGR = nextHourTime - (new Date());
+
 
 setTimeout(function() {
     // Cheching every hour because users can adjust their General Reminder to different hours of the day.
@@ -137,11 +129,11 @@ async function triggerGeneralReminder() {
             
             // Checking to see if the current hour is the time the user wants our system to send
             // out the general reminder, if they have any upcoming tasks for the week.
-            const thisMoment = new Date();
-            // Make sure this variable is not assigned to a Date variable which is later modified.
-            const thisSpecificMoment = new Date(thisMoment.getFullYear(), thisMoment.getMonth(), 
-                                            thisMoment.getDate(), thisMoment.getHours(), 0, 0, 0);
-            const specifiedTime = new Date( allActive[0].user_general_reminder_time );
+            const thisSpecificMoment = new Date( ClearDateMinAndSecAndMill() );
+            
+            const specifiedTime = new Date( 
+                ClearDateMinAndSecAndMill( allActive[0].user_general_reminder_time ) 
+            );
 
             loggingData += "    specifiedTime.toLocaleString() = " + specifiedTime.toLocaleString() + "\n";
             loggingData += "    thisSpecificMoment.toLocaleString() = " + thisSpecificMoment.toLocaleString() + "\n";
@@ -151,12 +143,11 @@ async function triggerGeneralReminder() {
             // has specified to get their general email reminder:
             if ( specifiedTime.getTime()  <= thisSpecificMoment.getTime() ) {
                 
-                // Quickly updating the DB to prevent any competition from threads as
-                // to prevent duplicating reminders being sent out:
-                const previousGRT = new Date( allActive[0].user_general_reminder_time );
-                const nowGRT = new Date();
-                const newGRT = new Date( nowGRT.getFullYear(), nowGRT.getMonth(), ( nowGRT.getDate() + 1 ),
-                                        previousGRT.getHours(), 0, 0, 0 );
+                // Updating the DB with the user's new General Reminder Time:
+                const newGRT = new Date( ClearDateMinAndSecAndMill() );
+                newGRT.setDate( newGRT.getDate() + 1 );
+                newGRT.setHours( specifiedTime.getHours() );
+
 
                 try {
                     loggingData += "            Pre: updating the DB with user's new GRT. \n";
@@ -187,11 +178,9 @@ async function triggerGeneralReminder() {
 
 
                 const today = thisSpecificMoment;
-                var oneWeek = new Date();
+                const oneWeek = new Date( ClearDateMinAndSecAndMill() );
                 oneWeek.setDate(oneWeek.getDate() + 7);
-                oneWeek.setMinutes(0);
-                oneWeek.setSeconds(0);
-                oneWeek.setMilliseconds(0);
+
                 /* The email will list out the upcoming reminders in the next seven days.
                 * For each day there is the time (in ms) at 12:00 am and another time at 11:45 pm
                 * to make sure the date time comparison is always going to be accurate.
@@ -211,10 +200,9 @@ async function triggerGeneralReminder() {
                 // [Due today, Due tomorrow, Due in two days, Due in three days, Due in less than a week, Overdue]
                 var reminders = ["", "", "", "", "", ""];
 
-                const dueDate = new Date(allActive[activeIndex].reminder_due_date);
-                const dueDateTime = dueDate.getTime();
+                const dueDateTimeCheck = ClearDateSecAndMill( allActive[activeIndex].reminder_due_date );
 
-                if (dueDateTime >= upcomingDates[8]) {
+                if (dueDateTimeCheck >= upcomingDates[8]) {
                     // There are not any reminders within the next seven days, for the current user.		
                     return
                 }
@@ -223,8 +211,7 @@ async function triggerGeneralReminder() {
 
                 while (activeIndex < activeLength && !lookedThroughTheUpcomingWeekReminders) {
 
-                    const dueDate = new Date(allActive[activeIndex].reminder_due_date);
-                    const dueDateTime = dueDate.getTime();
+                    const dueDateTime = ClearDateSecAndMill( allActive[activeIndex].reminder_due_date );
 
                     if (dueDateTime < upcomingDates[0]) { // Overdue
                         reminders[5] += "<br/>" + allActive[activeIndex].reminder_title;
@@ -544,11 +531,12 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             console.log("");
             loggingData += "        error = " + error + "\n";
 
-            // Changing the General Reminder Time back since the reminder was not sent:
-            const previousGRT = new Date( generalReminderTime );
-            const nowGRT = new Date();
-            const pushedBackGRT = new Date( nowGRT.getFullYear(), nowGRT.getMonth(), ( nowGRT.getDate() - 1 ),
-                                previousGRT.getHours(), 0, 0, 0 );
+            /* Changing the General Reminder Time back since the reminder was not sent:
+             *
+             * This generalReminderTime variable is actually the original GRT and not the recently
+             * updated value currently in the DB so setting the DB value to the original GRT will be best.
+             */
+            const pushedBackGRT = new Date( ClearDateMinAndSecAndMill( generalReminderTime ) );
 
             try {
                 const updateGRT = await pool.query(
@@ -625,26 +613,25 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
 // and if so, the server sends out an email and a text message:
 var initialSpecificReminderHasNotBeenSent = true;
 const possibleMinutes = [0, 15, 30, 45];
-const now = new Date();
-var nextAvailable;
+const nextAvailable = new Date( ClearDateSecAndMill() );
 
-const currentMinute = now.getMinutes();
+const currentMinute = nextAvailable.getMinutes();
 
 if (currentMinute < possibleMinutes[1]) {
-    nextAvailable = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 
-                    now.getHours(), possibleMinutes[1], 0, 0);
+    nextAvailable.setMinutes( possibleMinutes[1] );
+
 } else if (currentMinute < possibleMinutes[2]) {
-    nextAvailable = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 
-                    now.getHours(), possibleMinutes[2], 0, 0);
+    nextAvailable.setMinutes( possibleMinutes[2] );
+
 } else if (currentMinute < possibleMinutes[3]) {
-    nextAvailable = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 
-                    now.getHours(), possibleMinutes[3], 0, 0);
+    nextAvailable.setMinutes( possibleMinutes[3] );
+
 } else {
-    nextAvailable = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 
-                    (now.getHours() + 1), possibleMinutes[0], 0, 0);
+    nextAvailable.setHours( nextAvailable.getHours() + 1 );
+    nextAvailable.setMinutes( possibleMinutes[0] );
 }
 
-const remainingMS = nextAvailable - now;
+const remainingMS = nextAvailable - (new Date());
 
 setTimeout(function() {
     setInterval(triggerSpecifiedReminder, (1000 * 60 * 15));
@@ -702,9 +689,7 @@ async function triggerSpecifiedReminder() {
         // [Reminder title, Reminder details, Due date, Reminder date]
         var reminders = [];
 
-        const current = new Date();
-        const currentReminderTime = new Date(current.getFullYear(), current.getMonth(), current.getDate(), 
-                                current.getHours(), current.getMinutes(), 0, 0);
+        const currentReminderTime = new Date( ClearDateSecAndMill() );
 
         // The two variables below are used to update the state, that the reminders have been sent out.
         const userId = currUserAllActiveReminders[0].user_id;
@@ -712,10 +697,10 @@ async function triggerSpecifiedReminder() {
 
         
         allActive.forEach(async function(activeReminder, index) {
-            const specifiedReminder = new Date(activeReminder.reminder_reminder_date);
-            const updatedSpecifiedReminder = new Date(specifiedReminder.getFullYear(), 
-                                specifiedReminder.getMonth(), specifiedReminder.getDate(), 
-                                specifiedReminder.getHours(), specifiedReminder.getMinutes(), 0, 0);
+            
+            const updatedSpecifiedReminder = new Date( 
+                ClearDateSecAndMill( activeReminder.reminder_reminder_date ) 
+            );
 
             loggingData += "        updatedSpecifiedReminder.toLocaleString() = " + updatedSpecifiedReminder.toLocaleString() + "\n";
             loggingData += "        currentReminderTime.toLocaleString() = " + currentReminderTime.toLocaleString() + "\n";
@@ -726,8 +711,7 @@ async function triggerSpecifiedReminder() {
 
                 loggingData += "            Processing to send out reminder.  \n";
 
-                // Quickly updating the DB that this reminder has been sent, as to prevent any 
-                // duplicate reminders being sent out.
+                // Quickly updating the DB that this reminder has been sent:
                 updateDBReminderSent(true, userId, activeReminder.reminder_id, loggingFile);
 
                 loggingData += "            Returned from updateDBReminderSent() call.  \n";
@@ -1032,3 +1016,35 @@ function properTime(time, userTimeZone, loggingFile) {
     return (new Date(userTime)).toLocaleString("en-US", dateOptions);
 }
 /************************************** END: Email and Text Message services *********************/
+/************************************** START: HELPER FUNCTIONS **********************************/
+// Clearing the minutes, seconds, and milliseconds of the given date.
+// Returns the Date object in milliseconds form.
+function ClearDateMinAndSecAndMill(givenDate) {
+    const dateObj = new Date( ClearDateSecAndMill(givenDate) );
+    dateObj.setMinutes(0);
+    return dateObj.getTime();
+}
+
+// Clears out the seconds and milliseconds of a Date object and
+// returns the Date object in milliseconds form.
+function ClearDateSecAndMill(givenDate) {
+    if (!givenDate) {
+        givenDate = new Date();
+    }
+    const dateObj = new Date(givenDate);
+    dateObj.setSeconds(0);
+	dateObj.setMilliseconds(0);
+    return dateObj.getTime();
+}
+
+/* Helper function to pause the reminders if they are early, so the user gets
+ * their reminder at the exact time they requested.
+ */
+function sleep(ms) {
+    return new Promise((accept) => {
+        setTimeout(() => {
+            accept();
+        }, ms);
+    });
+}
+/************************************** END: HELPER FUNCTIONS ************************************/
