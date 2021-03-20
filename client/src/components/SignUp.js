@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import Select from "react-select";
 
+import { ClearDateMinAndSecAndMill } from "./dashboard/reminders/ClearDate";
+
 import "./../App.css"
 
 const SignUp = ({ setAuth }) => {
@@ -79,11 +81,8 @@ const SignUp = ({ setAuth }) => {
              * The generalReminderTime is stored as a date so that the timezone, which the user is in,
              * can be properly stored so they can get alerted at their 6:00 am and not the UTC 6:00 am.
              */
-            var generalReminderTime = new Date();
+            var generalReminderTime = new Date( ClearDateMinAndSecAndMill() );
             generalReminderTime.setHours(6);
-            generalReminderTime.setMinutes(0);
-            generalReminderTime.setSeconds(0);
-            generalReminderTime.setMilliseconds(0);
 
             /* Making sure that the first General Daily Reminder, our new user gets, will be sent
              * out the day after they have signed up because the Ensure-GeneralReminder feature 

@@ -1,3 +1,5 @@
+import { ClearDateMinAndSecAndMill } from "./ClearDate";
+
 /* Updating the General Reminder Time to the following day, at the specified time.
  * This edge case comes up when a user doesn't use the reminder app (doesn't have 
  * any Active Reminders) for one or more days and the next time the user creates 
@@ -14,9 +16,9 @@ async function PushGeneralReminderTimeAhead( myHeaders ) {
         const parseResp = await grtGetResponse.json();
         const finalTime = new Date(parseResp.user_general_reminder_time);
 
-        const tempTime = new Date();
-        const newGRT = new Date( tempTime.getFullYear(), tempTime.getMonth(), ( tempTime.getDate() + 1), 
-                                finalTime.getHours(), 0, 0, 0 );
+        const newGRT = new Date( ClearDateMinAndSecAndMill() );
+        newGRT.setDate( newGRT.getDate() + 1 );
+        newGRT.setHours( finalTime.getHours() );
         
         let body = { newGRT };
 

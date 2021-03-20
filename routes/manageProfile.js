@@ -22,7 +22,7 @@ router.put("/general", authorization, async(req, res) => {
     try {
         // Breaking down the data provided by the user:
         const { fName, lName, email, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum } = req.body;
-
+        
         const lowerCaseEmail = email.toLowerCase();
         const userId = req.user;
 
@@ -51,9 +51,13 @@ router.put("/general", authorization, async(req, res) => {
             }
         }
 
+        // Making sure that the user's first and last name is capitalized:
+        const firstNameFinalForm = CapitalizeName( fName );
+        const lastNameFinalForm = CapitalizeName( lName );
+
         const updateUserInfo = await pool.query(
             "UPDATE users SET user_f_name = $1, user_l_name = $2, user_email = $3, user_cp_carrier = $4, user_cp_carrier_email_extn = $5, user_p_num = $6 WHERE user_id = $7",
-            [fName, lName, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum, userId]
+            [firstNameFinalForm, lastNameFinalForm, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum, userId]
         );
 
         res.status(200).json("Your Profile has now been successfully update!");
@@ -155,5 +159,19 @@ router.put("/general/reminder", authorization, async (req, res) => {
     }
 });
 /************************************** END: MY GENERAL REMINDER TIME ****************************/
+
+// Helper function:
+function CapitalizeName(givenName) {
+    var nameFinalForm = "";
+    if (givenName) {
+        nameFinalForm += givenName.charAt(0).toUpperCase();
+        if (givenName.length > 1) {
+            nameFinalForm += givenName.slice(1);
+        }
+    }
+    
+    return nameFinalForm;
+}
+
 
 module.exports = router;

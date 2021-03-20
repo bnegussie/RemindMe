@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect } from "react";
 import TimePicker from "react-time-picker";
 import { toast } from "react-toastify";
 
+import { ClearDateMinAndSecAndMill } from "./../dashboard/reminders/ClearDate";
+
 import "./../../App.css"
 
 function ChangeGeneralReminderTime() {
@@ -48,19 +50,13 @@ function ChangeGeneralReminderTime() {
 		// Parsing the data provided.
 		var setTime = reminderHour.split(":");
 		var hour = parseInt(setTime[0]);
-		var newGRT;
-
-		const now = new Date();
-		/* Setting the actual data which will be stored in the DB:
-		 * Creating a new Date object because if the user has moved into a new Timezone,
-		 * the new Date will capture that information so the user gets notified at the right time.
-		 */
-		if (hour > now.getHours()) {
-			newGRT = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, 0, 0, 0);
-			
-		} else {
-			newGRT = new Date(now.getFullYear(), now.getMonth(), (now.getDate() + 1), hour, 0, 0, 0);
+		var newGRT = new Date( ClearDateMinAndSecAndMill() );
+		
+		// Checking if the new General Reminder Time (GRT) set has already passed for the day:
+		if (hour <= newGRT.getHours()) {
+			newGRT.setDate( newGRT.getDate() + 1 );	
 		}
+		newGRT.setHours(hour);
 		setGeneralReminderTime(newGRT);
 
 		try {
