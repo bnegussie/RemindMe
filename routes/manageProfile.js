@@ -2,6 +2,9 @@ const router = require("express").Router();
 const pool = require("../db");
 const authorization = require("../middleware/authorization");
 const bcryptLib = require("bcrypt");
+var crypto = require("crypto");
+require("dotenv").config();
+const nodeMailer = require('nodeMailer');
 
 /************************************** START: MY PROFILE ****************************************/
 // Getting the general information from the user's profile:
@@ -159,8 +162,54 @@ router.put("/general/reminder", authorization, async (req, res) => {
     }
 });
 /************************************** END: MY GENERAL REMINDER TIME ****************************/
+/************************************** START: FORGOT AND RESET PASSWORD *************************/
+router.post("/forgotpwd", async (req, res) => {
+    try {
+        const { email } = req.body;
+        
+        // Checking if the user even exists:
+        const user = await pool.query("SELECT * FROM users WHERE user_email = $1", [email]);
 
-// Helper function:
+        if (user.rows.length === 0) {
+            return res.status(200).json("A user with this email does not exist.");
+        }
+
+        // Generating the URL for this user to reset their password:
+        const urlStarterLink = crypto.randomBytes(20).toString('hex');
+        const saltRound = 12;
+        const salt = await bcryptLib.genSalt(saltRound);
+        const bcryptURL = await bcryptLib.hash(urlStarterLink, salt);
+
+
+        // Placing URL into user's account:
+        const updateUser = await pool.query("UPDATE users SET user_reset_pwd_url = $1 WHERE user_email = $2",
+            [bcryptURL, email]
+        );
+
+
+        const fName = user.rows[0].user_f_name;
+        const pNum = user.rows[0].user_p_num;
+        const cPhoneCarrierEmailExtn = user.rows[0].user_cp_carrier_email_extn;
+
+        await sendResetPwdLink(fName, email, cPhoneCarrierEmailExtn, pNum, bcryptURL);
+
+
+        var successMessage = "A Reset Password email ";
+
+        const userPNumNoSpaces = pNum.replace(/\s/g,'');
+        if (userPNumNoSpaces !== '') {
+            successMessage += "and text message ";
+        }
+        successMessage += "has been sent to you now.";
+
+        res.status(200).json(successMessage);
+
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+});
+/************************************** END: FORGOT AND RESET PASSWORD ***************************/
+/************************************** START: HELPER FUNCTIONS **********************************/
 function CapitalizeName(givenName) {
     var nameFinalForm = "";
     if (givenName) {
@@ -172,6 +221,117 @@ function CapitalizeName(givenName) {
     
     return nameFinalForm;
 }
+
+async function sendResetPwdLink(fName, email, cPhoneCarrierEmailExtn, pNum, partialURL ) {
+    try {
+        const finalURL = "RemindMeee.com/ResetPassword/" + partialURL;
+        
+        // Step 1: create a reuseable transporter object.
+        let transporter = nodeMailer.createTransport({
+            host: process.env.host,
+            auth: {
+                user: process.env.serviceAccount,
+                pass: process.env.serviceSecret
+            },
+            tls: {
+                rejectUnauthorized: process.env.usingTLS
+            }
+        });
+
+        // Step 2, part 1: sending email with defined transport object:
+        let emailInfo = {
+            from: `RemindMe <${process.env.serviceEmail}>`,
+            to: `${email}`,
+            subject: "RemindMe: Reset Password",
+            html: `
+            <div style="color: #000 !important;">
+                <center>
+                    <h1 style="color: #000;">RemindMe</h1>
+                </center>
+
+                <h3 style="color: #000;">Hi ${fName},</h3>
+                <h3 style="color: #000; text-indent: 50px;"> 
+                Please click the button below to reset your password. You have 24 hours before the
+                link expires.
+                </h3>
+            </div>
+            
+            <br/>
+            <div>
+                <!--[if mso]>
+                <center>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://${finalURL}" style="height:40px;v-text-anchor:middle;width:300px;" arcsize="25%" strokecolor="#000" fillcolor="#8B4513">
+                        <w:anchorlock/>
+                        <center style="color:#fff; font-family:sans-serif; font-size:15px; font-weight:bold;">
+                            Reset Password
+                        </center>
+                    </v:roundrect>
+                </center>
+                <![endif]-->
+
+                <center>
+                    <a 
+                        href="https://${finalURL}" 
+                        style="background-color:#8B4513; border:1px solid #000; border-radius:10px; color:#fff; display:inline-block; font-family:sans-serif; font-size:15px; font-weight:bold; line-height:40px; text-align:center; text-decoration:none; width:300px; -webkit-text-size-adjust:none; mso-hide:all;">
+
+                        Reset Password
+                    </a>
+                </center>
+            </div>
+            `
+        };
+
+        transporter.sendMail(emailInfo, function(error, data) {
+            if (error) {
+                let errorTime = (new Date()).toLocaleString();
+                console.log(errorTime + ": An error occurred while sending the Reset Password email.");
+    
+            } else {
+                let sentTime = (new Date()).toLocaleString();
+                console.log(sentTime + ": The Reset Password email was successfully sent.");
+            }
+        });
+
+        // Checking if the phone number was provided before sending out an SMS:
+        const userPNumNoSpaces = pNum.replace(/\s/g,'');
+        if (userPNumNoSpaces !== '') {
+
+            // Step 2, part 2: sending text message with defined transport object:
+            let smsInfo = {
+                from: `RemindMe <${process.env.serviceEmail}>`,
+                to: `${pNum}${cPhoneCarrierEmailExtn}`,
+                subject: "RemindMe: Reset Password",
+                text: `Hi ${fName},
+                Please click the link below to reset your password. You have 24 hours before the link expires.
+
+                -
+                -
+                -
+                -
+
+                Reset password link:
+                ${finalURL}
+                `
+            };
+
+            transporter.sendMail(smsInfo, function(error, data) {
+                if (error) {
+                    let errorTime = (new Date()).toLocaleString();
+                    console.log(errorTime + ": An error occurred while sending the Reset Password text message.");
+                } else {
+                    let sentTime = (new Date()).toLocaleString();
+                    console.log(sentTime + ": The Reset Password text message was successfully sent.");
+                }
+            });
+        }
+
+        return
+
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+/************************************** END: HELPER FUNCTIONS ************************************/
 
 
 module.exports = router;

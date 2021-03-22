@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { toast } from 'react-toastify';
 
+import ForgotPwd from "./ForgotPwd";
+
 import "./../App.css"
 
 const LogIn = ({ setAuth }) => {
@@ -101,6 +103,7 @@ const LogIn = ({ setAuth }) => {
                     
                     <button className="btn btn-success btn-block">Submit</button>
                 </form>
+                <ForgotPwd />
             </div>
         </Fragment>
     );

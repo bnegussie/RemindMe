@@ -973,6 +973,27 @@ legend {
   transition: 0.3s ease-out;
 }
 /***************************************** END: SEARCH.JS ****************************************/
+/***************************************** START: FORGOTPWD.JS ***********************************/
+.forgot-pwd.link {
+  text-decoration: none;
+  
+  float: right;
+  margin-bottom: 10px;
+}
+
+.forgot-pwd.message {
+  color: var(--brown);
+  font-size: 16px;
+}
+
+.form-group.forgot-pwd {
+  margin-top: 30px;
+}
+
+.modal-body.forgot-pwd {
+  text-align: left;
+}
+/***************************************** END: FORGOTPWD.JS *************************************/
 
 /* MOBILE MODE FOR ALL FILES: */
 @media screen and (max-width: 700px) {
