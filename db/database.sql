@@ -16,6 +16,7 @@ CREATE TABLE users (
     user_general_reminder_time TIMESTAMPTZ NOT NULL,
     user_time_zone INT NOT NULL,
     user_reset_pwd_url VARCHAR(255),
+    user_reset_pwd_time TIMESTAMPTZ,
     PRIMARY KEY (user_id)
 );
 

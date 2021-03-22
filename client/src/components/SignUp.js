@@ -299,8 +299,7 @@ const SignUp = ({ setAuth }) => {
                     <label htmlFor="sign-up-pwd_confirm" className="form-label">Confirm password:</label>
                 </div>         
                 
-                <button className="btn btn-success btn-block">Submit</button>
-                <hr />
+                <button className="btn btn-success btn-block mb-4">Submit</button>
             </form>
 
         </Fragment>

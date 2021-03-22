@@ -32,11 +32,12 @@ function ForgotPwd() {
 
             if (parseResp === "A user with this email does not exist.") {
                 return toast.error(parseResp);
-            } else if (parseResp === "A Reset Password email has been sent to you now." ||
-                parseResp === "A Reset Password email and text message has been sent to you now.") {
+            } else if (parseResp === "A Reset Password link has been sent to you via email now." ||
+                parseResp === "A Reset Password link has been sent to you via email and text message now.") {
 
-                toast.success(parseResp, {autoClose: 4500});
-				setTimeout(() => { window.location = "/LogIn"; }, 4500);
+                toast.success(parseResp);
+				setTimeout(() => { window.location = "/LogIn"; }, 5000);
+                
             } else {
                 return toast.error("Something went wrong.");
             }
@@ -78,7 +79,7 @@ function ForgotPwd() {
                             <div className="modal-body forgot-pwd">
                                 <div className="forgot-pwd message">
                                     <p>
-                                        Please provide the email which is associated with the account.
+                                        Please provide the email which is connected to your account.
                                     </p>
                                 </div>
 

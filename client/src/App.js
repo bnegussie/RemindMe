@@ -23,6 +23,7 @@ import HowItWorks from "./components/info_pages/HowItWorks"
 import FAQ from "./components/info_pages/FAQ"
 import ManageProfile from "./components/manage_profile/ManageProfile";
 import Search from "./components/dashboard/reminders/Search";
+import ResetPwd from "./components/ResetPwd";
 
 
 toast.configure();
@@ -173,6 +174,17 @@ function App() {
                   <ManageProfile isAuth={isAuth} setAuth={setAuth} />
                 ) : (
                   <LandingPage />
+                )  
+              }
+            />
+
+            <Route 
+              path="/ResetPassword/:id" 
+              render={props => 
+                isAuthenticated ? (
+                  <Redirect to="/Dashboard"/> 
+                ) : (
+                  <ResetPwd />
                 )  
               }
             />

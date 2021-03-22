@@ -174,16 +174,19 @@ router.post("/forgotpwd", async (req, res) => {
             return res.status(200).json("A user with this email does not exist.");
         }
 
+
         // Generating the URL for this user to reset their password:
         const urlStarterLink = crypto.randomBytes(20).toString('hex');
         const saltRound = 12;
         const salt = await bcryptLib.genSalt(saltRound);
         const bcryptURL = await bcryptLib.hash(urlStarterLink, salt);
+        const partialUserURL = email + "/" + bcryptURL;
 
 
-        // Placing URL into user's account:
-        const updateUser = await pool.query("UPDATE users SET user_reset_pwd_url = $1 WHERE user_email = $2",
-            [bcryptURL, email]
+        // Placing URL into user's account along with a time stamp
+        // because the link will not be valid after one hour:
+        const updateUser = await pool.query("UPDATE users SET user_reset_pwd_url = $1, user_reset_pwd_time = $2 WHERE user_email = $3",
+            [partialUserURL, new Date(), email]
         );
 
 
@@ -191,21 +194,79 @@ router.post("/forgotpwd", async (req, res) => {
         const pNum = user.rows[0].user_p_num;
         const cPhoneCarrierEmailExtn = user.rows[0].user_cp_carrier_email_extn;
 
-        await sendResetPwdLink(fName, email, cPhoneCarrierEmailExtn, pNum, bcryptURL);
+        await sendResetPwdLink(fName, email, cPhoneCarrierEmailExtn, pNum, partialUserURL);
 
 
-        var successMessage = "A Reset Password email ";
+        var successMessage = "A Reset Password link has been sent to you via email ";
 
         const userPNumNoSpaces = pNum.replace(/\s/g,'');
         if (userPNumNoSpaces !== '') {
             successMessage += "and text message ";
         }
-        successMessage += "has been sent to you now.";
+        successMessage += "now.";
 
         res.status(200).json(successMessage);
 
     } catch (error) {
         res.status(500).json(error.message);
+    }
+});
+
+// Simply checking if the given reset URL is valid:
+router.get("/resetpwd", async (req, res) => {
+    try {
+        const { id } = req.query;
+
+        // Checking if it's a valid password reset link:
+        const checkId = await pool.query("SELECT * FROM users WHERE user_reset_pwd_url = $1", [id]);
+
+        if (checkId.rows.length === 0) {
+            return res.status(200).json({message: "Invalid Reset Password link."});
+        }
+        // Finished link validity check.
+
+
+        // Checking if the link has expired (one hour limit):
+        const resetLinkDate = (new Date( checkId.rows[0].user_reset_pwd_time )).getTime();
+
+        const now = new Date();
+        const deadline = 1000 * 60 * 60;
+
+        if ( now - resetLinkDate >= deadline ) {
+            return res.status(200).json({message: "The Reset Password link has expired."});
+        }
+        // Finished link expiration check.
+
+
+        const userEmail = checkId.rows[0].user_email;
+        res.status(200).json( {userEmail, message: "Valid Reset Password link."} )
+
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+});
+
+router.put("/resetpwd", async (req, res) => {
+    try {
+        const { userEmail, newPwd } = req.body;
+
+        if (!userEmail || !newPwd) {
+            return res.status(200).json("Invalid values.")
+        }
+
+        // Encrypting the new password:
+        const saltRound = 10;
+        const salt = await bcryptLib.genSalt(saltRound);
+        const bcryptPwd = await bcryptLib.hash(newPwd, salt);
+
+        const changePwd = await pool.query("UPDATE users SET user_pwd = $1, user_reset_pwd_url = $2, user_reset_pwd_time = $3 WHERE user_email = $4", 
+            [bcryptPwd, '', null,  userEmail]
+        );
+
+        res.status(200).json("Your password has now been successfully reset!");
+
+    } catch (error) {
+        console.error(error.message);
     }
 });
 /************************************** END: FORGOT AND RESET PASSWORD ***************************/
@@ -222,9 +283,9 @@ function CapitalizeName(givenName) {
     return nameFinalForm;
 }
 
-async function sendResetPwdLink(fName, email, cPhoneCarrierEmailExtn, pNum, partialURL ) {
+async function sendResetPwdLink(fName, email, cPhoneCarrierEmailExtn, pNum, partialUserURL ) {
     try {
-        const finalURL = "RemindMeee.com/ResetPassword/" + partialURL;
+        const finalURL = "RemindMeee.com/ResetPassword/" + partialUserURL;
         
         // Step 1: create a reuseable transporter object.
         let transporter = nodeMailer.createTransport({
@@ -251,7 +312,7 @@ async function sendResetPwdLink(fName, email, cPhoneCarrierEmailExtn, pNum, part
 
                 <h3 style="color: #000;">Hi ${fName},</h3>
                 <h3 style="color: #000; text-indent: 50px;"> 
-                Please click the button below to reset your password. You have 24 hours before the
+                Please click the button below to reset your password. You have one hour before the
                 link expires.
                 </h3>
             </div>
@@ -302,7 +363,7 @@ async function sendResetPwdLink(fName, email, cPhoneCarrierEmailExtn, pNum, part
                 to: `${pNum}${cPhoneCarrierEmailExtn}`,
                 subject: "RemindMe: Reset Password",
                 text: `Hi ${fName},
-                Please click the link below to reset your password. You have 24 hours before the link expires.
+                Please click the link below to reset your password. You have one hour before the link expires.
 
                 -
                 -
