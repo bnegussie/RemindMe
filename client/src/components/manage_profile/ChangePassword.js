@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { toast } from "react-toastify";
 
+import PasswordToggle from "./../PasswordToggle";
+
 import "./../../App.css"
 
 function ChangePassword() {
@@ -8,6 +10,10 @@ function ChangePassword() {
     const [currentPwd, setCurrentPwd] = useState("");
     const [newPwd, setNewPwd] = useState("");
     const [confirmNewPwd, setConfirmNewPwd] = useState("");
+
+    const [currentPwdInputType, currentPwdToggleIcon] = PasswordToggle();
+    const [newPwdInputType, newPwdToggleIcon] = PasswordToggle();
+    const [confirmNewPwdInputType, confirmNewPwdToggleIcon] = PasswordToggle();
 
     function onCancel() {
         setCurrentPwd("");
@@ -100,7 +106,7 @@ function ChangePassword() {
                             <div className="modal-body">
                                 <div className="form-group change-pwd">
                                     <input 
-                                        type="password"
+                                        type={ currentPwdInputType }
                                         name="currentPwd"
                                         id="currentPwd"
                                         placeholder=" "
@@ -115,13 +121,14 @@ function ChangePassword() {
                                         
                                         Current password:
 									</label>
+                                    <span className="pwd-toggle-icon"> { currentPwdToggleIcon } </span>
                                 </div>
                             
                                 <hr />
 
                                 <div className="form-group change-pwd">
                                     <input 
-                                        type="password"
+                                        type={ newPwdInputType }
                                         name="newPwd"
                                         id="newPwd"
                                         placeholder=" "
@@ -136,11 +143,12 @@ function ChangePassword() {
                                         
                                         New password:
 									</label>
+                                    <span className="pwd-toggle-icon"> { newPwdToggleIcon } </span>
                                 </div>
 
                                 <div className="form-group change-pwd">
                                     <input 
-                                        type="password"
+                                        type={ confirmNewPwdInputType }
                                         name="confirmNewPwd"
                                         id="confirmNewPwd"
                                         placeholder= " "
@@ -155,6 +163,7 @@ function ChangePassword() {
                                         
                                         Confirm new password:
 									</label>
+                                    <span className="pwd-toggle-icon"> { confirmNewPwdToggleIcon } </span>
                                 </div>
                             </div>
 

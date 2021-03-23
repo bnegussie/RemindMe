@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { toast } from 'react-toastify';
 
 import ForgotPwd from "./ForgotPwd";
+import PasswordToggle from "./PasswordToggle";
 
 import "./../App.css"
 
@@ -13,6 +14,7 @@ const LogIn = ({ setAuth }) => {
     });
 
     const {email, pwd} = inputs;
+    const [pwdInputType, pwdToggleIcon] = PasswordToggle();
 
     const onChange = (e) => {
         setInputs({...inputs, [e.target.name] : e.target.value});
@@ -89,7 +91,7 @@ const LogIn = ({ setAuth }) => {
 
                     <div className="form-group">
                         <input 
-                            type="password"
+                            type={ pwdInputType }
                             name="pwd"
                             id="log-in-pwd"
                             placeholder=" "
@@ -99,6 +101,7 @@ const LogIn = ({ setAuth }) => {
                             required
                         />
                         <label htmlFor="log-in-pwd" className="form-label">Password:</label>
+                        <span className="pwd-toggle-icon"> { pwdToggleIcon } </span>
                     </div>
                     
                     <button className="btn btn-success btn-block">Submit</button>

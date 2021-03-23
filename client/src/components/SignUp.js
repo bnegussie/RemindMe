@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import Select from "react-select";
 
 import { ClearDateMinAndSecAndMill } from "./dashboard/reminders/ClearDate";
+import PasswordToggle from "./PasswordToggle";
 
 import "./../App.css"
 
@@ -21,6 +22,9 @@ const SignUp = ({ setAuth }) => {
     const [allCellphoneCarriers, setAllCellphoneCarriers] = useState([]);
 
     const { f_name, l_name, email, p_num, pwd, pwd_confirm } = inputs;
+
+    const [pwdInputType, pwdToggleIcon] = PasswordToggle();
+    const [confirmPwdInputType, confirmPwdToggleIcon] = PasswordToggle();
 
     const onChange = (e) => {
         setInputs({...inputs, [e.target.name] : e.target.value});
@@ -273,7 +277,7 @@ const SignUp = ({ setAuth }) => {
 
                 <div className="form-group">
                     <input
-                        type="password"
+                        type={ pwdInputType }
                         name="pwd"
                         id="sign-up-pwd"
                         placeholder=" "
@@ -283,11 +287,12 @@ const SignUp = ({ setAuth }) => {
                         required
                     />
                     <label htmlFor="sign-up-pwd" className="form-label">Password:</label>
+                    <span className="pwd-toggle-icon"> { pwdToggleIcon } </span>
                 </div>
 
                 <div className="form-group">
                     <input
-                        type="password"
+                        type={ confirmPwdInputType }
                         name="pwd_confirm"
                         id="sign-up-pwd_confirm"
                         placeholder=" "
@@ -297,6 +302,7 @@ const SignUp = ({ setAuth }) => {
                         required
                     />
                     <label htmlFor="sign-up-pwd_confirm" className="form-label">Confirm password:</label>
+                    <span className="pwd-toggle-icon"> { confirmPwdToggleIcon } </span>
                 </div>         
                 
                 <button className="btn btn-success btn-block mb-4">Submit</button>

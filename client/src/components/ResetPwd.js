@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import PasswordToggle from "./PasswordToggle";
+
 import "./../App.css"
 
 function ResetPwd() {
@@ -10,6 +12,9 @@ function ResetPwd() {
     const [userEmail, setUserEmail] = useState("");
     const [newPwd, setNewPwd] = useState("");
     const [confirmNewPwd, setConfirmNewPwd] = useState("");
+
+    const [newPwdInputType, newPwdToggleIcon] = PasswordToggle();
+    const [confirmNewPwdInputType, confirmNewPwdToggleIcon] = PasswordToggle();
 
     const history = useHistory();
 
@@ -113,7 +118,7 @@ function ResetPwd() {
             <form onSubmit={e => submitResetPwd(e)} className="form">
                 <div className="form-group">
                     <input 
-                        type="password"
+                        type={ newPwdInputType }
                         name="new-pwd"
                         id="new-pwd"
                         placeholder=" "
@@ -126,11 +131,12 @@ function ResetPwd() {
                     <label htmlFor="new-pwd" className="form-label">
                         New password:
                     </label>
+                    <span className="pwd-toggle-icon"> { newPwdToggleIcon } </span>
                 </div>
 
                 <div className="form-group">
                     <input 
-                        type="password"
+                        type={ confirmNewPwdInputType }
                         name="confirm-new-pwd"
                         id="confirm-new-pwd"
                         placeholder=" "
@@ -142,6 +148,7 @@ function ResetPwd() {
                     <label htmlFor="confirm-new-pwd" className="form-label">
                         Confirm new password:
                     </label>
+                    <span className="pwd-toggle-icon"> { confirmNewPwdToggleIcon } </span>
                 </div>
                 
                 <button className="btn btn-success btn-block">Submit</button>
