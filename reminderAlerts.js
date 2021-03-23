@@ -572,7 +572,7 @@ async function sendGeneralReminder(req, userEmail, userCPCarrierEmailExtn, userP
             ${initialGreeting} Make sure to keep moving forward and keep making the most out of this day!
             ${allSMSReminders}
             Click the link below to view all of your reminders: 
-            www.RemindMeee.com
+            RemindMeee.com
             `
         };
 
@@ -903,7 +903,7 @@ async function sendSpecifiedReminder(req, userEmail, userCPCarrierEmailExtn, use
             ${initialGreeting} which you wanted to be reminded about. Make sure to keep moving forward and keep making the most out of this day!
             ${smsReminders}
             Click the link below to view all of your reminders: 
-            www.RemindMeee.com `
+            RemindMeee.com `
         };
 
         transporter.sendMail(smsInfo, function(error, data) {

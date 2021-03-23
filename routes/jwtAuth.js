@@ -101,13 +101,27 @@ router.post("/login", validInfo, async(req, res) => {
         // 3) Checking if pwd provided matches pwd in the DB:
         const validPwd = await bcryptLib.compare(pwd, user.rows[0].user_pwd);
 
+        var incorPwdAttempts = user.rows[0].user_incor_pwd_count;
+
+        if (incorPwdAttempts >= 10) {
+            return res.status(200).json("Too many incorrect password attempts.");
+        }
+
         if (!validPwd) {
+            // Incrementing the number of times the user incorrectly types their password.
+            // If they continue to fail to provide the proper password, their account will be locked.
+            const updateTimeZone = await pool.query("UPDATE users SET user_incor_pwd_count = $1 WHERE user_email = $2",
+                [(incorPwdAttempts + 1), email]
+            );
+
             return res.status(200).json("Incorrect password.");
         }
 
-        // Updating the user's time zone:
-        const updateTimeZone = await pool.query("UPDATE users SET user_time_zone = $1 WHERE user_email = $2",
-            [userTimeZone, email]
+        incorPwdAttempts = 0;
+
+        // Updating the user's time zone and incorrect password count:
+        const updateUserData = await pool.query("UPDATE users SET user_time_zone = $1, user_incor_pwd_count = $2 WHERE user_email = $3",
+            [userTimeZone, incorPwdAttempts, email]
         );
 
         // 4) Generate our JWT token:

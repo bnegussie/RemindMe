@@ -259,8 +259,12 @@ router.put("/resetpwd", async (req, res) => {
         const salt = await bcryptLib.genSalt(saltRound);
         const bcryptPwd = await bcryptLib.hash(newPwd, salt);
 
-        const changePwd = await pool.query("UPDATE users SET user_pwd = $1, user_reset_pwd_url = $2, user_reset_pwd_time = $3 WHERE user_email = $4", 
-            [bcryptPwd, '', null,  userEmail]
+        const userResetPwdURL = '';
+        const userPwdResetTime = null;
+        const incorPwdAttempts = 0;
+
+        const changePwd = await pool.query("UPDATE users SET user_pwd = $1, user_reset_pwd_url = $2, user_reset_pwd_time = $3, user_incor_pwd_count = $4 WHERE user_email = $5", 
+            [bcryptPwd, userResetPwdURL, userPwdResetTime, incorPwdAttempts, userEmail]
         );
 
         res.status(200).json("Your password has now been successfully reset!");

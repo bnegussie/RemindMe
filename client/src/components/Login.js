@@ -55,6 +55,13 @@ const LogIn = ({ setAuth }) => {
                 
                 return toast.error(parseResp, {autoClose: 4000}); 
 
+            } else if (parseResp === "Too many incorrect password attempts.") {
+
+                toast.error(parseResp, {autoClose: 7500});
+                toast.error("Your account has been locked.", {autoClose: 7500});
+                return toast.info("Please click the Forgot Password link, on this page, to reset your password.", 
+                        {autoClose: 7500});
+                        
             } else if (parseResp.message && parseResp.message === "Successful log in!") {
                 localStorage.setItem("token", parseResp.token);
                 setAuth(true);

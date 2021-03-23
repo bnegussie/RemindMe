@@ -562,7 +562,7 @@ router.post("/welcome", authorization, async (req, res) => {
                 -
 
                 Click the link below to create your first reminder:
-                www.RemindMeee.com
+                RemindMeee.com
                 `
             };
 
