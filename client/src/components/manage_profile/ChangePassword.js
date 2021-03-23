@@ -40,6 +40,10 @@ function ChangePassword() {
             } else if (newPwd.length < 6) {
                 return toast.error("Your new password must be at least six characters long.", 
                                     {autoClose: 4000});
+            } else if (currentPwd === newPwd) {
+                return toast.error("Your new password cannot be the same as your current password.", 
+                                    {autoClose: 4000});
+
             }
             // Finished input validation.
 
