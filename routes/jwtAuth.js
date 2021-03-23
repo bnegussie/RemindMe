@@ -101,12 +101,23 @@ router.post("/login", validInfo, async(req, res) => {
         // 3) Checking if pwd provided matches pwd in the DB:
         const validPwd = await bcryptLib.compare(pwd, user.rows[0].user_pwd);
 
-        var incorPwdAttempts = user.rows[0].user_incor_pwd_count;
 
+        // Safety checks:--------------------------------------------------------------->
+
+        // This person has already requested a Reset Password so we will force them
+        // to actually reset their password.
+        if ( user.rows[0].user_reset_pwd_url ) {
+            return res.status(200).json(
+                "Please reset your password by following the instructions which you previously received in your email."
+            );
+        }
+
+        var incorPwdAttempts = user.rows[0].user_incor_pwd_count;
         if (incorPwdAttempts >= 10) {
             return res.status(200).json("Too many incorrect password attempts.");
         }
 
+        
         if (!validPwd) {
             // Incrementing the number of times the user incorrectly types their password.
             // If they continue to fail to provide the proper password, their account will be locked.
@@ -116,6 +127,8 @@ router.post("/login", validInfo, async(req, res) => {
 
             return res.status(200).json("Incorrect password.");
         }
+        // Safety checks end.:----------------------------------------------------------<
+
 
         incorPwdAttempts = 0;
 
