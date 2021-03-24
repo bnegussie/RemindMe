@@ -49,6 +49,10 @@ router.post("/signup", validInfo, async(req, res) => {
         const firstNameFinalForm = CapitalizeName( f_name );
         const lastNameFinalForm = CapitalizeName( l_name );
 
+        const userResetPwdURL = '';
+        const userPwdResetTime = null;
+        const incorPwdAttempts = 0;
+
         
         // 3) Bcrypt the user's pwd:
         const saltRound = 10;
@@ -58,9 +62,10 @@ router.post("/signup", validInfo, async(req, res) => {
 
         // 4) Insert the user into our DB:
         const newUser = await pool.query(
-            "INSERT INTO users (user_f_name, user_l_name, user_email, user_cp_carrier, user_cp_carrier_email_extn, user_p_num, user_pwd, user_general_reminder_time, user_time_zone) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *", 
+            "INSERT INTO users (user_f_name, user_l_name, user_email, user_cp_carrier, user_cp_carrier_email_extn, user_p_num, user_pwd, user_general_reminder_time, user_time_zone, user_reset_pwd_url, user_reset_pwd_time, user_incor_pwd_count) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *", 
             [firstNameFinalForm, lastNameFinalForm, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, 
-                p_num, bcryptPwd, generalReminderTime, userTimeZone]
+                p_num, bcryptPwd, generalReminderTime, userTimeZone, userResetPwdURL, userPwdResetTime,
+                incorPwdAttempts]
         );
 
         

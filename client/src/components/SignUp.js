@@ -21,6 +21,8 @@ const SignUp = ({ setAuth }) => {
     const [cPhoneCarrierEmailExtn, setCPhoneCarrierEmailExtn] = useState("");
     const [allCellphoneCarriers, setAllCellphoneCarriers] = useState([]);
 
+    var invalidAttemptsCounter = 0;
+
     const { f_name, l_name, email, p_num, pwd, pwd_confirm } = inputs;
 
     const [pwdInputType, pwdToggleIcon] = PasswordToggle();
@@ -45,6 +47,12 @@ const SignUp = ({ setAuth }) => {
 
         try {
             // Quick input validation:
+            if (invalidAttemptsCounter >= 10) {
+                // If this is a bot or a malicious user, refreshing the page
+                // will slow them dowm from taking down the server.
+                window.location = "/";
+            }
+            
             // Making sure the input fields are not empty or filled with empty spaces.
             if (f_name === "" || (f_name).replace(/\s/g, "") === "" || 
                 l_name === "" || (l_name).replace(/\s/g, "") === "" ||
@@ -124,6 +132,7 @@ const SignUp = ({ setAuth }) => {
             if (parseResp === "A user with this email address already exists." || 
                 parseResp === "A user with this phone number already exists.") {
                 
+                invalidAttemptsCounter++;
                 return toast.error(parseResp, {autoClose: 4000});
 
             } else if (parseResp.message && parseResp.message === "Successful registration!") {

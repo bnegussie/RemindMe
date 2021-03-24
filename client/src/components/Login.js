@@ -15,6 +15,7 @@ const LogIn = ({ setAuth }) => {
 
     const {email, pwd} = inputs;
     const [pwdInputType, pwdToggleIcon] = PasswordToggle();
+    var invalidAttemptsCounter = 0;
 
     const onChange = (e) => {
         setInputs({...inputs, [e.target.name] : e.target.value});
@@ -25,6 +26,12 @@ const LogIn = ({ setAuth }) => {
 
         try {
             // Quick input validation.
+            if (invalidAttemptsCounter >= 10) {
+                // If this is a bot or a malicious user, refreshing the page
+                // will slow them dowm from taking down the server.
+                window.location = "/";
+            }
+
             // eslint-disable-next-line
             if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
                 
@@ -50,11 +57,14 @@ const LogIn = ({ setAuth }) => {
             // parseResp now holds the JWT or the error message:
             const parseResp = await response.json();
 
-            if (parseResp === "A user with this email does not exist." || 
-                parseResp === "Incorrect password.") {
+            if (parseResp === "A user with this email does not exist.") {
                 
+                invalidAttemptsCounter++;
                 return toast.error(parseResp, {autoClose: 4000}); 
 
+            } else if (parseResp === "Incorrect password.") {
+                return toast.error(parseResp, {autoClose: 4000}); 
+            
             } else if ( parseResp ===  
                 "Please reset your password by following the instructions which you previously received in your email." ) {
                 
