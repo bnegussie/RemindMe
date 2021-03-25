@@ -38,25 +38,49 @@ function App() {
 
   const isAuth = async () => {
     try {
+      const myHeaders = new Headers();
+      myHeaders.append("token", localStorage.token);
+      myHeaders.append("refreshToken", localStorage.refreshToken);
+
       const response = await fetch("/api/auth/is-Verified", {
         method: "GET",
-        headers: {token: localStorage.token}
+        headers: myHeaders
       });
 
       const parseResp = await response.json();
+      
 
-      if (response.status === 401 && parseResp === "Token is not valid.") {
-        // The user is not logged in.
-        setIsAuthenticated(false);
-      } else {
+      if (typeof parseResp === "boolean") {
         parseResp ? setIsAuthenticated(true) : setIsAuthenticated(false);
+
+      } else if (parseResp === "The user has not logged in." ||
+                parseResp === "The refresh token is invalid.") {
+
+        setIsAuthenticated(false);
+
+        // Removing the JWT token; 
+        // this is needed when the user's session has timed out.
+        if (localStorage.token) {
+          localStorage.removeItem("token");
+        }
+        if (localStorage.refreshToken) {
+          localStorage.removeItem("refreshToken");
+        }
+
+        if (parseResp === "The refresh token is invalid.") {
+          toast.info("Your session has expired. Please log back in.", {autoClose: 4000});
+        }
+        
+
+      } else {
+        /* The new access token:
+         * The middleware can only return one thing which is why the new access token doesn't
+         * have it's own header to specify what came back from the is-Verified API call.
+         */
+        localStorage.setItem("token", parseResp);
+        setIsAuthenticated(true);
       }
 
-      // Removing the JWT token; this is needed when the user's session has timed out.
-      if (parseResp === "Token is not valid." && localStorage.token) {
-        localStorage.removeItem("token");
-        toast.info("Your session has expired. Please log back in.", {autoClose: 4000});
-      }
 
     } catch (error) {
       console.error(error.message);

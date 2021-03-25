@@ -82,6 +82,7 @@ const LogIn = ({ setAuth }) => {
                         
             } else if (parseResp.message && parseResp.message === "Successful log in!") {
                 localStorage.setItem("token", parseResp.token);
+                localStorage.setItem("refreshToken", parseResp.refreshToken);
                 setAuth(true);
                 toast.success(parseResp.message, {autoClose: 3000});
             } else {

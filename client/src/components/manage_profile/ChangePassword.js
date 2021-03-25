@@ -50,13 +50,14 @@ function ChangePassword() {
 
             const body = { currentPwd, newPwd };
 
-            const pwdHeaders = new Headers();
-            pwdHeaders.append("Content-type", "application/json");
-            pwdHeaders.append("token", localStorage.token);
+            const myHeaders = new Headers();
+            myHeaders.append("Content-type", "application/json");
+            myHeaders.append("token", localStorage.token);
+            myHeaders.append("refreshToken", localStorage.refreshToken);
 
             const response = await fetch("/api/profile/pwd", {
                 method: "PUT",
-                headers: pwdHeaders,
+                headers: myHeaders,
                 body: JSON.stringify(body)
             });
 

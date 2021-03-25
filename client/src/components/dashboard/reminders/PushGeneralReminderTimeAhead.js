@@ -10,7 +10,7 @@ async function PushGeneralReminderTimeAhead( myHeaders ) {
     try {
         const grtGetResponse = await fetch("/api/profile/general/reminder", {
             method: "GET",
-            headers: {"token": localStorage.token}
+            headers: myHeaders
         });
 
         const parseResp = await grtGetResponse.json();

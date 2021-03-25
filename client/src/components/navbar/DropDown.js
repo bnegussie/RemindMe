@@ -17,6 +17,7 @@ function DropDown({setAuth, onMouseLeave, closeMobileMenu}) {
 
     const logOut = ((e) => {
         e.preventDefault();
+        localStorage.removeItem("refreshToken");
         localStorage.removeItem("token");
         setAuth(false);
         history.push("/");

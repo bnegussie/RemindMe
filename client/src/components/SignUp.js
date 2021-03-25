@@ -138,10 +138,12 @@ const SignUp = ({ setAuth }) => {
             } else if (parseResp.message && parseResp.message === "Successful registration!") {
 
                 localStorage.setItem("token", parseResp.token);
+                localStorage.setItem("refreshToken", parseResp.refreshToken);
                 
                 const myHeaders = new Headers();
                 myHeaders.append("Content-type", "application/json");
                 myHeaders.append("token", localStorage.token);
+                myHeaders.append("refreshToken", localStorage.refreshToken);
 
                 // Sending welcome message:
                 // eslint-disable-next-line

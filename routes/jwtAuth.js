@@ -4,6 +4,7 @@ const bcryptLib = require("bcrypt");
 const jwtGenerator = require("../utils/jtwGenerator");
 const validInfo = require("../middleware/validInfo");
 const authorization = require("../middleware/authorization");
+const jwtRefreshTokenGenerator = require("../utils/jwtRefreshTokenGenerator");
 
 
 // Creating routers to make the Extress library more modular:
@@ -71,7 +72,8 @@ router.post("/signup", validInfo, async(req, res) => {
         
         // 5) Generate our JWT token:
         const token = jwtGenerator(newUser.rows[0].user_id);
-        res.json( {token, message: "Successful registration!"} );
+        const refreshToken = jwtRefreshTokenGenerator(newUser.rows[0].user_id);
+        res.json( {token, refreshToken, message: "Successful registration!"} );
 
     } catch (error) {
         console.error(error.message);
@@ -144,8 +146,9 @@ router.post("/login", validInfo, async(req, res) => {
 
         // 4) Generate our JWT token:
         const token = jwtGenerator(user.rows[0].user_id);
+        const refreshToken = jwtRefreshTokenGenerator(user.rows[0].user_id);
         // This token will be checked whenever a user tries to make a privilaged action:
-        res.json( {token, message: "Successful log in!"} );
+        res.json( {token, refreshToken, message: "Successful log in!"} );
 
     } catch (error) {
         console.error(error.message);
@@ -157,7 +160,13 @@ router.post("/login", validInfo, async(req, res) => {
 // Verifying the user's token:
 router.get("/is-verified", authorization, async(req, res) => {
     try {
-        res.json(true);
+        if (req.newAccessToken) {
+            // A new JWT access token has been granted:
+            res.json(req.newAccessToken);
+        } else {
+            res.json(true);
+        }
+        
     } catch (error) {
         console.error(error.message);
         res.status(500).json("Server error");
