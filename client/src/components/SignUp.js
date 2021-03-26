@@ -156,6 +156,7 @@ const SignUp = ({ setAuth }) => {
                 setAuth(true);
                 toast.success(parseResp.message, {autoClose: 3000});
             } else {
+                invalidAttemptsCounter++;
                 return toast.error("Something went wrong.", {autoClose: 3000});
             }
 

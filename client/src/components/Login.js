@@ -68,6 +68,7 @@ const LogIn = ({ setAuth }) => {
             } else if ( parseResp ===  
                 "Please reset your password by following the instructions which you previously received in your email." ) {
                 
+                invalidAttemptsCounter++;
                 toast.error("Your account has been locked.", {autoClose: 7500});
                 toast.error(parseResp, {autoClose: 7500});
                 return toast.info("If you would like a new Reset Password email please click the Forgot Password link, on this page.", 
@@ -75,6 +76,7 @@ const LogIn = ({ setAuth }) => {
             
             } else if (parseResp === "Too many incorrect password attempts.") {
 
+                invalidAttemptsCounter++;
                 toast.error("Your account has been locked.", {autoClose: 7500});
                 toast.error(parseResp, {autoClose: 7500});
                 return toast.info("Please click the Forgot Password link, on this page, to reset your password.", 
@@ -86,6 +88,7 @@ const LogIn = ({ setAuth }) => {
                 setAuth(true);
                 toast.success(parseResp.message, {autoClose: 3000});
             } else {
+                invalidAttemptsCounter++;
                 return toast.error("Something went wrong.", {autoClose: 3000});
             }
 
