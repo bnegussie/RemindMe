@@ -25,11 +25,11 @@ function Reminders({ isAuth }) {
 	var isExecuting = false;
 	const confirmIconClass = `fa fa-${isExecuting ? "circle-o-notch fa-spin" : "fa fa-trash"}`;
 
-	async function getAllActiveReminders() {
+	async function getAllActiveReminders( myHeaders ) {
 		try {
 			const response = await fetch("/api/dashboard/reminder/active", {
 				method: "GET",
-				headers: {token: localStorage.token}
+				headers: myHeaders
 			});
 			const parseResp = await response.json();
 			setAllActiveReminders(parseResp);
@@ -38,11 +38,11 @@ function Reminders({ isAuth }) {
 		}
 	}
 
-	async function getAllCompletedReminders() {
+	async function getAllCompletedReminders( myHeaders ) {
 		try {
 			const response = await fetch("/api/dashboard/reminder/completed", {
 				method: "GET",
-				headers: {token: localStorage.token}
+				headers: myHeaders
 			});
 			const parseResp = await response.json();
 			setAllCompletedReminders(parseResp);
@@ -51,11 +51,11 @@ function Reminders({ isAuth }) {
 		}
 	}
 
-	async function getAllOverdueReminders() {
+	async function getAllOverdueReminders( myHeaders ) {
 		try {
 			const response = await fetch("/api/dashboard/reminder/overdue", {
 				method: "GET",
-				headers: {token: localStorage.token}
+				headers: myHeaders
 			});
 			const parseResp = await response.json();
 			setAllOverdueReminders(parseResp);
@@ -64,11 +64,11 @@ function Reminders({ isAuth }) {
 		}
 	}
 
-	async function getAllReminders() {
+	async function getAllReminders( myHeaders ) {
 		try {
 			const response = await fetch("/api/dashboard/reminder/all", {
 				method: "GET",
-				headers: {token: localStorage.token}
+				headers: myHeaders
 			});
 			const parseResp = await response.json();
 			setAllReminders(parseResp);
@@ -79,12 +79,16 @@ function Reminders({ isAuth }) {
 
 	async function deleteReminderTask(reminder_id) {
 		try {
+			const myHeaders = new Headers();
+			myHeaders.append("token", localStorage.token);
+			myHeaders.append("refreshToken", localStorage.refreshToken);
+
 			// eslint-disable-next-line
 			const respActiveReminders = await fetch(
 				`/api/dashboard/reminder/active/${reminder_id}`,
 				{
 					method: "DELETE",
-					headers: {token: localStorage.token}
+					headers: myHeaders
 				}
 			);
 
@@ -93,7 +97,7 @@ function Reminders({ isAuth }) {
 				`/api/dashboard/reminder/completed/${reminder_id}`,
 				{
 					method: "DELETE",
-					headers: {token: localStorage.token}
+					headers: myHeaders
 				}
 			);
 
@@ -102,7 +106,7 @@ function Reminders({ isAuth }) {
 				`/api/dashboard/reminder/overdue/${reminder_id}`,
 				{
 					method: "DELETE",
-					headers: {token: localStorage.token}
+					headers: myHeaders
 				}
 			);
 
@@ -111,7 +115,7 @@ function Reminders({ isAuth }) {
 				`/api/dashboard/reminder/all/${reminder_id}`,
 				{
 					method: "DELETE",
-					headers: {token: localStorage.token}
+					headers: myHeaders
 				}
 			);
 
@@ -150,10 +154,14 @@ function Reminders({ isAuth }) {
 	}
 
 	useEffect(() => {
-		getAllActiveReminders();
-		getAllCompletedReminders();
-		getAllReminders();
-		getAllOverdueReminders();
+		const myHeaders = new Headers();
+		myHeaders.append("token", localStorage.token);
+		myHeaders.append("refreshToken", localStorage.refreshToken);
+
+		getAllActiveReminders( myHeaders );
+		getAllCompletedReminders( myHeaders );
+		getAllReminders( myHeaders );
+		getAllOverdueReminders( myHeaders );
 
 		return () => {
 			setAllActiveReminders([]);
@@ -167,20 +175,25 @@ function Reminders({ isAuth }) {
 	useEffect(() => {
 		async function getLatestOverdueReminders() {
 			try {
+				const myHeaders = new Headers();
+				myHeaders.append("Content-type", "application/json");
+				myHeaders.append("token", localStorage.token);
+				myHeaders.append("refreshToken", localStorage.refreshToken);
+				
 				/* These API requests are very important because we want to make sure we wait and
 				 * have the proper decision, before deciding to place a reminder as overdue,
 				 * as to prevent any duplications.
 				 */
 				const respGetAllActiveReminders = await fetch("/api/dashboard/reminder/active", {
 					method: "GET",
-					headers: {token: localStorage.token}
+					headers: myHeaders
 				});
 				const allActive = await respGetAllActiveReminders.json();
 
 				const respGetAllOverdueReminders = await fetch(
 					"/api/dashboard/reminder/overdue", {
 						method: "GET",
-						headers: {token: localStorage.token}
+						headers: myHeaders
 					});
 				const allOverdue = await respGetAllOverdueReminders.json();
 				
@@ -226,14 +239,8 @@ function Reminders({ isAuth }) {
 							var bodyPlusId = { id, completed, title, desc, dueDate, 
 												reminderDate, reminderSent };
 
-							const myHeaders = new Headers();
-							myHeaders.append("Content-type", "application/json");
-							myHeaders.append("token", localStorage.token);
-
 							// eslint-disable-next-line
-							const addingToOverdueReminders = await fetch(
-								`/api/dashboard/reminder/overdue`,
-								{
+							const addingToOverdueReminders = await fetch( `/api/dashboard/reminder/overdue`, {
 									method: "POST",
 									headers: myHeaders,
 									body: JSON.stringify(bodyPlusId),
@@ -251,7 +258,7 @@ function Reminders({ isAuth }) {
 
 					activeIndex++;
 				}
-				getAllOverdueReminders();
+				getAllOverdueReminders(myHeaders);
 	
 			} catch (error) {
 				console.error(error.message);

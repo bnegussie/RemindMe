@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { toast } from "react-toastify";
 
+import PasswordToggle from "./../PasswordToggle";
+
 import "./../../App.css"
 
 function ChangePassword() {
@@ -8,6 +10,10 @@ function ChangePassword() {
     const [currentPwd, setCurrentPwd] = useState("");
     const [newPwd, setNewPwd] = useState("");
     const [confirmNewPwd, setConfirmNewPwd] = useState("");
+
+    const [currentPwdInputType, currentPwdToggleIcon] = PasswordToggle();
+    const [newPwdInputType, newPwdToggleIcon] = PasswordToggle();
+    const [confirmNewPwdInputType, confirmNewPwdToggleIcon] = PasswordToggle();
 
     function onCancel() {
         setCurrentPwd("");
@@ -34,19 +40,24 @@ function ChangePassword() {
             } else if (newPwd.length < 6) {
                 return toast.error("Your new password must be at least six characters long.", 
                                     {autoClose: 4000});
+            } else if (currentPwd === newPwd) {
+                return toast.error("Your new password cannot be the same as your current password.", 
+                                    {autoClose: 4000});
+
             }
             // Finished input validation.
 
 
             const body = { currentPwd, newPwd };
 
-            const pwdHeaders = new Headers();
-            pwdHeaders.append("Content-type", "application/json");
-            pwdHeaders.append("token", localStorage.token);
+            const myHeaders = new Headers();
+            myHeaders.append("Content-type", "application/json");
+            myHeaders.append("token", localStorage.token);
+            myHeaders.append("refreshToken", localStorage.refreshToken);
 
             const response = await fetch("/api/profile/pwd", {
                 method: "PUT",
-                headers: pwdHeaders,
+                headers: myHeaders,
                 body: JSON.stringify(body)
             });
 
@@ -100,7 +111,7 @@ function ChangePassword() {
                             <div className="modal-body">
                                 <div className="form-group change-pwd">
                                     <input 
-                                        type="password"
+                                        type={ currentPwdInputType }
                                         name="currentPwd"
                                         id="currentPwd"
                                         placeholder=" "
@@ -115,13 +126,14 @@ function ChangePassword() {
                                         
                                         Current password:
 									</label>
+                                    <span className="pwd-toggle-icon"> { currentPwdToggleIcon } </span>
                                 </div>
                             
                                 <hr />
 
                                 <div className="form-group change-pwd">
                                     <input 
-                                        type="password"
+                                        type={ newPwdInputType }
                                         name="newPwd"
                                         id="newPwd"
                                         placeholder=" "
@@ -136,11 +148,12 @@ function ChangePassword() {
                                         
                                         New password:
 									</label>
+                                    <span className="pwd-toggle-icon"> { newPwdToggleIcon } </span>
                                 </div>
 
                                 <div className="form-group change-pwd">
                                     <input 
-                                        type="password"
+                                        type={ confirmNewPwdInputType }
                                         name="confirmNewPwd"
                                         id="confirmNewPwd"
                                         placeholder= " "
@@ -155,6 +168,7 @@ function ChangePassword() {
                                         
                                         Confirm new password:
 									</label>
+                                    <span className="pwd-toggle-icon"> { confirmNewPwdToggleIcon } </span>
                                 </div>
                             </div>
 

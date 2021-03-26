@@ -80,20 +80,22 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 			// The Dates stored in the DB are not sanitized.
 			const bodyPlusId = {id, completed, title, desc, dueDate, reminderDate, reminderSent};
 
+			const myHeaders = new Headers();
+			myHeaders.append("Content-type", "application/json");
+			myHeaders.append("token", localStorage.token);
+			myHeaders.append("refreshToken", localStorage.refreshToken);
+
 			// The possibility that the Completed check box state being 
 			// altered makes this a bit more complicated function. 
 
 			const respAllGetReminder = await fetch(`/api/dashboard/reminder/all/${id}`, {
 				method: "GET",
-				headers: {token: localStorage.token}
+				headers: myHeaders
 			});
 			const respCurrReminder = await respAllGetReminder.json();
 			
 			const originalCompletedState = respCurrReminder.reminder_completed;
 
-			const myHeaders = new Headers();
-			myHeaders.append("Content-type", "application/json");
-			myHeaders.append("token", localStorage.token);
 
 			if (originalCompletedState === completed) {
 				// The Completed state has not been changed.
@@ -124,7 +126,7 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 
 					const respAllOverdue = await fetch("/api/dashboard/reminder/overdue", {
 						method: "GET",
-						headers: {token: localStorage.token}
+						headers: myHeaders
 					});
 					const localAllOverdueReminders = await respAllOverdue.json();
 					
@@ -158,7 +160,7 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 									`/api/dashboard/reminder/overdue/${id}`, 
 									{
 										method: "DELETE",
-										headers: {token: localStorage.token}
+										headers: myHeaders
 								});
 
 							}
@@ -176,14 +178,14 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 					const respDeletedActiveReminder = await fetch(
 						`/api/dashboard/reminder/active/${id}`, {
 							method: "DELETE",
-							headers: {token: localStorage.token}
+							headers: myHeaders
 					});
 
 					// eslint-disable-next-line
 					const respDeletedOverdueReminder = await fetch(
 						`/api/dashboard/reminder/overdue/${id}`, {
 							method: "DELETE",
-							headers: {token: localStorage.token}
+							headers: myHeaders
 					});
 
 					// eslint-disable-next-line
@@ -202,7 +204,7 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 					const respDeletedCompletedReminder = await fetch(
 						`/api/dashboard/reminder/completed/${id}`, {
 							method: "DELETE",
-							headers: {token: localStorage.token}
+							headers: myHeaders
 					});
 
 					// eslint-disable-next-line

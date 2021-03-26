@@ -19,15 +19,19 @@ function ManageProfile({ isAuth, setAuth }) {
 
 	async function deleteAccount() {
 		try {
+			const myHeaders = new Headers();
+			myHeaders.append("token", localStorage.token);
+			myHeaders.append("refreshToken", localStorage.refreshToken);
+
 			const response = await fetch("/api/profile/account", {
 				method: "DELETE",
-				headers: {"token": localStorage.token}
+				headers: myHeaders
 			});
 
 			const parseResp = await response.json();
 
 			if (response.status === 200) {
-				
+				localStorage.removeItem("refreshToken");
 				localStorage.removeItem("token");
 				toast.success("Successfully deleted your account.", {autoClose: 2500});
 				setTimeout(() => { window.location = "/"; }, 2500);

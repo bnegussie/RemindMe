@@ -52,6 +52,7 @@ function CreateReminder({ activeRemindersEmpty }) {
 		const myHeaders = new Headers();
 		myHeaders.append("Content-type", "application/json");
 		myHeaders.append("token", localStorage.token);
+		myHeaders.append("refreshToken", localStorage.refreshToken);
 
 		if (activeRemindersEmpty) {
 			await PushGeneralReminderTimeAhead(myHeaders);

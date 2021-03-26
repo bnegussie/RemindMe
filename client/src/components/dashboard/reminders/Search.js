@@ -21,9 +21,13 @@ function Search({ isAuth }) {
 
     async function getAllReminders() {
 		try {
+            const myHeaders = new Headers();
+            myHeaders.append("token", localStorage.token);
+            myHeaders.append("refreshToken", localStorage.refreshToken);
+
 			const response = await fetch("/api/dashboard/reminder/all", {
 				method: "GET",
-				headers: {token: localStorage.token}
+				headers: myHeaders
 			});
 			const parseResp = await response.json();
 
@@ -53,9 +57,13 @@ function Search({ isAuth }) {
             if (e.target.value === '') {
                 setFilteredReminders(allReminders);
             } else {
+                const myHeaders = new Headers();
+                myHeaders.append("token", localStorage.token);
+                myHeaders.append("refreshToken", localStorage.refreshToken);
+                
                 const response = await fetch(`/api/dashboard/search/?title=${titleSearched}`, {
                     method: "GET",
-                    headers: {"token": localStorage.token}
+                    headers: myHeaders
                 });
                 const parseResp = await response.json();
 
@@ -72,12 +80,16 @@ function Search({ isAuth }) {
 	// Action when reminder Delete button is clicked.
     async function deleteReminderTask(reminder_id) {
 		try {
+            const myHeaders = new Headers();
+            myHeaders.append("token", localStorage.token);
+            myHeaders.append("refreshToken", localStorage.refreshToken);
+            
 			// eslint-disable-next-line
 			const respActiveReminders = await fetch(
 				`/api/dashboard/reminder/active/${reminder_id}`,
 				{
 					method: "DELETE",
-					headers: {token: localStorage.token}
+					headers: myHeaders
 				}
 			);
 
@@ -86,7 +98,7 @@ function Search({ isAuth }) {
 				`/api/dashboard/reminder/completed/${reminder_id}`,
 				{
 					method: "DELETE",
-					headers: {token: localStorage.token}
+					headers: myHeaders
 				}
 			);
 
@@ -95,7 +107,7 @@ function Search({ isAuth }) {
 				`/api/dashboard/reminder/overdue/${reminder_id}`,
 				{
 					method: "DELETE",
-					headers: {token: localStorage.token}
+					headers: myHeaders
 				}
 			);
 
@@ -104,7 +116,7 @@ function Search({ isAuth }) {
 				`/api/dashboard/reminder/all/${reminder_id}`,
 				{
 					method: "DELETE",
-					headers: {token: localStorage.token}
+					headers: myHeaders
 				}
             );
             

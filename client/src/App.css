@@ -973,8 +973,51 @@ legend {
   transition: 0.3s ease-out;
 }
 /***************************************** END: SEARCH.JS ****************************************/
+/***************************************** START: FORGOTPWD.JS ***********************************/
+.forgot-pwd.link {
+  text-decoration: none;
+  
+  float: right;
+  margin-bottom: 10px;
+}
+
+.forgot-pwd.message {
+  color: var(--brown);
+  font-size: 16px;
+}
+
+.form-group.forgot-pwd {
+  margin-top: 30px;
+}
+
+.modal-body.forgot-pwd {
+  text-align: left;
+}
+/***************************************** END: FORGOTPWD.JS *************************************/
+/***************************************** START: PASSWORDTOGGLE.JS ******************************/
+.pwd-toggle-icon {
+  cursor: pointer;
+  transition: all 0.5s;
+  opacity: 1;
+  display: flex;
+  
+  transform: translateY(-4.1em);
+  float: right;
+  margin-right: 5px;
+  margin-bottom: -30px;
+}
+/***************************************** END: PASSWORDTOGGLE.JS ********************************/
+
 
 /* MOBILE MODE FOR ALL FILES: */
+@media screen and (max-width: 960px) {
+  /* START: PASSWORDTOGGLE.JS */
+  .pwd-toggle-icon {
+    transform: translateY(-3.7em);
+  }
+  /* END: PASSWORDTOGGLE.JS */
+}
+
 @media screen and (max-width: 700px) {
   /* START: BUTTON.JS  */
   .btn.btn-info.edit-reminder,

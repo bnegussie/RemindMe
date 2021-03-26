@@ -45,13 +45,14 @@ function UpdateProfile() {
 
 			const body = { fName, lName, email, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum };
 			
-			const putHeaders = new Headers();
-			putHeaders.append("Content-type", "application/json");
-			putHeaders.append("token", localStorage.token);
+			const myHeaders = new Headers();
+			myHeaders.append("Content-type", "application/json");
+			myHeaders.append("token", localStorage.token);
+			myHeaders.append("refreshToken", localStorage.refreshToken);
 
 			const response = await fetch("/api/profile/general", {
                 method: "PUT",
-                headers: putHeaders,
+                headers: myHeaders,
                 body: JSON.stringify(body)
             });
             
@@ -79,9 +80,13 @@ function UpdateProfile() {
 
 	async function getProfile() {
 		try {
+			const myHeaders = new Headers();
+			myHeaders.append("token", localStorage.token);
+			myHeaders.append("refreshToken", localStorage.refreshToken);
+
 			const response = await fetch("/api/profile/general", {
 				method: "GET",
-				headers: {token: localStorage.token}
+				headers: myHeaders
 			});
 			const profile = await response.json();
 			

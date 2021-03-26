@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import Select from "react-select";
 
 import { ClearDateMinAndSecAndMill } from "./dashboard/reminders/ClearDate";
+import PasswordToggle from "./PasswordToggle";
 
 import "./../App.css"
 
@@ -20,7 +21,12 @@ const SignUp = ({ setAuth }) => {
     const [cPhoneCarrierEmailExtn, setCPhoneCarrierEmailExtn] = useState("");
     const [allCellphoneCarriers, setAllCellphoneCarriers] = useState([]);
 
+    var invalidAttemptsCounter = 0;
+
     const { f_name, l_name, email, p_num, pwd, pwd_confirm } = inputs;
+
+    const [pwdInputType, pwdToggleIcon] = PasswordToggle();
+    const [confirmPwdInputType, confirmPwdToggleIcon] = PasswordToggle();
 
     const onChange = (e) => {
         setInputs({...inputs, [e.target.name] : e.target.value});
@@ -41,6 +47,12 @@ const SignUp = ({ setAuth }) => {
 
         try {
             // Quick input validation:
+            if (invalidAttemptsCounter >= 10) {
+                // If this is a bot or a malicious user, refreshing the page
+                // will slow them dowm from taking down the server.
+                window.location = "/";
+            }
+            
             // Making sure the input fields are not empty or filled with empty spaces.
             if (f_name === "" || (f_name).replace(/\s/g, "") === "" || 
                 l_name === "" || (l_name).replace(/\s/g, "") === "" ||
@@ -120,15 +132,18 @@ const SignUp = ({ setAuth }) => {
             if (parseResp === "A user with this email address already exists." || 
                 parseResp === "A user with this phone number already exists.") {
                 
+                invalidAttemptsCounter++;
                 return toast.error(parseResp, {autoClose: 4000});
 
             } else if (parseResp.message && parseResp.message === "Successful registration!") {
 
                 localStorage.setItem("token", parseResp.token);
+                localStorage.setItem("refreshToken", parseResp.refreshToken);
                 
                 const myHeaders = new Headers();
                 myHeaders.append("Content-type", "application/json");
                 myHeaders.append("token", localStorage.token);
+                myHeaders.append("refreshToken", localStorage.refreshToken);
 
                 // Sending welcome message:
                 // eslint-disable-next-line
@@ -141,6 +156,7 @@ const SignUp = ({ setAuth }) => {
                 setAuth(true);
                 toast.success(parseResp.message, {autoClose: 3000});
             } else {
+                invalidAttemptsCounter++;
                 return toast.error("Something went wrong.", {autoClose: 3000});
             }
 
@@ -273,7 +289,7 @@ const SignUp = ({ setAuth }) => {
 
                 <div className="form-group">
                     <input
-                        type="password"
+                        type={ pwdInputType }
                         name="pwd"
                         id="sign-up-pwd"
                         placeholder=" "
@@ -283,11 +299,12 @@ const SignUp = ({ setAuth }) => {
                         required
                     />
                     <label htmlFor="sign-up-pwd" className="form-label">Password:</label>
+                    <span className="pwd-toggle-icon"> { pwdToggleIcon } </span>
                 </div>
 
                 <div className="form-group">
                     <input
-                        type="password"
+                        type={ confirmPwdInputType }
                         name="pwd_confirm"
                         id="sign-up-pwd_confirm"
                         placeholder=" "
@@ -297,10 +314,10 @@ const SignUp = ({ setAuth }) => {
                         required
                     />
                     <label htmlFor="sign-up-pwd_confirm" className="form-label">Confirm password:</label>
+                    <span className="pwd-toggle-icon"> { confirmPwdToggleIcon } </span>
                 </div>         
                 
-                <button className="btn btn-success btn-block">Submit</button>
-                <hr />
+                <button className="btn btn-success btn-block mb-4">Submit</button>
             </form>
 
         </Fragment>

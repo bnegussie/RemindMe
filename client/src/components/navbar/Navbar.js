@@ -47,10 +47,13 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
         async function getUsername() {
             if (isAuthenticated) {
                 try {
-                    const response = await fetch(
-                        "/api/dashboard/user/username", {
+                    const myHeaders = new Headers();
+                    myHeaders.append("token", localStorage.token);
+                    myHeaders.append("refreshToken", localStorage.refreshToken);
+
+                    const response = await fetch( "/api/dashboard/user/username", {
                             method: "GET",
-                            headers: {token: localStorage.token}
+                            headers: myHeaders
                     });
                     const parseResp = await response.json();
 

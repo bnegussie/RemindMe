@@ -6,6 +6,7 @@ async function ReminderCompletedState(reminder_id, reminder_completed, activeRem
     const myHeaders = new Headers();
     myHeaders.append("Content-type", "application/json");
     myHeaders.append("token", localStorage.token);
+    myHeaders.append("refreshToken", localStorage.refreshToken);
 
     try {
         if (reminder_completed) {
@@ -14,7 +15,7 @@ async function ReminderCompletedState(reminder_id, reminder_completed, activeRem
             const respActiveReminders = await fetch(
                 `/api/dashboard/reminder/active/${reminder_id}`, {
                     method: "DELETE",
-                    headers: {token: localStorage.token}
+                    headers: myHeaders
                 }
             );
 
@@ -22,7 +23,7 @@ async function ReminderCompletedState(reminder_id, reminder_completed, activeRem
             const respOverdueReminders = await fetch(
                 `/api/dashboard/reminder/overdue/${reminder_id}`, {
                     method: "DELETE",
-                    headers: {token: localStorage.token}
+                    headers: myHeaders
                 }
             );
 
@@ -69,7 +70,7 @@ async function ReminderCompletedState(reminder_id, reminder_completed, activeRem
                 `/api/dashboard/reminder/completed/${reminder_id}`,
                 {
                     method: "DELETE",
-                    headers: {token: localStorage.token}
+                    headers: myHeaders
                 }
             );
 
