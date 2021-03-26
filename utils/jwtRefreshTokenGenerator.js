@@ -7,7 +7,7 @@ function jwtRefreshTokenGenerator(user_id) {
         user: user_id
     }
 
-    return jwtLib.sign(payload, process.env.jwtRefresh, {expiresIn: (60 * 60 * 24 * 7)});
+    return jwtLib.sign(payload, process.env.jwtRefresh, {expiresIn: ("7d")});
 }
 
 module.exports = jwtRefreshTokenGenerator;

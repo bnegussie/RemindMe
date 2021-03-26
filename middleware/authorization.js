@@ -24,7 +24,7 @@ module.exports = async(req, res, next) => {
                 const refreshPayload = jwtLibrary.verify(jwtRefreshToken, process.env.jwtRefresh);
 
                 const newAccessToken = jwtLibrary.sign({user: refreshPayload.user}, process.env.jwtSecret,
-                    {expiresIn: (60 * 60)});
+                    {expiresIn: (60)});
 
                 // Successfully created the new JTW access token:
                 req.newAccessToken = newAccessToken;
