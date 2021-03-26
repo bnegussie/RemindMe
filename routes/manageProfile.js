@@ -2,9 +2,10 @@ const router = require("express").Router();
 const pool = require("../db");
 const authorization = require("../middleware/authorization");
 const bcryptLib = require("bcrypt");
-var crypto = require("crypto");
+const crypto = require("crypto");
 require("dotenv").config();
 const nodeMailer = require('nodeMailer');
+const { v4: uuidv4 } = require('uuid');
 
 /************************************** START: MY PROFILE ****************************************/
 // Getting the general information from the user's profile:
@@ -176,12 +177,7 @@ router.post("/forgotpwd", async (req, res) => {
 
 
         // Generating the URL for this user to reset their password:
-        const urlStarterLink = crypto.randomBytes(20).toString('hex');
-        const saltRound = 12;
-        const salt = await bcryptLib.genSalt(saltRound);
-        const bcryptURL = await bcryptLib.hash(urlStarterLink, salt);
-        const partialUserURL = email + "/" + bcryptURL;
-
+        const partialUserURL = email + "/" + crypto.randomBytes(20).toString('hex') + uuidv4();
 
         // Placing URL into user's account along with a time stamp
         // because the link will not be valid after one hour:

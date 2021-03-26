@@ -7,12 +7,17 @@ import "./../App.css";
 function ForgotPwd() {
 
     const [email, setEmail] = useState("");
+    var invalidAttemptsCounter = 0;
 
     async function forgotPwdRequest(e) {
         e.preventDefault();
 
         try {
             // Quick input validation.
+            if (invalidAttemptsCounter >= 10) {
+                window.location = "/";
+            }
+
             // eslint-disable-next-line
             if (!email ||  !email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
                 
@@ -31,6 +36,7 @@ function ForgotPwd() {
             const parseResp = await checkingUserExists.json();
 
             if (parseResp === "A user with this email does not exist.") {
+                invalidAttemptsCounter++;
                 return toast.error(parseResp);
             } else if (parseResp === "A Reset Password link has been sent to you via email now." ||
                 parseResp === "A Reset Password link has been sent to you via email and text message now.") {
@@ -39,6 +45,7 @@ function ForgotPwd() {
 				setTimeout(() => { window.location = "/LogIn"; }, 5000);
                 
             } else {
+                invalidAttemptsCounter++;
                 return toast.error("Something went wrong.");
             }
             
