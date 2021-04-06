@@ -512,10 +512,10 @@ router.post("/welcome", authorization, async (req, res) => {
             <div>
                 <!--[if mso]>
                 <center>
-                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://RemindMeee.com" style="height:40px;v-text-anchor:middle;width:300px;" arcsize="25%" strokecolor="#000" fillcolor="#8B4513">
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://RemindMeee.com" style="height:40px;v-text-anchor:middle;width:200px;" arcsize="25%" strokecolor="#000" fillcolor="#8B4513">
                         <w:anchorlock/>
                         <center style="color:#fff; font-family:sans-serif; font-size:15px; font-weight:bold;">
-                            Click here to create your first reminder
+                            RemindMeee.com
                         </center>
                     </v:roundrect>
                 </center>
@@ -524,9 +524,9 @@ router.post("/welcome", authorization, async (req, res) => {
                 <center>
                     <a 
                         href="https://RemindMeee.com" 
-                        style="background-color:#8B4513; border:1px solid #000; border-radius:10px; color:#fff; display:inline-block; font-family:sans-serif; font-size:15px; font-weight:bold; line-height:40px; text-align:center; text-decoration:none; width:300px; -webkit-text-size-adjust:none; mso-hide:all;">
+                        style="background-color:#8B4513; border:1px solid #000; border-radius:10px; color:#fff; display:inline-block; font-family:sans-serif; font-size:15px; font-weight:bold; line-height:40px; text-align:center; text-decoration:none; width:200px; -webkit-text-size-adjust:none; mso-hide:all;">
 
-                        Click here to create your first reminder
+                            RemindMeee.com
                     </a>
                 </center>
             </div>
