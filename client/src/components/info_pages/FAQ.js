@@ -9,6 +9,29 @@ function FAQ() {
                 <div className="faq-message">
                     <ul>
                         <li className="info-bulletin">
+                            I have signed up for an account and created my first reminder,
+                            but I still have not received the reminder email. Why is this happening?
+                        </li>
+                    </ul>
+                    <p>
+                        First please check your Spam folder and make sure the reminder has 
+                        not been placed over there. It would be under the name: RemindMe.
+                    </p>
+                    <p>
+                        If you find it in your Spam folder, please mark it as not-spam, for 
+                        future cases. If you don't see it there, please log into your RemindMe
+                        account and on the Manage Profile page, under the My Profile section, 
+                        make sure you have correctly provided your email.
+                    </p>
+                    <p>
+                        If none of these seem to help resolve the issue, please reach out to me 
+                        so I can take a look into the issue. Thank you.
+                    </p>
+
+                    <br/> <br/>
+
+                    <ul>
+                        <li className="info-bulletin">
                             How come I am not receiving the text message reminders, even though
                             I have provided my cell phone carrier as well as my cell phone number?
                         </li>
