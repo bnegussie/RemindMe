@@ -80,17 +80,12 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 			// The Dates stored in the DB are not sanitized.
 			const bodyPlusId = {id, completed, title, desc, dueDate, reminderDate, reminderSent};
 
-			const myHeaders = new Headers();
-			myHeaders.append("Content-type", "application/json");
-			myHeaders.append("token", localStorage.token);
-			myHeaders.append("refreshToken", localStorage.refreshToken);
-
 			// The possibility that the Completed check box state being 
 			// altered makes this a bit more complicated function. 
 
 			const respAllGetReminder = await fetch(`/api/dashboard/reminder/all/${id}`, {
 				method: "GET",
-				headers: myHeaders
+				credentials: 'include'
 			});
 			const respCurrReminder = await respAllGetReminder.json();
 			
@@ -106,8 +101,9 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 						`/api/dashboard/reminder/completed/${id}`, 
 						{
 							method: "PUT",
-							headers: myHeaders,
-							body: JSON.stringify(body)
+							headers: {"Content-type": "application/json"},
+							body: JSON.stringify(body),
+							credentials: 'include'
 					});
 
 				} else {
@@ -115,8 +111,9 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 					const respUpdatedActiveReminder = await fetch(
 						`/api/dashboard/reminder/active/${id}`, {
 							method: "PUT",
-							headers: myHeaders,
-							body: JSON.stringify(body)
+							headers: {"Content-type": "application/json"},
+							body: JSON.stringify(body),
+							credentials: 'include'
 					});
 
 
@@ -126,7 +123,7 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 
 					const respAllOverdue = await fetch("/api/dashboard/reminder/overdue", {
 						method: "GET",
-						headers: myHeaders
+						credentials: 'include'
 					});
 					const localAllOverdueReminders = await respAllOverdue.json();
 					
@@ -146,8 +143,9 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 									`/api/dashboard/reminder/overdue/${id}`, 
 									{
 										method: "PUT",
-										headers: myHeaders,
-										body: JSON.stringify(body)
+										headers: {"Content-type": "application/json"},
+										body: JSON.stringify(body),
+										credentials: 'include'
 								});
 							} else {
 								/* but now the Due Date has been pushed forward, so
@@ -157,10 +155,9 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 
 								// eslint-disable-next-line
 								const respDeleteOfOverdueReminder = await fetch(
-									`/api/dashboard/reminder/overdue/${id}`, 
-									{
+									`/api/dashboard/reminder/overdue/${id}`, {
 										method: "DELETE",
-										headers: myHeaders
+										credentials: 'include'
 								});
 
 							}
@@ -178,41 +175,43 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 					const respDeletedActiveReminder = await fetch(
 						`/api/dashboard/reminder/active/${id}`, {
 							method: "DELETE",
-							headers: myHeaders
+							credentials: 'include'
 					});
 
 					// eslint-disable-next-line
 					const respDeletedOverdueReminder = await fetch(
 						`/api/dashboard/reminder/overdue/${id}`, {
 							method: "DELETE",
-							headers: myHeaders
+							credentials: 'include'
 					});
 
 					// eslint-disable-next-line
 					const respAddingToCompleted = await fetch(
 						"/api/dashboard/reminder/completed", {
 							method: "POST",
-							headers: myHeaders,
-							body: JSON.stringify(bodyPlusId)
+							headers: {"Content-type": "application/json"},
+							body: JSON.stringify(bodyPlusId),
+							credentials: 'include'
 					});
 				} else {
 					if (activeRemindersEmpty) {
-						await PushGeneralReminderTimeAhead(myHeaders);
+						await PushGeneralReminderTimeAhead();
 					}
 
 					// eslint-disable-next-line
 					const respDeletedCompletedReminder = await fetch(
 						`/api/dashboard/reminder/completed/${id}`, {
 							method: "DELETE",
-							headers: myHeaders
+							credentials: 'include'
 					});
 
 					// eslint-disable-next-line
 					const respAddingToCompleted = await fetch(
 						"/api/dashboard/reminder/active", {
 							method: "POST",
-							headers: myHeaders,
-							body: JSON.stringify(bodyPlusId)
+							headers: {"Content-type": "application/json"},
+							body: JSON.stringify(bodyPlusId),
+							credentials: 'include'
 					});
 				}
 			}
@@ -221,8 +220,9 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 			const respUpdatedAllReminder = await fetch(
 				`/api/dashboard/reminder/all/${id}`, {
 					method: "PUT",
-					headers: myHeaders,
-					body: JSON.stringify(body)
+					headers: {"Content-type": "application/json"},
+					body: JSON.stringify(body),
+					credentials: 'include'
 			});
 
 			const finalDest = redirectTo ? redirectTo : "/";

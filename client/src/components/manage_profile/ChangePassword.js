@@ -50,15 +50,11 @@ function ChangePassword() {
 
             const body = { currentPwd, newPwd };
 
-            const myHeaders = new Headers();
-            myHeaders.append("Content-type", "application/json");
-            myHeaders.append("token", localStorage.token);
-            myHeaders.append("refreshToken", localStorage.refreshToken);
-
             const response = await fetch("/api/profile/pwd", {
                 method: "PUT",
-                headers: myHeaders,
-                body: JSON.stringify(body)
+                headers: {"Content-type": "application/json"},
+                body: JSON.stringify(body),
+                credentials: 'include'
             });
 
             const parseResp = await response.json();
@@ -71,7 +67,7 @@ function ChangePassword() {
                 setTimeout(() => { window.location = "/ManageProfile"; }, 3000);
 
             } else {
-                return toast.error("Something went wrong. Please try again later.", [parseResp]);
+                return toast.error(`Something went wrong. Please try again later. ${parseResp}`);
             }            
             
         } catch (error) {

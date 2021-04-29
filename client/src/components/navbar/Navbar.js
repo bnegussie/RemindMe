@@ -46,14 +46,11 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
     useEffect(() => {
         async function getUsername() {
             if (isAuthenticated) {
+                
                 try {
-                    const myHeaders = new Headers();
-                    myHeaders.append("token", localStorage.token);
-                    myHeaders.append("refreshToken", localStorage.refreshToken);
-
                     const response = await fetch( "/api/dashboard/user/username", {
                             method: "GET",
-                            headers: myHeaders
+                            credentials: 'include'
                     });
                     const parseResp = await response.json();
 
@@ -82,7 +79,7 @@ const Navbar = ({ setAuth, isAuthenticated, isAuth }) => {
     if (isAuthenticated) {
         return (
             <Fragment>
-                <nav className="navbar" onMouseEnter={isAuth} onMouseLeave={isAuth} >
+                <nav className="navbar" onMouseEnter={isAuth}>
                     <div className="navbar-container">
                         <Link to="/Dashboard" className="navbar-logo" onClick={checkIsAuth}>
                             RemindMe <i className="fas fa-angle-double-right" />

@@ -137,27 +137,19 @@ const SignUp = ({ setAuth }) => {
 
             } else if (parseResp.message && parseResp.message === "Successful registration!") {
 
-                localStorage.setItem("token", parseResp.token);
-                localStorage.setItem("refreshToken", parseResp.refreshToken);
-                
-                const myHeaders = new Headers();
-                myHeaders.append("Content-type", "application/json");
-                myHeaders.append("token", localStorage.token);
-                myHeaders.append("refreshToken", localStorage.refreshToken);
-
                 // Sending welcome message:
-                // eslint-disable-next-line
-                const welcomeResponse = await fetch("/api/dashboard/welcome", {
+                await fetch("/api/dashboard/welcome", {
                     method: "POST",
-                    headers: myHeaders,
-                    body: JSON.stringify(body)
+                    headers: {"Content-type": "application/json"},
+                    body: JSON.stringify(body),
+                    credentials: 'include'
                 });
 
                 setAuth(true);
                 toast.success(parseResp.message, {autoClose: 3000});
             } else {
                 invalidAttemptsCounter++;
-                return toast.error("Something went wrong.", {autoClose: 3000});
+                return toast.error(`Something went wrong: ${parseResp.message}`, {autoClose: 3000});
             }
 
         } catch (error) {

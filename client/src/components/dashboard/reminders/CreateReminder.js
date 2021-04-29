@@ -48,14 +48,8 @@ function CreateReminder({ activeRemindersEmpty }) {
 		}
 		// Finished input validation.
 
-		// Reuseable header:
-		const myHeaders = new Headers();
-		myHeaders.append("Content-type", "application/json");
-		myHeaders.append("token", localStorage.token);
-		myHeaders.append("refreshToken", localStorage.refreshToken);
-
 		if (activeRemindersEmpty) {
-			await PushGeneralReminderTimeAhead(myHeaders);
+			await PushGeneralReminderTimeAhead();
 		}
 
 		const completed = false;
@@ -66,8 +60,9 @@ function CreateReminder({ activeRemindersEmpty }) {
 		try {
 			const respAllReminders = await fetch("/api/dashboard/reminder/all", {
 				method: "POST",
-				headers: myHeaders,
+				headers: {"Content-type": "application/json"},
 				body: JSON.stringify(body),
+				credentials: 'include'
 			});
 
 			const parseResp = await respAllReminders.json();
@@ -79,8 +74,9 @@ function CreateReminder({ activeRemindersEmpty }) {
 			// eslint-disable-next-line
 			const respActiveReminders = await fetch("/api/dashboard/reminder/active", {
 				method: "POST",
-				headers: myHeaders,
+				headers: {"Content-type": "application/json"},
 				body: JSON.stringify(bodyPlusId),
+				credentials: 'include'
             });
             
             window.location = "/";

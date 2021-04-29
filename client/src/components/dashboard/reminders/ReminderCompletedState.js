@@ -3,11 +3,6 @@ import { PushGeneralReminderTimeAhead } from "./PushGeneralReminderTimeAhead";
 async function ReminderCompletedState(reminder_id, reminder_completed, activeRemindersEmpty) {
     reminder_completed = !reminder_completed;
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-type", "application/json");
-    myHeaders.append("token", localStorage.token);
-    myHeaders.append("refreshToken", localStorage.refreshToken);
-
     try {
         if (reminder_completed) {
             // The Completed checkbox just got checked.
@@ -15,15 +10,13 @@ async function ReminderCompletedState(reminder_id, reminder_completed, activeRem
             const respActiveReminders = await fetch(
                 `/api/dashboard/reminder/active/${reminder_id}`, {
                     method: "DELETE",
-                    headers: myHeaders
+                    credentials: 'include'
                 }
             );
 
-            // eslint-disable-next-line
-            const respOverdueReminders = await fetch(
-                `/api/dashboard/reminder/overdue/${reminder_id}`, {
+            await fetch(`/api/dashboard/reminder/overdue/${reminder_id}`, {
                     method: "DELETE",
-                    headers: myHeaders
+                    credentials: 'include'
                 }
             );
 
@@ -40,37 +33,33 @@ async function ReminderCompletedState(reminder_id, reminder_completed, activeRem
             const body = { completed, title, desc, dueDate, reminderDate, reminderSent };
             const bodyPlusId = { id, completed, title, desc, dueDate, reminderDate, reminderSent };
 
-            // eslint-disable-next-line
-            const respAllReminders = await fetch(
-                `/api/dashboard/reminder/all/${reminder_id}`,
-                {
+            await fetch( `/api/dashboard/reminder/all/${reminder_id}`, {
                     method: "PUT",
-                    headers: myHeaders,
-                    body: JSON.stringify(body)
+                    headers: {"Content-type": "application/json"},
+                    body: JSON.stringify(body),
+                    credentials: 'include'
                 }
             );
 
-            // eslint-disable-next-line
-            const respCompletedReminders = await fetch(
-                "/api/dashboard/reminder/completed", {
+            await fetch( "/api/dashboard/reminder/completed", {
                     method: "POST",
-                    headers: myHeaders,
-                    body: JSON.stringify(bodyPlusId)
-            });
+                    headers: {"Content-type": "application/json"},
+                    body: JSON.stringify(bodyPlusId),
+                    credentials: 'include'
+                }
+            );
 
         } else {
             // The Completed checkbox has now been unchecked.
 
             if (activeRemindersEmpty) {
-                await PushGeneralReminderTimeAhead(myHeaders);
+                await PushGeneralReminderTimeAhead();
             }
 
-            // eslint-disable-next-line
             const respCompletedReminders = await fetch(
-                `/api/dashboard/reminder/completed/${reminder_id}`,
-                {
+                `/api/dashboard/reminder/completed/${reminder_id}`, {
                     method: "DELETE",
-                    headers: myHeaders
+                    credentials: 'include'
                 }
             );
 
@@ -87,23 +76,21 @@ async function ReminderCompletedState(reminder_id, reminder_completed, activeRem
             const body = { completed, title, desc, dueDate, reminderDate, reminderSent };
             const bodyPlusId = { id, completed, title, desc, dueDate, reminderDate, reminderSent };
 
-            // eslint-disable-next-line
-            const respAllReminders = await fetch(
-                `/api/dashboard/reminder/all/${reminder_id}`,
-                {
+            await fetch(`/api/dashboard/reminder/all/${reminder_id}`, {
                     method: "PUT",
-                    headers: myHeaders,
-                    body: JSON.stringify(body)
+                    headers: {"Content-type": "application/json"},
+                    body: JSON.stringify(body),
+                    credentials: 'include'
                 }
             );
 
-            // eslint-disable-next-line
-            const respActiveReminders = await fetch(
-                "/api/dashboard/reminder/active", {
+            await fetch("/api/dashboard/reminder/active", {
                     method: "POST",
-                    headers: myHeaders,
-                    body: JSON.stringify(bodyPlusId)
-            });
+                    headers: {"Content-type": "application/json"},
+                    body: JSON.stringify(bodyPlusId),
+                    credentials: 'include'
+                }
+            );
         }
 
     } catch (error) {

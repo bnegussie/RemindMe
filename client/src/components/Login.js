@@ -51,7 +51,8 @@ const LogIn = ({ setAuth }) => {
             const response = await fetch("/api/auth/login", {
                 method: "POST",
                 headers: {"Content-type": "application/json"},
-                body: JSON.stringify(body)
+                body: JSON.stringify(body),
+                credentials: 'include'
             });
             
             // parseResp now holds the JWT or the error message:
@@ -83,8 +84,7 @@ const LogIn = ({ setAuth }) => {
                         {autoClose: 7500});
                         
             } else if (parseResp.message && parseResp.message === "Successful log in!") {
-                localStorage.setItem("token", parseResp.token);
-                localStorage.setItem("refreshToken", parseResp.refreshToken);
+                
                 setAuth(true);
                 toast.success(parseResp.message, {autoClose: 3000});
             } else {
@@ -96,6 +96,8 @@ const LogIn = ({ setAuth }) => {
             console.error(error.message);
         }
     };
+
+
 
     return (
         <Fragment>

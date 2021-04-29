@@ -1,10 +1,12 @@
 const expressLib = require("express");
 const app = expressLib();
+require("dotenv").config();
 
 // Setting up the Middleware (Express):
 const corsLib = require("cors");
 
 const path = require("path");
+const cookieParser = require('cookie-parser');
 
 // Utilizing environment variables:
 const PORT = process.env.PORT || 5000;
@@ -13,17 +15,27 @@ const PORT = process.env.PORT || 5000;
 app.use(expressLib.json());
 
 // Connecting the back & front end:
-app.use(corsLib());
+app.use(
+    corsLib({
+        origin: [
+            'http://localhost:3000',
+            'https://remindmeee.com'
+        ],
+        credentials: true
+    })
+);
+
+app.use(cookieParser());
 
 
 
 // API and web URL ROUTES:------------------------------------------------------>
 
 
-/* UNCOMMENT THE LINE BELLOW WHEN THIS CODE IS RUNNING IN PRODUCTION -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
- * so the static client side build file can be used. 
-*/
-// app.use(expressLib.static(path.join(__dirname, "client/build")));
+// Using static build for production environment:
+if (process.env.environment === "PROD") {
+    app.use(expressLib.static(path.join(__dirname, "client/build")));
+}
 
 
 
@@ -37,7 +49,7 @@ app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/profile", require("./routes/manageProfile"));
 
 // Catching all other requests and sending them back to the index.html file
-// so they can get redirected approperiately.
+// so they can get redirected appropriately.
 app.get('/*', function(req, res) {
     res.sendFile(path.join(__dirname, 'client/build/index.html'), function(err) {
         if (err) {

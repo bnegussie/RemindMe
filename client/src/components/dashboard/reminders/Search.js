@@ -6,7 +6,7 @@ import { ReminderCompletedState } from "./ReminderCompletedState";
 
 import "./../../../App.css";
 
-function Search({ isAuth }) {
+function Search({ isAuth, isAuthenticated }) {
 
     const [allReminders, setAllReminders] = useState([]);
     const [filteredReminders, setFilteredReminders] = useState([]);
@@ -20,14 +20,11 @@ function Search({ isAuth }) {
 	const confirmIconClass = `fa fa-${isExecuting ? "circle-o-notch fa-spin" : "fa fa-trash"}`;
 
     async function getAllReminders() {
-		try {
-            const myHeaders = new Headers();
-            myHeaders.append("token", localStorage.token);
-            myHeaders.append("refreshToken", localStorage.refreshToken);
 
-			const response = await fetch("/api/dashboard/reminder/all", {
+		try {
+            const response = await fetch("/api/dashboard/reminder/all", {
 				method: "GET",
-				headers: myHeaders
+				credentials: 'include'
 			});
 			const parseResp = await response.json();
 
@@ -42,9 +39,14 @@ function Search({ isAuth }) {
 				i++;
 			}
 			// Finished checking to see if there is at least one active reminder.
-            
-            setAllReminders(parseResp);
-            setFilteredReminders(parseResp);
+
+            const isArray = Array.isArray( parseResp );
+            const objType = Object.prototype.toString.call( parseResp );
+
+            if (parseResp && (isArray || objType === "[object Array]")) {
+                setAllReminders(parseResp);
+                setFilteredReminders(parseResp);
+            }
             
 		} catch (error) {
 			console.error(error.message);
@@ -53,18 +55,18 @@ function Search({ isAuth }) {
 
     async function searchForReminders(e) {
         e.preventDefault();
+
         try {
             if (e.target.value === '') {
                 setFilteredReminders(allReminders);
-            } else {
-                const myHeaders = new Headers();
-                myHeaders.append("token", localStorage.token);
-                myHeaders.append("refreshToken", localStorage.refreshToken);
-                
+
+            } else {                
+
                 const response = await fetch(`/api/dashboard/search/?title=${titleSearched}`, {
                     method: "GET",
-                    headers: myHeaders
+                    credentials: 'include'
                 });
+
                 const parseResp = await response.json();
 
                 if (response.status === 200) {
@@ -79,44 +81,29 @@ function Search({ isAuth }) {
 
 	// Action when reminder Delete button is clicked.
     async function deleteReminderTask(reminder_id) {
-		try {
-            const myHeaders = new Headers();
-            myHeaders.append("token", localStorage.token);
-            myHeaders.append("refreshToken", localStorage.refreshToken);
-            
-			// eslint-disable-next-line
-			const respActiveReminders = await fetch(
-				`/api/dashboard/reminder/active/${reminder_id}`,
-				{
+		
+        try {
+            await fetch(`/api/dashboard/reminder/active/${reminder_id}`, {
 					method: "DELETE",
-					headers: myHeaders
+					credentials: 'include'
 				}
 			);
 
-			// eslint-disable-next-line
-			const respCompletedReminders = await fetch(
-				`/api/dashboard/reminder/completed/${reminder_id}`,
-				{
+			await fetch(`/api/dashboard/reminder/completed/${reminder_id}`, {
 					method: "DELETE",
-					headers: myHeaders
+					credentials: 'include'
 				}
 			);
 
-			// eslint-disable-next-line
-			const respOverdueReminders = await fetch(
-				`/api/dashboard/reminder/overdue/${reminder_id}`,
-				{
+			await fetch(`/api/dashboard/reminder/overdue/${reminder_id}`, {
 					method: "DELETE",
-					headers: myHeaders
+					credentials: 'include'
 				}
 			);
 
-			// eslint-disable-next-line
-			const respAllReminders = await fetch(
-				`/api/dashboard/reminder/all/${reminder_id}`,
-				{
+			await fetch(`/api/dashboard/reminder/all/${reminder_id}`, {
 					method: "DELETE",
-					headers: myHeaders
+					credentials: 'include'
 				}
             );
             
@@ -159,19 +146,26 @@ function Search({ isAuth }) {
     }
 
     useEffect(() => {
+        isAuth();
 		getAllReminders();
 		
 		return () => {
 			setAllReminders([]);
 			setFilteredReminders([]);
 		}
-    }, []);
+    }, [isAuth]);
 
+
+
+
+    if (!isAuthenticated) {
+        return
+    }
 
     return (
         <Fragment>
             <div className="search-container">
-                <div className="search-top-component" onClick={isAuth} onMouseEnter={isAuth}>
+                <div className="search-top-component" onClick={isAuth}>
                     <form className="d-flex" onSubmit={searchForReminders}>
                         <input 
                             type="search" 
@@ -200,9 +194,9 @@ function Search({ isAuth }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredReminders.map((currReminder) => (
+                            {filteredReminders.length !== 0 && filteredReminders.map((currReminder) => (
                                 <tr key={currReminder.reminder_id}>
-                                    <td onClick={isAuth} >
+                                    <td onClick={isAuth}>
                                         <input
                                             type="checkbox"
                                             className="completed-checkboxes"
@@ -218,14 +212,14 @@ function Search({ isAuth }) {
                                     <td className="reminder-titles">
                                         {currReminder.reminder_title}
                                     </td>
-                                    <td onClick={isAuth} >
+                                    <td onClick={isAuth}>
 										<EditReminder 
 											currReminder={currReminder} 
 											redirectTo="/Dashboard/Search" 
 											activeRemindersEmpty={activeRemindersEmpty}
 										/>
                                     </td>
-                                    <td onClick={isAuth} >
+                                    <td onClick={isAuth}>
                                         <InlineConfirmButton
                                             className="btn btn-danger delete-reminder"
                                             textValues={textValues}

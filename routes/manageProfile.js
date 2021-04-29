@@ -110,26 +110,23 @@ router.delete("/account", authorization, async (req, res) => {
     try {
         const userId = req.user;
 
-        const dRemindersFromOverdue = await pool.query("DELETE FROM overdue_reminders WHERE user_id = $1", 
-            [userId]
-        );
-        const dRemindersFromCompleted = await pool.query("DELETE FROM completed_reminders WHERE user_id = $1", 
-            [userId]
-        );
-        const dRemindersFromActive = await pool.query("DELETE FROM active_reminders WHERE user_id = $1", 
-            [userId]
-        );
-        const dRemindersFromAll = await pool.query("DELETE FROM all_reminders WHERE user_id = $1", 
-            [userId]
-        );
-        const dUserAccount = await pool.query("DELETE FROM users WHERE user_id = $1", 
-            [userId]
-        );
+        // Deleting user info from Overdue, Completed, Active, and All reminders table:
+        await pool.query("DELETE FROM overdue_reminders WHERE user_id = $1", [userId] );
 
-        res.status(200).json("All user's data has been remomved.");
+        await pool.query("DELETE FROM completed_reminders WHERE user_id = $1", [userId] );
+
+        await pool.query("DELETE FROM active_reminders WHERE user_id = $1", [userId] );
+
+        await pool.query("DELETE FROM all_reminders WHERE user_id = $1", [userId] );
+
+        // Deleting the user's profile information:
+        await pool.query("DELETE FROM users WHERE user_id = $1", [userId] );
+
+        res.clearCookie("token");
+        return res.status(200).json("All user's data has been remomved.");
 
     } catch (error) {
-        res.status(500).json(error.message);
+        res.status(500).json({ message: error.message });
     }
 });
 /************************************** END: MY ACCOUNT ******************************************/

@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from "react";
-import './App.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -25,71 +24,95 @@ import ManageProfile from "./components/manage_profile/ManageProfile";
 import Search from "./components/dashboard/reminders/Search";
 import ResetPwd from "./components/ResetPwd";
 
+import './App.css';
+
 
 toast.configure();
 
 function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // A lock to prevent a race condition:
+  var checkAuthThreadLock = false;
 
   const setAuth = boolean => {
     setIsAuthenticated(boolean);
   };
 
-  const isAuth = async () => {
+  async function isAuth() {
     try {
-      const myHeaders = new Headers();
-      myHeaders.append("token", localStorage.token);
-      myHeaders.append("refreshToken", localStorage.refreshToken);
+      if (!checkAuthThreadLock) {
+        checkAuthThreadLock = true;
 
-      const response = await fetch("/api/auth/is-Verified", {
-        method: "GET",
-        headers: myHeaders
-      });
+        const response = await fetch("/api/auth/is-Verified", {
+          method: "GET",
+          credentials: 'include'
+        });
 
-      const parseResp = await response.json();
-      
+        checkAuthThreadLock = false;
 
-      if (typeof parseResp === "boolean") {
-        parseResp ? setIsAuthenticated(true) : setIsAuthenticated(false);
+        const parseResp = await response.json();
 
-      } else if (parseResp === "The user has not logged in." ||
-                parseResp === "The refresh token is invalid.") {
-
-        setIsAuthenticated(false);
-
-        // Removing the JWT token; 
-        // this is needed when the user's session has timed out.
-        if (localStorage.token) {
-          localStorage.removeItem("token");
+        if (parseResp.message === "This is an authorized user.") {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
         }
-        if (localStorage.refreshToken) {
-          localStorage.removeItem("refreshToken");
-        }
-
-        if (parseResp === "The refresh token is invalid.") {
-          toast.info("Your session has expired. Please log back in.", {autoClose: 4000});
-        }
-        
-
-      } else {
-        /* The new access token:
-         * The middleware can only return one thing which is why the new access token doesn't
-         * have it's own header to specify what came back from the is-Verified API call.
-         */
-        localStorage.setItem("token", parseResp);
-        setIsAuthenticated(true);
       }
 
-
     } catch (error) {
+      checkAuthThreadLock = false;
+      setIsAuthenticated(false);
+
       console.error(error.message);
     }
   }
 
   useEffect(() => {
     isAuth();
+
+    // eslint-disable-next-line
   }, []);
+
+
+  if (isAuthenticated) {
+    return (
+      <Fragment>
+        <Router>
+          <ScrollToTop />
+          <Navbar setAuth={setAuth} isAuthenticated={isAuthenticated} isAuth={isAuth} />
+          <Switch>
+            <Route exact path='/' />
+          </Switch>
+
+          <div className="container">
+            <Switch>
+              <Route exact path="/" render={props => <Redirect to="/Dashboard"/> } />
+
+              <Route exact path="/aboutus" render={props => <Redirect to="/Dashboard"/> } />
+
+              <Route exact path="/howitworks" render={props => <Redirect to="/Dashboard"/> } />
+
+              <Route exact path="/faq" render={props => <Redirect to="/Dashboard"/> } />
+
+              <Route exact path="/LogIn" render={props => <Redirect to="/Dashboard"/> } />
+
+              <Route exact path="/SignUp" render={props => <Redirect to="/Dashboard"/> } />
+
+              <Route exact path="/Dashboard/Search" render={props => <Search {...props} isAuth={isAuth} isAuthenticated={isAuthenticated} /> } />
+
+              <Route exact path="/Dashboard" render={props => <Dashboard {...props} isAuth={isAuth} isAuthenticated={isAuthenticated} /> } />
+
+              <Route exact path="/manageprofile" render={props => <ManageProfile isAuth={isAuth} isAuthenticated={isAuthenticated} /> } />
+
+              <Route path="/ResetPassword/:id" render={props => <Redirect to="/Dashboard"/> } />
+
+            </Switch>
+          </div>
+        </Router>
+      </Fragment>
+    )
+  }
 
   return (
     <Fragment>
@@ -99,119 +122,28 @@ function App() {
         <Switch>
           <Route exact path='/' />
         </Switch>
-      
+
         <div className="container">
           <Switch>
+            <Route exact path="/" render={props => <LandingPage isAuth={isAuth} /> } />
 
-            <Route 
-              exact path="/" 
-              render={props => 
-                isAuthenticated ? (
-                  <Redirect to="/Dashboard"/>
-                ) : (
-                  <LandingPage />
-                )  
-              }
-            />
+            <Route exact path="/aboutus" render={props => <AboutUs /> } />
 
-            <Route 
-              exact path="/aboutus" 
-              render={props => 
-                isAuthenticated ? (
-                  <Redirect to="/Dashboard"/>
-                ) : (
-                  <AboutUs />
-                )  
-              }
-            />
+            <Route exact path="/howitworks" render={props => <HowItWorks /> } />
 
-            <Route 
-              exact path="/howitworks" 
-              render={props => 
-                isAuthenticated ? (
-                  <Redirect to="/Dashboard"/>
-                ) : (
-                  <HowItWorks />
-                )  
-              }
-            />
+            <Route exact path="/faq" render={props => <FAQ /> } />
 
-            <Route 
-              exact path="/faq" 
-              render={props => 
-                isAuthenticated ? (
-                  <Redirect to="/Dashboard"/>
-                ) : (
-                  <FAQ />
-                )  
-              }
-            />
+            <Route exact path="/LogIn" render={props => <LogIn {...props} setAuth={setAuth} isAuth={isAuth} /> } />
 
-            <Route
-              exact path="/LogIn"
-              render={props =>
-                isAuthenticated ? (
-                  <Redirect to="/Dashboard" />
-                ) : (
-                  <LogIn {...props} setAuth={setAuth} />
-                )
-              }
-            />
+            <Route exact path="/SignUp" render={props => <SignUp {...props} setAuth={setAuth} /> } />
 
-            <Route 
-              exact path="/SignUp" 
-              render={props => 
-                isAuthenticated ? (
-                  <Redirect to="/Dashboard"/> 
-                ) : (
-                  <SignUp {...props} setAuth={setAuth} />
-                )  
-              }
-            />
+            <Route exact path="/Dashboard/Search" render={props => <LandingPage isAuth={isAuth} /> } />
 
-            <Route 
-              exact path="/Dashboard/Search" 
-              render={props => 
-                isAuthenticated ? (
-                  <Search {...props} isAuth={isAuth} />
-                ) : (
-                  <LandingPage />
-                )  
-              }
-            />
+            <Route exact path="/Dashboard" render={props => <LandingPage isAuth={isAuth} /> } />
 
-            <Route 
-              exact path="/Dashboard" 
-              render={props => 
-                isAuthenticated ? (
-                  <Dashboard {...props} isAuth={isAuth} />
-                ) : (
-                  <LandingPage />
-                )  
-              }
-            />
+            <Route exact path="/manageprofile" render={props => <LandingPage isAuth={isAuth} /> } />
 
-            <Route 
-              exact path="/manageprofile" 
-              render={props => 
-                isAuthenticated ? (
-                  <ManageProfile isAuth={isAuth} setAuth={setAuth} />
-                ) : (
-                  <LandingPage />
-                )  
-              }
-            />
-
-            <Route 
-              path="/ResetPassword/:id" 
-              render={props => 
-                isAuthenticated ? (
-                  <Redirect to="/Dashboard"/> 
-                ) : (
-                  <ResetPwd />
-                )  
-              }
-            />
+            <Route path="/ResetPassword/:id" render={props => <ResetPwd /> } />
 
           </Switch>
         </div>
