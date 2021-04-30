@@ -169,7 +169,7 @@ function Reminders({ isAuth, isAuthenticated }) {
 
 			// Reloading is necessary because the Edit component will not have the
 			// same state without a rerender.
-			window.location = "/";
+			window.location = "/Dashboard";
 		}
 	}
 

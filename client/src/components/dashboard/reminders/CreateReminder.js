@@ -79,7 +79,7 @@ function CreateReminder({ activeRemindersEmpty }) {
 				credentials: 'include'
             });
             
-            window.location = "/";
+            window.location = "/Dashboard";
 		} catch (error) {
 			console.error(error.message);
 		}
