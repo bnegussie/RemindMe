@@ -124,7 +124,7 @@ router.post("/login", validInfo, async(req, res) => {
         }
 
         var incorPwdAttempts = user.rows[0].user_incor_pwd_count;
-        if (incorPwdAttempts >= 10) {
+        if (incorPwdAttempts >= 5) {
             return res.status(200).json("Too many incorrect password attempts.");
         }
 
