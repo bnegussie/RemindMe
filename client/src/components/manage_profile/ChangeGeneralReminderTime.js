@@ -14,13 +14,10 @@ function ChangeGeneralReminderTime() {
 
 	async function getGRT() {
 		try {
-			const myHeaders = new Headers();
-			myHeaders.append("token", localStorage.token);
-			myHeaders.append("refreshToken", localStorage.refreshToken);
 
 			const response = await fetch("/api/profile/general/reminder", {
 				method: "GET",
-				headers: myHeaders
+				credentials: 'include'
 			});
 			const parseResp = await response.json();
 
@@ -35,7 +32,7 @@ function ChangeGeneralReminderTime() {
 				setReminderHour( time );
 
             } else {
-                return toast.error("Something went wrong. Please try again later.", [parseResp]);
+                return toast.error(`Something went wrong. Please try again later. ${parseResp}`);
 			}
 			
 		} catch (error) {
@@ -66,15 +63,11 @@ function ChangeGeneralReminderTime() {
 		try {
 			const body = { newGRT };
 
-			const myHeaders = new Headers();
-			myHeaders.append("Content-type", "application/json");
-			myHeaders.append("token", localStorage.token);
-			myHeaders.append("refreshToken", localStorage.refreshToken);
-
 			const response = await fetch("/api/profile/general/reminder", {
 				method: "PUT",
-				headers: myHeaders,
-				body: JSON.stringify(body)
+				headers: {"Content-type": "application/json"},
+				body: JSON.stringify(body),
+				credentials: 'include'
 			});
 
 			const parseResp = await response.json();
@@ -85,7 +78,7 @@ function ChangeGeneralReminderTime() {
 				setTimeout(() => { window.location = "/ManageProfile"; }, 3000);
 
             } else {
-				return toast.error("Something went wrong. Please try again later.", [parseResp]);
+				return toast.error(`Something went wrong. Please try again later. ${parseResp}`);
 			}
 			
 		} catch (error) {

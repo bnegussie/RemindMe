@@ -3,11 +3,11 @@ import React, { Fragment } from "react";
 import Reminders from "./reminders/Reminders"
 import ScrollToTop from "./../ScrollToTop"
 
-const Dashboard = ({ isAuth }) => {    
+const Dashboard = ({ isAuth, isAuthenticated }) => {    
     return (
         <Fragment>
             <ScrollToTop />
-            <Reminders isAuth={isAuth} />
+            <Reminders isAuth={isAuth} isAuthenticated={isAuthenticated} />
         </Fragment>
     );
 };

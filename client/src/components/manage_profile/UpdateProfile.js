@@ -44,16 +44,12 @@ function UpdateProfile() {
 
 
 			const body = { fName, lName, email, cPhoneCarrier, cPhoneCarrierEmailExtn, pNum };
-			
-			const myHeaders = new Headers();
-			myHeaders.append("Content-type", "application/json");
-			myHeaders.append("token", localStorage.token);
-			myHeaders.append("refreshToken", localStorage.refreshToken);
 
 			const response = await fetch("/api/profile/general", {
                 method: "PUT",
-                headers: myHeaders,
-                body: JSON.stringify(body)
+                headers: {"Content-type": "application/json"},
+                body: JSON.stringify(body),
+				credentials: 'include'
             });
             
             // parseResp now holds the JWT unless the server threw an error:
@@ -70,7 +66,7 @@ function UpdateProfile() {
 				setTimeout(() => { window.location = "/ManageProfile"; }, 2000);
 				
 			} else {
-                return toast.error("Something went wrong. Please try again later.", [parseResp]);
+                return toast.error(`Something went wrong. Please try again later. ${parseResp}`);
 			}
 			
 		} catch (error) {
@@ -79,14 +75,11 @@ function UpdateProfile() {
 	}
 
 	async function getProfile() {
+		
 		try {
-			const myHeaders = new Headers();
-			myHeaders.append("token", localStorage.token);
-			myHeaders.append("refreshToken", localStorage.refreshToken);
-
 			const response = await fetch("/api/profile/general", {
 				method: "GET",
-				headers: myHeaders
+				credentials: 'include'
 			});
 			const profile = await response.json();
 			

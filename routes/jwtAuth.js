@@ -1,13 +1,15 @@
 const router = require("express").Router();
 const pool = require("../db");
 const bcryptLib = require("bcrypt");
-const jwtGenerator = require("../utils/jtwGenerator");
+const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validInfo");
 const authorization = require("../middleware/authorization");
-const jwtRefreshTokenGenerator = require("../utils/jwtRefreshTokenGenerator");
+const jwtLib = require("jsonwebtoken");
+const atob = require("atob");
+require("dotenv").config();
 
 
-// Creating routers to make the Extress library more modular:
+// Creating routers to make the Express library more modular:
 // Building the routes: ------------------->
 
 // SignUp route- adding a user into the DB:
@@ -50,9 +52,12 @@ router.post("/signup", validInfo, async(req, res) => {
         const firstNameFinalForm = CapitalizeName( f_name );
         const lastNameFinalForm = CapitalizeName( l_name );
 
+        // Default user values:
         const userResetPwdURL = '';
         const userPwdResetTime = null;
         const incorPwdAttempts = 0;
+        const jwtRefreshToken = '';
+        const jwtAccessToken = '';
 
         
         // 3) Bcrypt the user's pwd:
@@ -63,21 +68,20 @@ router.post("/signup", validInfo, async(req, res) => {
 
         // 4) Insert the user into our DB:
         const newUser = await pool.query(
-            "INSERT INTO users (user_f_name, user_l_name, user_email, user_cp_carrier, user_cp_carrier_email_extn, user_p_num, user_pwd, user_general_reminder_time, user_time_zone, user_reset_pwd_url, user_reset_pwd_time, user_incor_pwd_count) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *", 
-            [firstNameFinalForm, lastNameFinalForm, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, 
+            "INSERT INTO users (user_f_name, user_l_name, user_email, user_cp_carrier, user_cp_carrier_email_extn, user_p_num, user_pwd, user_general_reminder_time, user_time_zone, user_reset_pwd_url, user_reset_pwd_time, user_incor_pwd_count, user_refresh_token, user_access_token) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *", [
+                firstNameFinalForm, lastNameFinalForm, lowerCaseEmail, cPhoneCarrier, cPhoneCarrierEmailExtn, 
                 p_num, bcryptPwd, generalReminderTime, userTimeZone, userResetPwdURL, userPwdResetTime,
-                incorPwdAttempts]
+                incorPwdAttempts, jwtRefreshToken, jwtAccessToken
+            ]
         );
 
         
-        // 5) Generate our JWT token:
-        const token = jwtGenerator(newUser.rows[0].user_id);
-        const refreshToken = jwtRefreshTokenGenerator(newUser.rows[0].user_id);
-        res.json( {token, refreshToken, message: "Successful registration!"} );
+        // 5) Generate the user's JWT tokens:
+        await jwtGenerator(res, newUser.rows[0].user_id);
+        res.json( {message: "Successful registration!"} );
 
     } catch (error) {
-        console.error(error.message);
-        res.status(500).json("Server error");
+        res.status(500).json( `Server error: ${error.message}` );
     }
 });
 
@@ -120,7 +124,7 @@ router.post("/login", validInfo, async(req, res) => {
         }
 
         var incorPwdAttempts = user.rows[0].user_incor_pwd_count;
-        if (incorPwdAttempts >= 10) {
+        if (incorPwdAttempts >= 5) {
             return res.status(200).json("Too many incorrect password attempts.");
         }
 
@@ -144,15 +148,13 @@ router.post("/login", validInfo, async(req, res) => {
             [userTimeZone, incorPwdAttempts, email]
         );
 
-        // 4) Generate our JWT token:
-        const token = jwtGenerator(user.rows[0].user_id);
-        const refreshToken = jwtRefreshTokenGenerator(user.rows[0].user_id);
+        // 4) Generate the user's JWT tokens:
+        await jwtGenerator(res, user.rows[0].user_id);
         // This token will be checked whenever a user tries to make a privilaged action:
-        res.json( {token, refreshToken, message: "Successful log in!"} );
+        res.status(200).json({ message: "Successful log in!" });
 
     } catch (error) {
-        console.error(error.message);
-        res.status(500).json("Server error");
+        res.status(500).json( `Server error: ${error.message}` );
     }
 });
 
@@ -160,16 +162,114 @@ router.post("/login", validInfo, async(req, res) => {
 // Verifying the user's token:
 router.get("/is-verified", authorization, async(req, res) => {
     try {
-        if (req.newAccessToken) {
-            // A new JWT access token has been granted:
-            res.json(req.newAccessToken);
-        } else {
-            res.json(true);
+        if (res.message === "The user has not logged in.") {
+            return res.status(200).json({ message: error.message });
+        }
+
+        res.status(200).json({ message: "This is an authorized user." });
+        
+    } catch (error) {
+        res.status(401).json( error.message );
+    }
+});
+
+router.get("/log-out", async(req, res) => {
+    var successfulLogout = false;
+    var errorMessage = "";
+    
+    try {
+        const jwtToken = req.cookies.token;
+
+        if (jwtToken) {
+            const payload = jwtLib.verify(jwtToken, process.env.jwtSecret);
+            const userId = payload.user;
+
+            // Making sure the access token in the browser is the same as the token in the DB:
+            const response = await pool.query(
+                "SELECT user_access_token FROM users WHERE user_id = $1", [
+                    payload.user
+                ]
+            );
+
+            const activeAccessTokens = response.rows[0].user_access_token;
+
+            if (activeAccessTokens.length === 0) {
+                errorMessage = "Invalid access token.";
+                return 
+            }
+
+            const accessTokensArray = activeAccessTokens.split(",");
+
+            if ( !accessTokensArray.includes(jwtToken) ) {
+                errorMessage = "Invalid access token.";
+                return
+            }
+
+            const clearTokens = "";
+
+            await pool.query(
+                "UPDATE users SET user_access_token = $1, user_refresh_token = $2 WHERE user_id = $3", [
+                    clearTokens, clearTokens, userId
+                ]
+            );
+            successfulLogout = true;
         }
         
     } catch (error) {
-        console.error(error.message);
-        res.status(500).json("Server error");
+        errorMessage = error.message;
+
+        if (error.message === "jwt expired") {
+
+            try {
+                var userId = "";
+                const exiredJWTToken = req.cookies.token;
+                const expiredPayload = JSON.parse(atob(exiredJWTToken.split('.')[1]));
+                userId = expiredPayload.user;
+
+                const tokensInDB = await pool.query(
+                    "SELECT user_access_token FROM users WHERE user_id = $1;", [
+                        userId
+                    ]
+                );
+
+                const accessTokensInDB = tokensInDB.rows[0].user_access_token;
+
+                if (accessTokensInDB.length === 0) {
+                    errorMessage = "Invalid access token.";
+                    return
+                }
+
+                var accessTokensArray = accessTokensInDB.split(",");
+
+                if ( !accessTokensArray.includes( exiredJWTToken ) ) {
+                    errorMessage = "Invalid access token.";
+                    return
+                }
+
+                const clearTokens = "";
+
+                await pool.query(
+                    "UPDATE users SET user_access_token = $1, user_refresh_token = $2 WHERE user_id = $3", [
+                        clearTokens, clearTokens, userId
+                    ]
+                );
+                successfulLogout = true;
+
+            } catch (error) {
+                errorMessage = error.message;
+            }
+        } else {
+            errorMessage = "Invalid access token.";
+            return
+        }
+
+    } finally {
+        res.clearCookie("token");
+        if (successfulLogout) {
+            return res.status(200).json({ message: "Successfully logged out." });
+        } else {
+            return res.status(403).json( errorMessage );
+        }
     }
 });
 

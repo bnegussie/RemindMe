@@ -6,11 +6,12 @@ import { ClearDateMinAndSecAndMill } from "./ClearDate";
  * a reminder or marks an old reminder task as uncompleted, then soon after, the user
  * will get a General Daily Reminder at the next full hour and this should not happen.
  */
-async function PushGeneralReminderTimeAhead( myHeaders ) {
+async function PushGeneralReminderTimeAhead() {
     try {
         const grtGetResponse = await fetch("/api/profile/general/reminder", {
             method: "GET",
-            headers: myHeaders
+            headers: {"Content-type": "application/json"},
+            credentials: 'include'
         });
 
         const parseResp = await grtGetResponse.json();
@@ -25,7 +26,7 @@ async function PushGeneralReminderTimeAhead( myHeaders ) {
         // eslint-disable-next-line
         const grtUpdateResponse = await fetch("/api/profile/general/reminder", {
             method: "PUT",
-            headers: myHeaders,
+            headers: {"Content-type": "application/json"},
             body: JSON.stringify(body)
         });
 

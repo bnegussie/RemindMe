@@ -18,6 +18,8 @@ CREATE TABLE users (
     user_reset_pwd_url VARCHAR(255),
     user_reset_pwd_time TIMESTAMPTZ,
     user_incor_pwd_count INT NOT NULL,
+    user_refresh_token VARCHAR(255),
+    user_access_token VARCHAR(1023),
     PRIMARY KEY (user_id)
 );
 

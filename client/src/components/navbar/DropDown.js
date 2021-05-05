@@ -15,17 +15,33 @@ function DropDown({setAuth, onMouseLeave, closeMobileMenu}) {
 
     let history = useHistory();
 
-    const logOut = ((e) => {
+    async function logOut(e) {
         e.preventDefault();
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("token");
-        setAuth(false);
-        history.push("/");
-        setDDownClicked(false);
-        onMouseLeave();
-        closeMobileMenu();
-        toast.success("You have successfully logged out.", {autoClose: 3000});
-    });
+
+        try {
+            setDDownClicked(false);
+            onMouseLeave();
+            closeMobileMenu();
+
+            const response = await fetch("/api/auth/log-out", {
+                method: "GET",
+                credentials: 'include'
+            });
+
+            if (response.status !== 200) {
+                const parseResp = await response.json();
+                console.error("ERROR: parseResp = ", [parseResp]);
+            }
+
+        } catch (error) {
+            console.error("error.message = ", [error.message]);
+
+        } finally {
+            setAuth(false);
+            history.push("/"); 
+            toast.success("You have successfully logged out.", {autoClose: 3000});
+        }
+    }
 
     function dDownClickHandler() {
         setDDownClicked(false);

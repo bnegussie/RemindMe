@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import InlineConfirmButton from "react-inline-confirm";
 import { Fragment } from "react";
 import { toast } from "react-toastify";
@@ -9,7 +9,7 @@ import ChangeGeneralReminderTime from "./ChangeGeneralReminderTime";
 
 import "./../../App.css";
 
-function ManageProfile({ isAuth, setAuth }) {
+function ManageProfile({ isAuth, isAuthenticated }) {
 
 	// Components for the Delete Account feature:
 	const textValues = ["Delete", "Are you sure?", "Deleting..."];
@@ -18,31 +18,37 @@ function ManageProfile({ isAuth, setAuth }) {
 
 
 	async function deleteAccount() {
+		
 		try {
-			const myHeaders = new Headers();
-			myHeaders.append("token", localStorage.token);
-			myHeaders.append("refreshToken", localStorage.refreshToken);
-
 			const response = await fetch("/api/profile/account", {
 				method: "DELETE",
-				headers: myHeaders
+				credentials: 'include'
 			});
 
 			const parseResp = await response.json();
 
 			if (response.status === 200) {
-				localStorage.removeItem("refreshToken");
-				localStorage.removeItem("token");
 				toast.success("Successfully deleted your account.", {autoClose: 2500});
 				setTimeout(() => { window.location = "/"; }, 2500);
 
             } else {
-                return toast.error("Something went wrong. Please try again later.", [parseResp]);
+                return toast.error(`Something went wrong: ${parseResp.message}`);
             }  
 
 		} catch (error) {
-			console.log(error.message);
+			console.error(error.message);
 		}
+	}
+
+	useEffect(() => {
+		isAuth();
+
+	}, [isAuth]);
+
+
+	
+	if(!isAuthenticated) {
+		return
 	}
 
 	return (
@@ -75,13 +81,13 @@ function ManageProfile({ isAuth, setAuth }) {
 						</tr>
 						<tr>
 							<td className="manage-profile-options">My Password</td>
-							<td className="manage-profile-btns" onClick={isAuth} >
+							<td className="manage-profile-btns" onClick={isAuth}>
 								<ChangePassword />
 							</td>
 						</tr>
 						<tr>
 							<td className="manage-profile-options">My General Reminder Time</td>
-							<td className="manage-profile-btns" onClick={isAuth} >
+							<td className="manage-profile-btns" onClick={isAuth}>
 								<ChangeGeneralReminderTime />
 							</td>
 						</tr>
@@ -90,7 +96,7 @@ function ManageProfile({ isAuth, setAuth }) {
                                 id="manage-profile-options-delete">
                                 My Account
                             </td>
-							<td className="manage-profile-btns" onClick={isAuth} >
+							<td className="manage-profile-btns" onClick={isAuth}>
 								<InlineConfirmButton
 									className="btn btn-danger manage-profile"
 									textValues={textValues}

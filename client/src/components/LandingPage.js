@@ -1,7 +1,14 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import "./../App.css"
 
-function LandingPage() {
+function LandingPage({ isAuth }) {
+
+    useEffect(() => {
+        isAuth();
+
+    }, [isAuth]);
+
+
     return (
         <Fragment>
             <div className="landing-container">
