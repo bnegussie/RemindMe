@@ -225,7 +225,7 @@ function EditReminder({ currReminder, redirectTo, activeRemindersEmpty }) {
 					credentials: 'include'
 			});
 
-			const finalDest = redirectTo ? redirectTo : "/";
+			const finalDest = redirectTo ? redirectTo : "/Dashboard";
 			window.location = finalDest;
 
 		} catch (error) {
